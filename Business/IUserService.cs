@@ -8,6 +8,6 @@ public interface IUserService
     public IEnumerable<User> GetAllUsers();
     public User GetUserById(int userId);
     public User GetUserByEmail(string userEmail);
-    //public void UpdateUser(int userId, User user); //UserUpdateDTO
+    public void UpdateUser(int userId, UserUpdateDTO userUpdateDTO);
     //public void DeleteUser(int userId);
 }

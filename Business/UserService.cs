@@ -48,5 +48,25 @@ public class UserService : IUserService
         }
         return user;
     }
+
+    public void UpdateUser(int userId, UserUpdateDTO userUpdateDTO)
+    {
+        var user = _userRepository.GetUser(userId);
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"Usuario con ID {userId} no encontrado");
+        }
+
+        var registeredUser = _userRepository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(userUpdateDTO.Email, StringComparison.OrdinalIgnoreCase));
+        if (registeredUser != null)
+        {
+            throw new Exception("El correo electrónico ya está registrado.");
+        }
+
+        user.Email = userUpdateDTO.Email;
+        user.Password = userUpdateDTO.Password;
+        user.Phone = userUpdateDTO.Phone;
+        _userRepository.UpdateUser(user);
+    }
     
 }

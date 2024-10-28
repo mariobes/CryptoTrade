@@ -65,4 +65,23 @@ public class UsersController : ControllerBase
         }
     }
 
+    [HttpPut("{userId}")]
+    public IActionResult UpdateUser(int userId, UserUpdateDTO userUpdateDTO)
+    {
+        if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
+
+        try {
+            _userService.UpdateUser(userId, userUpdateDTO);
+            return Ok("Usuario actualizado correctamente.");
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado el usuario con ID: {userId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al actualizar el usuario con ID: {userId}. {ex.Message}");
+        }
+    }
+
 }
