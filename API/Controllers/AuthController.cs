@@ -44,4 +44,19 @@ public class AuthController : ControllerBase
         }
     }
 
+    [HttpPost("register")]
+    public IActionResult Register([FromBody] UserCreateDTO userCreateDTO)
+    {
+        if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
+
+        try {
+            var user = _userService.RegisterUser(userCreateDTO);
+            return CreatedAtAction(nameof(Login), new { userId = user.Id }, user);
+        }     
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al registrar el usuario. {ex.Message}");
+        }
+    }
+
 }
