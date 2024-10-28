@@ -59,4 +59,17 @@ public class AuthController : ControllerBase
         }
     }
 
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        try {
+            //Limpiar el token
+            return Ok("Has cerrado sesión");
+        }     
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al cerrar la sesión del usuario. {ex.Message}");
+        }
+    }
+
 }
