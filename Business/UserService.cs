@@ -68,5 +68,15 @@ public class UserService : IUserService
         user.Phone = userUpdateDTO.Phone;
         _userRepository.UpdateUser(user);
     }
+
+    public void DeleteUser(int userId)
+    {
+        var user = _userRepository.GetUser(userId);
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"Usuario con ID {userId} no encontrado");
+        }
+        _userRepository.DeleteUser(userId);
+    }
     
 }

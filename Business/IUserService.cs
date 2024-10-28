@@ -9,5 +9,5 @@ public interface IUserService
     public User GetUserById(int userId);
     public User GetUserByEmail(string userEmail);
     public void UpdateUser(int userId, UserUpdateDTO userUpdateDTO);
-    //public void DeleteUser(int userId);
+    public void DeleteUser(int userId);
 }

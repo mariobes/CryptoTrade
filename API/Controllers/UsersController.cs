@@ -84,4 +84,22 @@ public class UsersController : ControllerBase
         }
     }
 
+    [HttpDelete("{userId}")]
+    public IActionResult DeleteUser(int userId)
+    {
+        try
+        {
+            _userService.DeleteUser(userId);
+            return Ok("Usuario eliminado correctamente.");
+        }
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado el usuario con ID: {userId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al eliminar el usuario con ID: {userId}. {ex.Message}");
+        }
+    }
+
 }
