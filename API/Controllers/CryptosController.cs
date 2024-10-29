@@ -81,4 +81,26 @@ public class CryptosController : ControllerBase
         }
     }
 
+    [HttpDelete("{cryptoId}")]
+    public IActionResult DeleteCrypto(int cryptoId)
+    {
+        try
+        {
+            
+            // if (!_transactionService.IsCryptoPurchased(cryptoId))
+            // {
+                _cryptoService.DeleteCrypto(cryptoId);
+            // }
+            return Ok("Criptomoneda eliminada correctamente.");
+        }
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado la criptomoneda con ID: {cryptoId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al eliminar la criptomoneda con ID: {cryptoId}. {ex.Message}");
+        }
+    }
+
 }

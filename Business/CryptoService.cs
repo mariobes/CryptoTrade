@@ -67,5 +67,15 @@ public class CryptoService : ICryptoService
         crypto.AllTimeLow = cryptoCreateUpdateDTO.AllTimeLow;
         _repository.UpdateCrypto(crypto);
     }
+
+    public void DeleteCrypto(int cryptoId)
+    {
+        var crypto = _repository.GetCrypto(cryptoId);
+        if (crypto == null)
+        {
+            throw new KeyNotFoundException($"Criptomoneda con ID {cryptoId} no encontrada");
+        }
+        _repository.DeleteCrypto(cryptoId);
+    }
     
 }
