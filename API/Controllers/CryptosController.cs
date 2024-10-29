@@ -15,6 +15,21 @@ public class CryptosController : ControllerBase
         _cryptoService = cryptoService;
     }
 
+    [HttpPost]
+    public IActionResult CreateCrypto([FromBody] CryptoCreateUpdateDTO cryptoCreateUpdateDTO)
+    {
+        if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
+
+        try {
+            var crypto = _cryptoService.RegisterCrypto(cryptoCreateUpdateDTO);
+            return CreatedAtAction(nameof(GetCrypto), new { cryptoId = crypto.Id }, crypto);
+        }     
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al registrar la criptomoneda. {ex.Message}");
+        }
+    }
+
     [HttpGet(Name = "GetAllCryptos")] 
     public ActionResult<IEnumerable<Crypto>> GetAllCryptos()
     {
