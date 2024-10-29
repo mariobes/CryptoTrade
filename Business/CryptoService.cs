@@ -38,5 +38,34 @@ public class CryptoService : ICryptoService
         }
         return crypto;
     }
+
+    public void UpdateCrypto(int cryptoId, CryptoCreateUpdateDTO cryptoCreateUpdateDTO)
+    {
+        var crypto = _repository.GetCrypto(cryptoId);
+        if (crypto == null)
+        {
+            throw new KeyNotFoundException($"Criptomoneda con ID {cryptoId} no encontrada");
+        }
+
+        var registeredCrypto = _repository.GetAllCryptos().FirstOrDefault(c => c.Name.Equals(cryptoCreateUpdateDTO.Name, StringComparison.OrdinalIgnoreCase));
+        if ((registeredCrypto != null) && (cryptoId != registeredCrypto.Id))
+        {
+            throw new Exception("El nombre de la criptomoneda ya existe.");
+        }
+
+        crypto.Name = cryptoCreateUpdateDTO.Name;
+        crypto.Symbol = cryptoCreateUpdateDTO.Symbol;
+        crypto.MarketCap = cryptoCreateUpdateDTO.MarketCap;
+        crypto.Description = cryptoCreateUpdateDTO.Description;
+        crypto.Value = cryptoCreateUpdateDTO.Value;
+        crypto.Ranking = cryptoCreateUpdateDTO.Ranking;
+        crypto.Website = cryptoCreateUpdateDTO.Website;
+        crypto.TotalSupply = cryptoCreateUpdateDTO.TotalSupply;
+        crypto.CirculatingSupply = cryptoCreateUpdateDTO.CirculatingSupply;
+        crypto.Contract = cryptoCreateUpdateDTO.Contract;
+        crypto.AllTimeHigh = cryptoCreateUpdateDTO.AllTimeHigh;
+        crypto.AllTimeLow = cryptoCreateUpdateDTO.AllTimeLow;
+        _repository.UpdateCrypto(crypto);
+    }
     
 }

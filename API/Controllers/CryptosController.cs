@@ -62,4 +62,23 @@ public class CryptosController : ControllerBase
         }
     }
 
+    [HttpPut("{cryptoId}")]
+    public IActionResult UpdateCrypto(int cryptoId, CryptoCreateUpdateDTO cryptoCreateUpdateDTO)
+    {
+        if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
+
+        try {
+            _cryptoService.UpdateCrypto(cryptoId, cryptoCreateUpdateDTO);
+            return Ok("Criptomoneda actualizada correctamente.");
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado la criptomoneda con ID: {cryptoId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al actualizar la criptomoneda con ID: {cryptoId}. {ex.Message}");
+        }
+    }
+
 }
