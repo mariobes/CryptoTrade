@@ -26,6 +26,11 @@ namespace CryptoTrade.Data
                 new User { Id = 3, Name = "Fernando", Birthdate = new DateTime(2003, 3, 3), Email = "fernando@gmail.com", Password = "fernando12345", Phone = "4745", DNI = "23526445X", Nationality = "España", Cash = 0, Wallet = 0 },
                 new User { Id = 4, Name = "Eduardo", Birthdate = new DateTime(2004, 4, 4), Email = "eduardo@gmail.com", Password = "eduardo12345", Phone = "4574548", DNI = "52353425D", Nationality = "España", Cash = 0, Wallet = 0 }
             );
+            modelBuilder.Entity<Crypto>().HasData(
+                new Crypto { Id = 1, Name = "Bitcoin", Symbol = "BTC", MarketCap = "900B", CreationDate = new DateTime(2009, 1, 3), Description = "La primera criptomoneda descentralizada", Value = 60000, Ranking = 1, Website = "https://bitcoin.org", TotalSupply = 21000000, CirculatingSupply = 19000000, Contract = "0x0000000000000000000000000000000000000000", AllTimeHigh = 69000, AllTimeLow = 67 },
+                new Crypto { Id = 2, Name = "Ethereum", Symbol = "ETH", MarketCap = "400B", CreationDate = new DateTime(2015, 7, 30), Description = "Una plataforma descentralizada de contratos inteligentes", Value = 4000, Ranking = 2, Website = "https://ethereum.org", TotalSupply = 118000000, CirculatingSupply = 118000000, Contract = "0x2170ed0880ac9a755fd29b2688956bd959f933f8", AllTimeHigh = 4800, AllTimeLow = 0.42 },
+                new Crypto { Id = 3, Name = "Cardano", Symbol = "ADA", MarketCap = "70B", CreationDate = new DateTime(2017, 9, 29), Description = "Plataforma blockchain de tercera generación", Value = 2.15, Ranking = 5, Website = "https://cardano.org", TotalSupply = 45000000000, CirculatingSupply = 32000000000, Contract = "0x3ee2200efb3400fabb9aacf31297cbdd1d435d47", AllTimeHigh = 3.10, AllTimeLow = 0.017 }
+            );
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
