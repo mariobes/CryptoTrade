@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserEFRepository>();
+builder.Services.AddScoped<ICryptoService, CryptoService>();
+builder.Services.AddScoped<ICryptoRepository, CryptoEFRepository>();
 
 var connectionString = builder.Configuration.GetConnectionString("ServerDB_localhost");
 

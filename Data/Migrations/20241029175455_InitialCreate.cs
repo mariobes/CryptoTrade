@@ -116,6 +116,16 @@ namespace CryptoTrade.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Cryptos",
+                columns: new[] { "Id", "AllTimeHigh", "AllTimeLow", "CirculatingSupply", "Contract", "CreationDate", "Description", "MarketCap", "Name", "Ranking", "Symbol", "TotalSupply", "Value", "Website" },
+                values: new object[,]
+                {
+                    { 1, 69000.0, 67.0, 19000000.0, "0x0000000000000000000000000000000000000000", new DateTime(2009, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "La primera criptomoneda descentralizada", "900B", "Bitcoin", 1, "BTC", 21000000.0, 60000.0, "https://bitcoin.org" },
+                    { 2, 4800.0, 0.41999999999999998, 118000000.0, "0x2170ed0880ac9a755fd29b2688956bd959f933f8", new DateTime(2015, 7, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "Una plataforma descentralizada de contratos inteligentes", "400B", "Ethereum", 2, "ETH", 118000000.0, 4000.0, "https://ethereum.org" },
+                    { 3, 3.1000000000000001, 0.017000000000000001, 32000000000.0, "0x3ee2200efb3400fabb9aacf31297cbdd1d435d47", new DateTime(2017, 9, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), "Plataforma blockchain de tercera generación", "70B", "Cardano", 5, "ADA", 45000000000.0, 2.1499999999999999, "https://cardano.org" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Birthdate", "Cash", "DNI", "Email", "IsBanned", "Name", "Nationality", "Password", "Phone", "Role", "Wallet" },
                 values: new object[,]

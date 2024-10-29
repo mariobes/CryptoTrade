@@ -78,6 +78,59 @@ namespace CryptoTrade.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cryptos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AllTimeHigh = 69000.0,
+                            AllTimeLow = 67.0,
+                            CirculatingSupply = 19000000.0,
+                            Contract = "0x0000000000000000000000000000000000000000",
+                            CreationDate = new DateTime(2009, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "La primera criptomoneda descentralizada",
+                            MarketCap = "900B",
+                            Name = "Bitcoin",
+                            Ranking = 1,
+                            Symbol = "BTC",
+                            TotalSupply = 21000000.0,
+                            Value = 60000.0,
+                            Website = "https://bitcoin.org"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AllTimeHigh = 4800.0,
+                            AllTimeLow = 0.41999999999999998,
+                            CirculatingSupply = 118000000.0,
+                            Contract = "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
+                            CreationDate = new DateTime(2015, 7, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Una plataforma descentralizada de contratos inteligentes",
+                            MarketCap = "400B",
+                            Name = "Ethereum",
+                            Ranking = 2,
+                            Symbol = "ETH",
+                            TotalSupply = 118000000.0,
+                            Value = 4000.0,
+                            Website = "https://ethereum.org"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AllTimeHigh = 3.1000000000000001,
+                            AllTimeLow = 0.017000000000000001,
+                            CirculatingSupply = 32000000000.0,
+                            Contract = "0x3ee2200efb3400fabb9aacf31297cbdd1d435d47",
+                            CreationDate = new DateTime(2017, 9, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Plataforma blockchain de tercera generación",
+                            MarketCap = "70B",
+                            Name = "Cardano",
+                            Ranking = 5,
+                            Symbol = "ADA",
+                            TotalSupply = 45000000000.0,
+                            Value = 2.1499999999999999,
+                            Website = "https://cardano.org"
+                        });
                 });
 
             modelBuilder.Entity("CryptoTrade.Models.Stock", b =>
