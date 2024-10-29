@@ -16,7 +16,7 @@ public class CryptosController : ControllerBase
     }
 
     [HttpGet(Name = "GetAllCryptos")] 
-    public ActionResult<IEnumerable<Crypto>> GetCryptos()
+    public ActionResult<IEnumerable<Crypto>> GetAllCryptos()
     {
         try 
         {
@@ -26,6 +26,24 @@ public class CryptosController : ControllerBase
         catch (Exception ex)
         {
             return BadRequest(ex);
+        }
+    }
+
+    [HttpGet("{cryptoId}")]
+    public IActionResult GetCrypto(int cryptoId)
+    {
+        try
+        {
+            var crypto = _cryptoService.GetCryptoById(cryptoId);
+            return Ok(crypto);
+        }
+        catch (KeyNotFoundException knfex)
+        {
+           return NotFound($"No se ha encontrado la criptomoneda con ID: {cryptoId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al obtener la criptomoneda con ID: {cryptoId}. {ex.Message}");
         }
     }
 

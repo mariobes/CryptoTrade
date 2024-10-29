@@ -16,5 +16,15 @@ public class CryptoService : ICryptoService
     {
         return _repository.GetAllCryptos();
     }
+
+    public Crypto GetCryptoById(int cryptoId)
+    {
+        var crypto = _repository.GetCrypto(cryptoId);
+        if (crypto == null)
+        {
+            throw new KeyNotFoundException($"Criptomoneda con ID {cryptoId} no encontrada");
+        }
+        return crypto;
+    }
     
 }
