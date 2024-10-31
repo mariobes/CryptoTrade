@@ -5,4 +5,5 @@ namespace CryptoTrade.Business;
 public interface IStockService
 {
     public IEnumerable<Stock> GetAllStocks();
+    public Stock GetStockById(int stockId);
 }

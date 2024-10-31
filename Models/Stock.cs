@@ -39,7 +39,7 @@ public class Stock
 
     public Stock() {}
 
-    public Stock(string name, double value, string description, int ranking, string website, double companyValue, double earningPerShare, double dividendYield) 
+    public Stock(string name, double value, string description, int ranking, string website, double companyValue, double earningPerShare, string category, double dividendYield) 
     {
         Name = name;
         Value = value;
@@ -48,6 +48,7 @@ public class Stock
         Website = website;
         CompanyValue = companyValue;
         EarningPerShare = earningPerShare;
+        Category = category;
         DividendYield = dividendYield;
     }
 }

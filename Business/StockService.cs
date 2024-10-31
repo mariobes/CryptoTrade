@@ -16,5 +16,15 @@ public class StockService : IStockService
     {
         return _repository.GetAllStocks();
     }
+
+    public Stock GetStockById(int stockId)
+    {
+        var stock = _repository.GetStock(stockId);
+        if (stock == null)
+        {
+            throw new KeyNotFoundException($"Acción con ID {stockId} no encontrada");
+        }
+        return stock;
+    }
     
 }

@@ -29,4 +29,22 @@ public class StocksController : ControllerBase
         }
     }
 
+    [HttpGet("{stockId}")]
+    public IActionResult GetStock(int stockId)
+    {
+        try
+        {
+            var stock = _stockService.GetStockById(stockId);
+            return Ok(stock);
+        }
+        catch (KeyNotFoundException knfex)
+        {
+           return NotFound($"No se ha encontrado la acción con ID: {stockId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al obtener la acción con ID: {stockId}. {ex.Message}");
+        }
+    }
+
 }
