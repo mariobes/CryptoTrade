@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CryptoTrade.Data.Migrations
 {
     [DbContext(typeof(CryptoTradeContext))]
-    [Migration("20241026100622_InitialCreate")]
+    [Migration("20241031174315_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,6 +80,59 @@ namespace CryptoTrade.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cryptos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AllTimeHigh = 69000.0,
+                            AllTimeLow = 67.0,
+                            CirculatingSupply = 19000000.0,
+                            Contract = "0x0000000000000000000000000000000000000000",
+                            CreationDate = new DateTime(2009, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "La primera criptomoneda descentralizada",
+                            MarketCap = "900B",
+                            Name = "Bitcoin",
+                            Ranking = 1,
+                            Symbol = "BTC",
+                            TotalSupply = 21000000.0,
+                            Value = 60000.0,
+                            Website = "https://bitcoin.org"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AllTimeHigh = 4800.0,
+                            AllTimeLow = 0.41999999999999998,
+                            CirculatingSupply = 118000000.0,
+                            Contract = "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
+                            CreationDate = new DateTime(2015, 7, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Una plataforma descentralizada de contratos inteligentes",
+                            MarketCap = "400B",
+                            Name = "Ethereum",
+                            Ranking = 2,
+                            Symbol = "ETH",
+                            TotalSupply = 118000000.0,
+                            Value = 4000.0,
+                            Website = "https://ethereum.org"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AllTimeHigh = 3.1000000000000001,
+                            AllTimeLow = 0.017000000000000001,
+                            CirculatingSupply = 32000000000.0,
+                            Contract = "0x3ee2200efb3400fabb9aacf31297cbdd1d435d47",
+                            CreationDate = new DateTime(2017, 9, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Plataforma blockchain de tercera generación",
+                            MarketCap = "70B",
+                            Name = "Cardano",
+                            Ranking = 5,
+                            Symbol = "ADA",
+                            TotalSupply = 45000000000.0,
+                            Value = 2.1499999999999999,
+                            Website = "https://cardano.org"
+                        });
                 });
 
             modelBuilder.Entity("CryptoTrade.Models.Stock", b =>
@@ -127,6 +180,50 @@ namespace CryptoTrade.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Stocks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Category = "Technology",
+                            CompanyValue = 2500000000000.0,
+                            CreationDate = new DateTime(1976, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Empresa multinacional de tecnología",
+                            DividendYield = 0.60999999999999999,
+                            EarningPerShare = 5.6100000000000003,
+                            Name = "Apple Inc.",
+                            Ranking = 1,
+                            Value = 150.25,
+                            Website = "https://www.apple.com"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Category = "Technology",
+                            CompanyValue = 2300000000000.0,
+                            CreationDate = new DateTime(1975, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Empresa de software y hardware",
+                            DividendYield = 0.87,
+                            EarningPerShare = 9.7799999999999994,
+                            Name = "Microsoft Corporation",
+                            Ranking = 2,
+                            Value = 300.55000000000001,
+                            Website = "https://www.microsoft.com"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Category = "Automotive",
+                            CompanyValue = 800000000000.0,
+                            CreationDate = new DateTime(2003, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Empresa de automóviles eléctricos y energías limpias",
+                            DividendYield = 0.0,
+                            EarningPerShare = 2.1600000000000001,
+                            Name = "Tesla, Inc.",
+                            Ranking = 3,
+                            Value = 750.75,
+                            Website = "https://www.tesla.com"
+                        });
                 });
 
             modelBuilder.Entity("CryptoTrade.Models.Transaction", b =>

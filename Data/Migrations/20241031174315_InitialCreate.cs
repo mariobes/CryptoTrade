@@ -116,6 +116,26 @@ namespace CryptoTrade.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Cryptos",
+                columns: new[] { "Id", "AllTimeHigh", "AllTimeLow", "CirculatingSupply", "Contract", "CreationDate", "Description", "MarketCap", "Name", "Ranking", "Symbol", "TotalSupply", "Value", "Website" },
+                values: new object[,]
+                {
+                    { 1, 69000.0, 67.0, 19000000.0, "0x0000000000000000000000000000000000000000", new DateTime(2009, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "La primera criptomoneda descentralizada", "900B", "Bitcoin", 1, "BTC", 21000000.0, 60000.0, "https://bitcoin.org" },
+                    { 2, 4800.0, 0.41999999999999998, 118000000.0, "0x2170ed0880ac9a755fd29b2688956bd959f933f8", new DateTime(2015, 7, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "Una plataforma descentralizada de contratos inteligentes", "400B", "Ethereum", 2, "ETH", 118000000.0, 4000.0, "https://ethereum.org" },
+                    { 3, 3.1000000000000001, 0.017000000000000001, 32000000000.0, "0x3ee2200efb3400fabb9aacf31297cbdd1d435d47", new DateTime(2017, 9, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), "Plataforma blockchain de tercera generación", "70B", "Cardano", 5, "ADA", 45000000000.0, 2.1499999999999999, "https://cardano.org" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Stocks",
+                columns: new[] { "Id", "Category", "CompanyValue", "CreationDate", "Description", "DividendYield", "EarningPerShare", "Name", "Ranking", "Value", "Website" },
+                values: new object[,]
+                {
+                    { 1, "Technology", 2500000000000.0, new DateTime(1976, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Empresa multinacional de tecnología", 0.60999999999999999, 5.6100000000000003, "Apple Inc.", 1, 150.25, "https://www.apple.com" },
+                    { 2, "Technology", 2300000000000.0, new DateTime(1975, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), "Empresa de software y hardware", 0.87, 9.7799999999999994, "Microsoft Corporation", 2, 300.55000000000001, "https://www.microsoft.com" },
+                    { 3, "Automotive", 800000000000.0, new DateTime(2003, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Empresa de automóviles eléctricos y energías limpias", 0.0, 2.1600000000000001, "Tesla, Inc.", 3, 750.75, "https://www.tesla.com" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Birthdate", "Cash", "DNI", "Email", "IsBanned", "Name", "Nationality", "Password", "Phone", "Role", "Wallet" },
                 values: new object[,]
