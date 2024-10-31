@@ -15,6 +15,21 @@ public class StocksController : ControllerBase
         _stockService = stockService;
     }
 
+    [HttpPost]
+    public IActionResult CreateStock([FromBody] StockCreateUpdateDTO stockCreateUpdateDTO)
+    {
+        if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
+
+        try {
+            var stock = _stockService.RegisterStock(stockCreateUpdateDTO);
+            return CreatedAtAction(nameof(GetStock), new { stockId = stock.Id }, stock);
+        }     
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al registrar la acción. {ex.Message}");
+        }
+    }
+
     [HttpGet(Name = "GetAllStocks")] 
     public ActionResult<IEnumerable<Stock>> GetAllStocks()
     {
