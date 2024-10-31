@@ -62,4 +62,23 @@ public class StocksController : ControllerBase
         }
     }
 
+    [HttpPut("{stockId}")]
+    public IActionResult UpdateStock(int stockId, StockCreateUpdateDTO stockCreateUpdateDTO)
+    {
+        if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
+
+        try {
+            _stockService.UpdateStock(stockId, stockCreateUpdateDTO);
+            return Ok("Acción actualizada correctamente.");
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado la acción con ID: {stockId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al actualizar la acción con ID: {stockId}. {ex.Message}");
+        }
+    }
+
 }
