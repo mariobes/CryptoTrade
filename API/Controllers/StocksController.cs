@@ -81,4 +81,26 @@ public class StocksController : ControllerBase
         }
     }
 
+    [HttpDelete("{stockId}")]
+    public IActionResult DeleteStock(int stockId)
+    {
+        try
+        {
+            
+            // if (!_transactionService.IsStockPurchased(stockId))
+            // {
+                _stockService.DeleteStock(stockId);
+            // }
+            return Ok("Acción eliminada correctamente.");
+        }
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado la acción con ID: {stockId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al eliminar la acción con ID: {stockId}. {ex.Message}");
+        }
+    }
+
 }

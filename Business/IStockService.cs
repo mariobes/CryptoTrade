@@ -8,4 +8,5 @@ public interface IStockService
     public IEnumerable<Stock> GetAllStocks();
     public Stock GetStockById(int stockId);
     public void UpdateStock(int stockId, StockCreateUpdateDTO stockCreateUpdateDTO);
+    public void DeleteStock(int stockId);
 }

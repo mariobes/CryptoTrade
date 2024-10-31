@@ -64,5 +64,15 @@ public class StockService : IStockService
         stock.DividendYield = stockCreateUpdateDTO.DividendYield;
         _repository.UpdateStock(stock);
     }
+
+    public void DeleteStock(int stockId)
+    {
+        var stock = _repository.GetStock(stockId);
+        if (stock == null)
+        {
+            throw new KeyNotFoundException($"Acción con ID {stockId} no encontrada");
+        }
+        _repository.DeleteStock(stockId);
+    }
     
 }
