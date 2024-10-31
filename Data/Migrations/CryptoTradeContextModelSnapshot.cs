@@ -178,6 +178,50 @@ namespace CryptoTrade.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Stocks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Category = "Technology",
+                            CompanyValue = 2500000000000.0,
+                            CreationDate = new DateTime(1976, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Empresa multinacional de tecnología",
+                            DividendYield = 0.60999999999999999,
+                            EarningPerShare = 5.6100000000000003,
+                            Name = "Apple Inc.",
+                            Ranking = 1,
+                            Value = 150.25,
+                            Website = "https://www.apple.com"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Category = "Technology",
+                            CompanyValue = 2300000000000.0,
+                            CreationDate = new DateTime(1975, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Empresa de software y hardware",
+                            DividendYield = 0.87,
+                            EarningPerShare = 9.7799999999999994,
+                            Name = "Microsoft Corporation",
+                            Ranking = 2,
+                            Value = 300.55000000000001,
+                            Website = "https://www.microsoft.com"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Category = "Automotive",
+                            CompanyValue = 800000000000.0,
+                            CreationDate = new DateTime(2003, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Empresa de automóviles eléctricos y energías limpias",
+                            DividendYield = 0.0,
+                            EarningPerShare = 2.1600000000000001,
+                            Name = "Tesla, Inc.",
+                            Ranking = 3,
+                            Value = 750.75,
+                            Website = "https://www.tesla.com"
+                        });
                 });
 
             modelBuilder.Entity("CryptoTrade.Models.Transaction", b =>
