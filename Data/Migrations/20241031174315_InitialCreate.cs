@@ -126,6 +126,16 @@ namespace CryptoTrade.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Stocks",
+                columns: new[] { "Id", "Category", "CompanyValue", "CreationDate", "Description", "DividendYield", "EarningPerShare", "Name", "Ranking", "Value", "Website" },
+                values: new object[,]
+                {
+                    { 1, "Technology", 2500000000000.0, new DateTime(1976, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Empresa multinacional de tecnología", 0.60999999999999999, 5.6100000000000003, "Apple Inc.", 1, 150.25, "https://www.apple.com" },
+                    { 2, "Technology", 2300000000000.0, new DateTime(1975, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), "Empresa de software y hardware", 0.87, 9.7799999999999994, "Microsoft Corporation", 2, 300.55000000000001, "https://www.microsoft.com" },
+                    { 3, "Automotive", 800000000000.0, new DateTime(2003, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Empresa de automóviles eléctricos y energías limpias", 0.0, 2.1600000000000001, "Tesla, Inc.", 3, 750.75, "https://www.tesla.com" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Birthdate", "Cash", "DNI", "Email", "IsBanned", "Name", "Nationality", "Password", "Phone", "Role", "Wallet" },
                 values: new object[,]
