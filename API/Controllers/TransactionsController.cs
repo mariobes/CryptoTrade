@@ -118,4 +118,21 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [HttpPost("sell-stock")]
+    public IActionResult SellStock([FromBody] BuySellAsset buySellAsset)
+    {
+        try {
+            _transactionService.SellStock(buySellAsset);
+            return Ok("Venta realizada correctamente.");
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado la acción con ID: {buySellAsset.AssetId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al hacer la venta del usuario con ID: {buySellAsset.UserId}. {ex.Message}");
+        }
+    }
+
 }

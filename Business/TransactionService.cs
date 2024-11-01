@@ -146,6 +146,39 @@ public class TransactionService : ITransactionService
         _transactionRepository.AddTransaction(transaction);
     }
 
+    public void SellStock(BuySellAsset buySellAsset)
+    {
+        var user = _userRepository.GetUser(buySellAsset.UserId);
+        if (user == null) 
+        {
+            throw new KeyNotFoundException($"Usuario con ID {buySellAsset.UserId} no encontrado");
+        }
+
+        var stock = _stockRepository.GetStock(buySellAsset.AssetId);
+        if (stock == null)
+        {
+            throw new KeyNotFoundException($"Acción con ID {buySellAsset.AssetId} no encontrada");
+        } 
+
+        var userHasStock = HasStock(buySellAsset.UserId, buySellAsset.AssetId);
+        if (!userHasStock)
+        {
+            throw new Exception($"El usuario {buySellAsset.UserId} no tiene la acción {buySellAsset.AssetId}");
+        }
+
+        var userStockBalance = GetStockBalance(buySellAsset.UserId, buySellAsset.AssetId);
+        if (buySellAsset.Amount > userStockBalance)
+        {
+            throw new Exception($"No tienes suficientes fondos para realizar la venta");
+        }
+        
+        Transaction transaction = new(buySellAsset.UserId, buySellAsset.AssetId, $"Vender {stock.Name}", buySellAsset.Amount, "Stock");
+        user.Cash += transaction.Amount;
+        user.Wallet -= transaction.Amount;
+        _userRepository.UpdateUser(user);
+        _transactionRepository.AddTransaction(transaction);
+    }
+
     public bool HasCrypto(int userId, int cryptoId)
     {
         var userTransactions = _transactionRepository.GetAllTransactions(userId);
@@ -153,6 +186,20 @@ public class TransactionService : ITransactionService
         foreach (var transaction in userTransactions)
         {
             if (transaction.AssetId == cryptoId && transaction.TypeOfAsset.Equals("Crypto"))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool HasStock(int userId, int stockId)
+    {
+        var userTransactions = _transactionRepository.GetAllTransactions(userId);
+
+        foreach (var transaction in userTransactions)
+        {
+            if (transaction.AssetId == stockId && transaction.TypeOfAsset.Equals("Stock"))
             {
                 return true;
             }
@@ -169,6 +216,29 @@ public class TransactionService : ITransactionService
         foreach (var transaction in userTransactions)
         {
             if (transaction.AssetId == cryptoId && transaction.TypeOfAsset.Equals("Crypto"))
+            {
+                if (transaction.Concept.StartsWith("Comprar"))
+                {
+                    balance += transaction.Amount;
+                }
+                else if (transaction.Concept.StartsWith("Vender"))
+                {
+                    balance -= transaction.Amount;
+                }
+            }
+        }
+        return balance;
+    }
+
+    public double GetStockBalance(int userId, int stockId)
+    {
+        var userTransactions = _transactionRepository.GetAllTransactions(userId);
+
+        double balance = 0;
+
+        foreach (var transaction in userTransactions)
+        {
+            if (transaction.AssetId == stockId && transaction.TypeOfAsset.Equals("Stock"))
             {
                 if (transaction.Concept.StartsWith("Comprar"))
                 {

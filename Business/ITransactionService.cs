@@ -10,4 +10,5 @@ public interface ITransactionService
     public void BuyCrypto(BuySellAsset buySellAsset);
     public void SellCrypto(BuySellAsset buySellAsset);
     public void BuyStock(BuySellAsset buySellAsset);
+    public void SellStock(BuySellAsset buySellAsset);
 }
