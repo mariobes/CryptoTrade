@@ -31,7 +31,20 @@ var app = builder.Build();
 
 // Configure Swagger
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+});
+
+// app.Use(async (context, next) =>
+// {
+//     if (context.Request.Path == "/")
+//     {
+//         context.Response.Redirect("/swagger");
+//         return;
+//     }
+//     await next();
+// });
 
 app.UseHttpsRedirection();
 

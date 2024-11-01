@@ -35,4 +35,21 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [HttpPost("deposit")]
+    public IActionResult MakeDeposit([FromBody] DepositWithdrawalDTO depositWithdrawalDTO)
+    {
+        try {
+            _transactionService.MakeDeposit(depositWithdrawalDTO);
+            return Ok("Depósito realizado correctamente.");
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado el usuario con ID: {depositWithdrawalDTO.UserId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al realizar el depósito del usuario con ID: {depositWithdrawalDTO.UserId}. {ex.Message}");
+        }
+    }
+
 }
