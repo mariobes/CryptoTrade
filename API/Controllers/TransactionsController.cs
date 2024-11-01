@@ -9,12 +9,10 @@ namespace CryptoTrade.API.Controllers;
 public class TransactionsController : ControllerBase
 {
     private readonly ITransactionService _transactionService;
-    private readonly IAuthService _authService;
 
-    public TransactionsController(ITransactionService transactionService, IAuthService authService)
+    public TransactionsController(ITransactionService transactionService)
     {
         _transactionService = transactionService;
-        _authService = authService;
     }
 
     [HttpGet("{userId}")]
@@ -66,6 +64,23 @@ public class TransactionsController : ControllerBase
         catch (Exception ex)
         {
             return BadRequest($"Error al hacer el retiro del usuario con ID: {depositWithdrawalDTO.UserId}. {ex.Message}");
+        }
+    }
+
+    [HttpPost("buy-crypto")]
+    public IActionResult BuyCrypto([FromBody] BuySellCrypto buySellCrypto)
+    {
+        try {
+            _transactionService.BuyCrypto(buySellCrypto);
+            return Ok("Compra realizada correctamente.");
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado el usuario con ID: {buySellCrypto.UserId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al hacer la compra del usuario con ID: {buySellCrypto.UserId}. {ex.Message}");
         }
     }
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CryptoTrade.Data.Migrations
 {
     [DbContext(typeof(CryptoTradeContext))]
-    [Migration("20241101113142_InitialCreate")]
+    [Migration("20241101121511_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
