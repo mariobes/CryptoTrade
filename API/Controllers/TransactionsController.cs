@@ -52,4 +52,21 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [HttpPost("withdrawal")]
+    public IActionResult MakeWithdrawal([FromBody] DepositWithdrawalDTO depositWithdrawalDTO)
+    {
+        try {
+            _transactionService.MakeWithdrawal(depositWithdrawalDTO);
+            return Ok("Retiro realizado correctamente.");
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado el usuario con ID: {depositWithdrawalDTO.UserId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al hacer el retiro del usuario con ID: {depositWithdrawalDTO.UserId}. {ex.Message}");
+        }
+    }
+
 }

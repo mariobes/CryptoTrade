@@ -37,5 +37,24 @@ public class TransactionService : ITransactionService
         _userRepository.UpdateUser(user);
         _transactionRepository.AddTransaction(transaction);
     }
+
+    public void MakeWithdrawal(DepositWithdrawalDTO depositWithdrawalDTO)
+    {
+        var user = _userRepository.GetUser(depositWithdrawalDTO.UserId);
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"Usuario con ID {depositWithdrawalDTO.UserId} no encontrado");
+        }
+
+        if (user.Cash < depositWithdrawalDTO.Amount)
+        {
+            throw new Exception("No tienes suficiente saldo para realizar el retiro");
+        }
+
+        Transaction transaction = new(depositWithdrawalDTO.UserId, "Retirar dinero", depositWithdrawalDTO.Amount, depositWithdrawalDTO.PaymentMethod);
+        user.Cash -= depositWithdrawalDTO.Amount;
+        _userRepository.UpdateUser(user);
+        _transactionRepository.AddTransaction(transaction);
+    }
     
 }
