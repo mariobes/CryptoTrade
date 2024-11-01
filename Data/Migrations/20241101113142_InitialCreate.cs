@@ -146,6 +146,27 @@ namespace CryptoTrade.Data.Migrations
                     { 4, new DateTime(2004, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 0.0, "52353425D", "eduardo@gmail.com", false, "Eduardo", "España", "eduardo12345", "4574548", "user", 0.0 }
                 });
 
+            migrationBuilder.InsertData(
+                table: "Transactions",
+                columns: new[] { "Id", "Amount", "AssetId", "Concept", "CryptoId", "Date", "PaymentMethod", "StockId", "UserId" },
+                values: new object[,]
+                {
+                    { 1, 0.10000000000000001, 1, "Compra de Bitcoin", null, new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Tarjeta de Crédito", null, 1 },
+                    { 2, 1.5, 2, "Compra de Ethereum", null, new DateTime(2023, 8, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Transferencia Bancaria", null, 1 },
+                    { 3, 500.0, 3, "Compra de Cardano", null, new DateTime(2023, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Tarjeta de Crédito", null, 2 },
+                    { 4, 0.050000000000000003, 1, "Venta de Bitcoin", null, new DateTime(2023, 10, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Wallet", null, 2 },
+                    { 5, 0.29999999999999999, 1, "Compra de Bitcoin", null, new DateTime(2023, 11, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Transferencia Bancaria", null, 2 },
+                    { 6, 2.0, 2, "Compra de Ethereum", null, new DateTime(2023, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "Tarjeta de Crédito", null, 3 },
+                    { 7, 1000.0, 3, "Compra de Cardano", null, new DateTime(2023, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "Wallet", null, 3 },
+                    { 8, 500.0, 3, "Venta de Cardano", null, new DateTime(2023, 10, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), "Transferencia Bancaria", null, 3 },
+                    { 9, 0.20000000000000001, 1, "Compra de Bitcoin", null, new DateTime(2023, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "Wallet", null, 4 },
+                    { 10, 0.5, 2, "Venta de Ethereum", null, new DateTime(2023, 7, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "Tarjeta de Crédito", null, 4 },
+                    { 11, 0.14999999999999999, 1, "Compra de Bitcoin", null, new DateTime(2023, 10, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), "Transferencia Bancaria", null, 4 },
+                    { 12, 10.0, 1, "Compra de acciones de Apple", null, new DateTime(2023, 9, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "Wallet", null, 2 },
+                    { 13, 5.0, 2, "Compra de acciones de Microsoft", null, new DateTime(2023, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "Tarjeta de Crédito", null, 3 },
+                    { 14, 2.0, 3, "Venta de acciones de Tesla", null, new DateTime(2023, 9, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), "Transferencia Bancaria", null, 4 }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_CryptoId",
                 table: "Transactions",

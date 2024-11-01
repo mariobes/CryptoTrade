@@ -11,6 +11,8 @@ builder.Services.AddScoped<ICryptoService, CryptoService>();
 builder.Services.AddScoped<ICryptoRepository, CryptoEFRepository>();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IStockRepository, StockEFRepository>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<ITransactionRepository, TransactionEFRepository>();
 
 var connectionString = builder.Configuration.GetConnectionString("ServerDB_localhost");
 

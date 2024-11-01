@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CryptoTrade.Data.Migrations
 {
     [DbContext(typeof(CryptoTradeContext))]
-    [Migration("20241031174315_InitialCreate")]
+    [Migration("20241101113142_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -268,6 +268,148 @@ namespace CryptoTrade.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Transactions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Amount = 0.10000000000000001,
+                            AssetId = 1,
+                            Concept = "Compra de Bitcoin",
+                            Date = new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentMethod = "Tarjeta de Crédito",
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Amount = 1.5,
+                            AssetId = 2,
+                            Concept = "Compra de Ethereum",
+                            Date = new DateTime(2023, 8, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentMethod = "Transferencia Bancaria",
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Amount = 500.0,
+                            AssetId = 3,
+                            Concept = "Compra de Cardano",
+                            Date = new DateTime(2023, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentMethod = "Tarjeta de Crédito",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Amount = 0.050000000000000003,
+                            AssetId = 1,
+                            Concept = "Venta de Bitcoin",
+                            Date = new DateTime(2023, 10, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentMethod = "Wallet",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Amount = 0.29999999999999999,
+                            AssetId = 1,
+                            Concept = "Compra de Bitcoin",
+                            Date = new DateTime(2023, 11, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentMethod = "Transferencia Bancaria",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Amount = 2.0,
+                            AssetId = 2,
+                            Concept = "Compra de Ethereum",
+                            Date = new DateTime(2023, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentMethod = "Tarjeta de Crédito",
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Amount = 1000.0,
+                            AssetId = 3,
+                            Concept = "Compra de Cardano",
+                            Date = new DateTime(2023, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentMethod = "Wallet",
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Amount = 500.0,
+                            AssetId = 3,
+                            Concept = "Venta de Cardano",
+                            Date = new DateTime(2023, 10, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentMethod = "Transferencia Bancaria",
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Amount = 0.20000000000000001,
+                            AssetId = 1,
+                            Concept = "Compra de Bitcoin",
+                            Date = new DateTime(2023, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentMethod = "Wallet",
+                            UserId = 4
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Amount = 0.5,
+                            AssetId = 2,
+                            Concept = "Venta de Ethereum",
+                            Date = new DateTime(2023, 7, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentMethod = "Tarjeta de Crédito",
+                            UserId = 4
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Amount = 0.14999999999999999,
+                            AssetId = 1,
+                            Concept = "Compra de Bitcoin",
+                            Date = new DateTime(2023, 10, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentMethod = "Transferencia Bancaria",
+                            UserId = 4
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Amount = 10.0,
+                            AssetId = 1,
+                            Concept = "Compra de acciones de Apple",
+                            Date = new DateTime(2023, 9, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentMethod = "Wallet",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Amount = 5.0,
+                            AssetId = 2,
+                            Concept = "Compra de acciones de Microsoft",
+                            Date = new DateTime(2023, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentMethod = "Tarjeta de Crédito",
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Amount = 2.0,
+                            AssetId = 3,
+                            Concept = "Venta de acciones de Tesla",
+                            Date = new DateTime(2023, 9, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentMethod = "Transferencia Bancaria",
+                            UserId = 4
+                        });
                 });
 
             modelBuilder.Entity("CryptoTrade.Models.User", b =>

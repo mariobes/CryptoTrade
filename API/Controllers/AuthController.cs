@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using CryptoTrade.Business;
 using CryptoTrade.Models;
 
-
 namespace CryptoTrade.API.Controllers;
 
 [ApiController]
