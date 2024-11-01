@@ -68,36 +68,70 @@ public class TransactionsController : ControllerBase
     }
 
     [HttpPost("buy-crypto")]
-    public IActionResult BuyCrypto([FromBody] BuySellCrypto buySellCrypto)
+    public IActionResult BuyCrypto([FromBody] BuySellAsset buySellAsset)
     {
         try {
-            _transactionService.BuyCrypto(buySellCrypto);
+            _transactionService.BuyCrypto(buySellAsset);
             return Ok("Compra realizada correctamente.");
         }     
         catch (KeyNotFoundException knfex)
         {
-            return NotFound($"No se ha encontrado la criptomoneda con ID: {buySellCrypto.CryptoId}. {knfex.Message}");
+            return NotFound($"No se ha encontrado la criptomoneda con ID: {buySellAsset.AssetId}. {knfex.Message}");
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error al hacer la compra del usuario con ID: {buySellCrypto.UserId}. {ex.Message}");
+            return BadRequest($"Error al hacer la compra del usuario con ID: {buySellAsset.UserId}. {ex.Message}");
         }
     }
 
     [HttpPost("sell-crypto")]
-    public IActionResult SellCrypto([FromBody] BuySellCrypto buySellCrypto)
+    public IActionResult SellCrypto([FromBody] BuySellAsset buySellAsset)
     {
         try {
-            _transactionService.SellCrypto(buySellCrypto);
+            _transactionService.SellCrypto(buySellAsset);
             return Ok("Venta realizada correctamente.");
         }     
         catch (KeyNotFoundException knfex)
         {
-            return NotFound($"No se ha encontrado la criptomoneda con ID: {buySellCrypto.CryptoId}. {knfex.Message}");
+            return NotFound($"No se ha encontrado la criptomoneda con ID: {buySellAsset.AssetId}. {knfex.Message}");
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error al hacer la venta del usuario con ID: {buySellCrypto.UserId}. {ex.Message}");
+            return BadRequest($"Error al hacer la venta del usuario con ID: {buySellAsset.UserId}. {ex.Message}");
+        }
+    }
+
+    [HttpPost("buy-stock")]
+    public IActionResult BuyStock([FromBody] BuySellAsset buySellAsset)
+    {
+        try {
+            _transactionService.BuyStock(buySellAsset);
+            return Ok("Compra realizada correctamente.");
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado la acción con ID: {buySellAsset.AssetId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al hacer la compra del usuario con ID: {buySellAsset.UserId}. {ex.Message}");
+        }
+    }
+
+    [HttpPost("sell-stock")]
+    public IActionResult SellStock([FromBody] BuySellAsset buySellAsset)
+    {
+        try {
+            _transactionService.SellStock(buySellAsset);
+            return Ok("Venta realizada correctamente.");
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado la acción con ID: {buySellAsset.AssetId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al hacer la venta del usuario con ID: {buySellAsset.UserId}. {ex.Message}");
         }
     }
 

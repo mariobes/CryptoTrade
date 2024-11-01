@@ -7,6 +7,8 @@ public interface ITransactionService
     public IEnumerable<Transaction> GetAllTransactions(int userId);
     public void MakeDeposit(DepositWithdrawalDTO depositWithdrawalDTO);
     public void MakeWithdrawal(DepositWithdrawalDTO depositWithdrawalDTO);
-    public void BuyCrypto(BuySellCrypto buySellCrypto);
-    public void SellCrypto(BuySellCrypto buySellCrypto);
+    public void BuyCrypto(BuySellAsset buySellAsset);
+    public void SellCrypto(BuySellAsset buySellAsset);
+    public void BuyStock(BuySellAsset buySellAsset);
+    public void SellStock(BuySellAsset buySellAsset);
 }
