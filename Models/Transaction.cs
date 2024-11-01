@@ -13,6 +13,7 @@ public class Transaction
     [ForeignKey("User")]
     public int UserId { get; set; }
 
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? AssetId { get; set; }
 
     [Required]
@@ -25,7 +26,11 @@ public class Transaction
 
     //public double Charge { get; set; } = 1.0;
 
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? PaymentMethod { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? TypeOfAsset { get; set; }
 
     [JsonIgnore]
     public User? User { get; set; }
@@ -46,12 +51,13 @@ public class Transaction
         PaymentMethod = paymentMethod;
     }
 
-    public Transaction (int userId, int assetId, string concept, double amount)
+    public Transaction (int userId, int assetId, string concept, double amount, string typeOfAsset)
     {
         UserId = userId;
         AssetId = assetId;
         Concept = concept;
         Amount = amount;
+        TypeOfAsset = typeOfAsset;
     }
 
 }

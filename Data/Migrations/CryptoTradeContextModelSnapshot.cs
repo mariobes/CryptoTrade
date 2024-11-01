@@ -217,7 +217,7 @@ namespace CryptoTrade.Data.Migrations
                             Description = "Empresa de automóviles eléctricos y energías limpias",
                             DividendYield = 0.0,
                             EarningPerShare = 2.1600000000000001,
-                            Name = "Tesla, Inc.",
+                            Name = "Tesla Inc.",
                             Ranking = 3,
                             Value = 750.75,
                             Website = "https://www.tesla.com"
@@ -254,6 +254,9 @@ namespace CryptoTrade.Data.Migrations
                     b.Property<int?>("StockId")
                         .HasColumnType("int");
 
+                    b.Property<string>("TypeOfAsset")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -266,6 +269,148 @@ namespace CryptoTrade.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Transactions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Amount = 100.0,
+                            AssetId = 1,
+                            Concept = "Comprar Bitcoin",
+                            Date = new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeOfAsset = "Crypto",
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Amount = 200.0,
+                            AssetId = 2,
+                            Concept = "Comprar Ethereum",
+                            Date = new DateTime(2023, 8, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeOfAsset = "Crypto",
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Amount = 500.0,
+                            AssetId = 3,
+                            Concept = "Comprar Cardano",
+                            Date = new DateTime(2023, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Amount = 50.0,
+                            AssetId = 1,
+                            Concept = "Vender Bitcoin",
+                            Date = new DateTime(2023, 10, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Amount = 100.0,
+                            AssetId = 1,
+                            Concept = "Comprar Bitcoin",
+                            Date = new DateTime(2023, 11, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Amount = 50.0,
+                            AssetId = 2,
+                            Concept = "Comprar Ethereum",
+                            Date = new DateTime(2023, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeOfAsset = "Crypto",
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Amount = 1000.0,
+                            AssetId = 3,
+                            Concept = "Comprar Cardano",
+                            Date = new DateTime(2023, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeOfAsset = "Crypto",
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Amount = 100.0,
+                            AssetId = 3,
+                            Concept = "Vender Cardano",
+                            Date = new DateTime(2023, 10, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeOfAsset = "Crypto",
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Amount = 300.0,
+                            AssetId = 1,
+                            Concept = "Comprar Bitcoin",
+                            Date = new DateTime(2023, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeOfAsset = "Crypto",
+                            UserId = 4
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Amount = 20.0,
+                            AssetId = 2,
+                            Concept = "Vender Ethereum",
+                            Date = new DateTime(2023, 7, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeOfAsset = "Crypto",
+                            UserId = 4
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Amount = 500.0,
+                            AssetId = 1,
+                            Concept = "Comprar Bitcoin",
+                            Date = new DateTime(2023, 10, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeOfAsset = "Crypto",
+                            UserId = 4
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Amount = 100.0,
+                            AssetId = 1,
+                            Concept = "Comprar Apple Inc.",
+                            Date = new DateTime(2023, 9, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeOfAsset = "Stock",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Amount = 500.0,
+                            AssetId = 2,
+                            Concept = "Comprar Microsoft Corporation",
+                            Date = new DateTime(2023, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeOfAsset = "Stock",
+                            UserId = 3
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Amount = 200.0,
+                            AssetId = 3,
+                            Concept = "Vender Tesla Inc.",
+                            Date = new DateTime(2023, 9, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeOfAsset = "Stock",
+                            UserId = 4
+                        });
                 });
 
             modelBuilder.Entity("CryptoTrade.Models.User", b =>

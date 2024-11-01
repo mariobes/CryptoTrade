@@ -34,9 +34,26 @@ namespace CryptoTrade.Data
             );
 
             modelBuilder.Entity<Stock>().HasData(
-            new Stock { Id = 1, Name = "Apple Inc.", Value = 150.25, CreationDate = new DateTime(1976, 4, 1), Description = "Empresa multinacional de tecnología", Ranking = 1, Website = "https://www.apple.com", CompanyValue = 2500000000000, EarningPerShare = 5.61, Category = "Technology", DividendYield = 0.61 },
-            new Stock { Id = 2, Name = "Microsoft Corporation", Value = 300.55, CreationDate = new DateTime(1975, 4, 4), Description = "Empresa de software y hardware", Ranking = 2, Website = "https://www.microsoft.com", CompanyValue = 2300000000000, EarningPerShare = 9.78, Category = "Technology", DividendYield = 0.87 },
-            new Stock { Id = 3, Name = "Tesla, Inc.", Value = 750.75, CreationDate = new DateTime(2003, 7, 1), Description = "Empresa de automóviles eléctricos y energías limpias", Ranking = 3, Website = "https://www.tesla.com", CompanyValue = 800000000000, EarningPerShare = 2.16, Category = "Automotive", DividendYield = 0.00 }
+                new Stock { Id = 1, Name = "Apple Inc.", Value = 150.25, CreationDate = new DateTime(1976, 4, 1), Description = "Empresa multinacional de tecnología", Ranking = 1, Website = "https://www.apple.com", CompanyValue = 2500000000000, EarningPerShare = 5.61, Category = "Technology", DividendYield = 0.61 },
+                new Stock { Id = 2, Name = "Microsoft Corporation", Value = 300.55, CreationDate = new DateTime(1975, 4, 4), Description = "Empresa de software y hardware", Ranking = 2, Website = "https://www.microsoft.com", CompanyValue = 2300000000000, EarningPerShare = 9.78, Category = "Technology", DividendYield = 0.87 },
+                new Stock { Id = 3, Name = "Tesla Inc.", Value = 750.75, CreationDate = new DateTime(2003, 7, 1), Description = "Empresa de automóviles eléctricos y energías limpias", Ranking = 3, Website = "https://www.tesla.com", CompanyValue = 800000000000, EarningPerShare = 2.16, Category = "Automotive", DividendYield = 0.00 }
+            );
+
+            modelBuilder.Entity<Transaction>().HasData(
+                new Transaction { Id = 1, UserId = 1, AssetId = 1, Concept = "Comprar Bitcoin", Amount = 100, Date = new DateTime(2023, 6, 12), TypeOfAsset = "Crypto" },
+                new Transaction { Id = 2, UserId = 1, AssetId = 2, Concept = "Comprar Ethereum", Amount = 200, Date = new DateTime(2023, 8, 5), TypeOfAsset = "Crypto" },
+                new Transaction { Id = 3, UserId = 2, AssetId = 3, Concept = "Comprar Cardano", Amount = 500, Date = new DateTime(2023, 9, 10), TypeOfAsset = "Crypto" },
+                new Transaction { Id = 4, UserId = 2, AssetId = 1, Concept = "Vender Bitcoin", Amount = 50, Date = new DateTime(2023, 10, 2), TypeOfAsset = "Crypto" },
+                new Transaction { Id = 5, UserId = 2, AssetId = 1, Concept = "Comprar Bitcoin", Amount = 100, Date = new DateTime(2023, 11, 15), TypeOfAsset = "Crypto" },
+                new Transaction { Id = 6, UserId = 3, AssetId = 2, Concept = "Comprar Ethereum", Amount = 50, Date = new DateTime(2023, 8, 20), TypeOfAsset = "Crypto" },
+                new Transaction { Id = 7, UserId = 3, AssetId = 3, Concept = "Comprar Cardano", Amount = 1000, Date = new DateTime(2023, 9, 30), TypeOfAsset = "Crypto" },
+                new Transaction { Id = 8, UserId = 3, AssetId = 3, Concept = "Vender Cardano", Amount = 100, Date = new DateTime(2023, 10, 21), TypeOfAsset = "Crypto" },
+                new Transaction { Id = 9, UserId = 4, AssetId = 1, Concept = "Comprar Bitcoin", Amount = 300, Date = new DateTime(2023, 6, 25), TypeOfAsset = "Crypto" },
+                new Transaction { Id = 10, UserId = 4, AssetId = 2, Concept = "Vender Ethereum", Amount = 20, Date = new DateTime(2023, 7, 14), TypeOfAsset = "Crypto" },
+                new Transaction { Id = 11, UserId = 4, AssetId = 1, Concept = "Comprar Bitcoin", Amount = 500, Date = new DateTime(2023, 10, 6), TypeOfAsset = "Crypto" },
+                new Transaction { Id = 12, UserId = 2, AssetId = 1, Concept = "Comprar Apple Inc.", Amount = 100, Date = new DateTime(2023, 9, 7), TypeOfAsset = "Stock" },
+                new Transaction { Id = 13, UserId = 3, AssetId = 2, Concept = "Comprar Microsoft Corporation", Amount = 500, Date = new DateTime(2023, 8, 16), TypeOfAsset = "Stock" },
+                new Transaction { Id = 14, UserId = 4, AssetId = 3, Concept = "Vender Tesla Inc.", Amount = 200, Date = new DateTime(2023, 9, 18), TypeOfAsset = "Stock" }
             );
         }
 

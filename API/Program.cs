@@ -11,6 +11,8 @@ builder.Services.AddScoped<ICryptoService, CryptoService>();
 builder.Services.AddScoped<ICryptoRepository, CryptoEFRepository>();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IStockRepository, StockEFRepository>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<ITransactionRepository, TransactionEFRepository>();
 
 var connectionString = builder.Configuration.GetConnectionString("ServerDB_localhost");
 
@@ -29,7 +31,20 @@ var app = builder.Build();
 
 // Configure Swagger
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+});
+
+// app.Use(async (context, next) =>
+// {
+//     if (context.Request.Path == "/")
+//     {
+//         context.Response.Redirect("/swagger");
+//         return;
+//     }
+//     await next();
+// });
 
 app.UseHttpsRedirection();
 
