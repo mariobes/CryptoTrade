@@ -76,11 +76,28 @@ public class TransactionsController : ControllerBase
         }     
         catch (KeyNotFoundException knfex)
         {
-            return NotFound($"No se ha encontrado el usuario con ID: {buySellCrypto.UserId}. {knfex.Message}");
+            return NotFound($"No se ha encontrado la criptomoneda con ID: {buySellCrypto.CryptoId}. {knfex.Message}");
         }
         catch (Exception ex)
         {
             return BadRequest($"Error al hacer la compra del usuario con ID: {buySellCrypto.UserId}. {ex.Message}");
+        }
+    }
+
+    [HttpPost("sell-crypto")]
+    public IActionResult SellCrypto([FromBody] BuySellCrypto buySellCrypto)
+    {
+        try {
+            _transactionService.SellCrypto(buySellCrypto);
+            return Ok("Venta realizada correctamente.");
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado la criptomoneda con ID: {buySellCrypto.CryptoId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al hacer la venta del usuario con ID: {buySellCrypto.UserId}. {ex.Message}");
         }
     }
 

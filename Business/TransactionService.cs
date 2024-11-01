@@ -66,21 +66,93 @@ public class TransactionService : ITransactionService
         {
             throw new KeyNotFoundException($"Usuario con ID {buySellCrypto.UserId} no encontrado");
         }
+
         var crypto = _cryptoRepository.GetCrypto(buySellCrypto.CryptoId);
         if (crypto == null) 
         {
             throw new KeyNotFoundException($"Criptomoneda con ID {buySellCrypto.CryptoId} no encontrada");
         }
+
         if (user.Cash < buySellCrypto.Amount)
         {
             throw new Exception("No tienes suficiente saldo para realizar la compra");
         }
 
-        Transaction transaction = new(buySellCrypto.UserId, buySellCrypto.CryptoId, $"Comprar {crypto.Name}", buySellCrypto.Amount);
+        Transaction transaction = new(buySellCrypto.UserId, buySellCrypto.CryptoId, $"Comprar {crypto.Name}", buySellCrypto.Amount, "Crypto");
         user.Cash -= transaction.Amount;
         user.Wallet += transaction.Amount;
         _userRepository.UpdateUser(user);
         _transactionRepository.AddTransaction(transaction);
+    }
+
+    public void SellCrypto(BuySellCrypto buySellCrypto)
+    {
+        var user = _userRepository.GetUser(buySellCrypto.UserId);
+        if (user == null) 
+        {
+            throw new KeyNotFoundException($"Usuario con ID {buySellCrypto.UserId} no encontrado");
+        }
+
+        var crypto = _cryptoRepository.GetCrypto(buySellCrypto.CryptoId);
+        if (crypto == null)
+        {
+            throw new KeyNotFoundException($"Criptomoneda con ID {buySellCrypto.CryptoId} no encontrada");
+        } 
+
+        var userHasCrypto = HasCrypto(buySellCrypto.UserId, buySellCrypto.CryptoId);
+        if (!userHasCrypto)
+        {
+            throw new Exception($"El usuario {buySellCrypto.UserId} no tiene la criptomoneda {buySellCrypto.CryptoId}");
+        }
+
+        var userCryptoBalance = GetCryptoBalance(buySellCrypto.UserId, buySellCrypto.CryptoId);
+        if (buySellCrypto.Amount > userCryptoBalance)
+        {
+            throw new Exception($"No tienes suficientes fondos para realizar la venta");
+        }
+        
+        Transaction transaction = new(buySellCrypto.UserId, buySellCrypto.CryptoId, $"Vender {crypto.Name}", buySellCrypto.Amount, "Crypto");
+        user.Cash += transaction.Amount;
+        user.Wallet -= transaction.Amount;
+        _userRepository.UpdateUser(user);
+        _transactionRepository.AddTransaction(transaction);
+    }
+
+    public bool HasCrypto(int userId, int cryptoId)
+    {
+        var userTransactions = _transactionRepository.GetAllTransactions(userId);
+
+        foreach (var transaction in userTransactions)
+        {
+            if (transaction.AssetId == cryptoId && transaction.TypeOfAsset.Equals("Crypto"))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public double GetCryptoBalance(int userId, int cryptoId)
+    {
+        var userTransactions = _transactionRepository.GetAllTransactions(userId);
+
+        double balance = 0;
+
+        foreach (var transaction in userTransactions)
+        {
+            if (transaction.AssetId == cryptoId && transaction.TypeOfAsset.Equals("Crypto"))
+            {
+                if (transaction.Concept.StartsWith("Comprar"))
+                {
+                    balance += transaction.Amount;
+                }
+                else if (transaction.Concept.StartsWith("Vender"))
+                {
+                    balance -= transaction.Amount;
+                }
+            }
+        }
+        return balance;
     }
     
 }

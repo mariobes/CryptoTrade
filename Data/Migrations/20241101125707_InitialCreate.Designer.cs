@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CryptoTrade.Data.Migrations
 {
     [DbContext(typeof(CryptoTradeContext))]
-    [Migration("20241101121511_InitialCreate")]
+    [Migration("20241101125707_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -219,7 +219,7 @@ namespace CryptoTrade.Data.Migrations
                             Description = "Empresa de automóviles eléctricos y energías limpias",
                             DividendYield = 0.0,
                             EarningPerShare = 2.1600000000000001,
-                            Name = "Tesla, Inc.",
+                            Name = "Tesla Inc.",
                             Ranking = 3,
                             Value = 750.75,
                             Website = "https://www.tesla.com"
@@ -256,6 +256,9 @@ namespace CryptoTrade.Data.Migrations
                     b.Property<int?>("StockId")
                         .HasColumnType("int");
 
+                    b.Property<string>("TypeOfAsset")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -273,21 +276,21 @@ namespace CryptoTrade.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Amount = 0.10000000000000001,
+                            Amount = 100.0,
                             AssetId = 1,
-                            Concept = "Compra de Bitcoin",
+                            Concept = "Comprar Bitcoin",
                             Date = new DateTime(2023, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentMethod = "Tarjeta de Crédito",
+                            TypeOfAsset = "Crypto",
                             UserId = 1
                         },
                         new
                         {
                             Id = 2,
-                            Amount = 1.5,
+                            Amount = 200.0,
                             AssetId = 2,
-                            Concept = "Compra de Ethereum",
+                            Concept = "Comprar Ethereum",
                             Date = new DateTime(2023, 8, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentMethod = "Transferencia Bancaria",
+                            TypeOfAsset = "Crypto",
                             UserId = 1
                         },
                         new
@@ -295,39 +298,39 @@ namespace CryptoTrade.Data.Migrations
                             Id = 3,
                             Amount = 500.0,
                             AssetId = 3,
-                            Concept = "Compra de Cardano",
+                            Concept = "Comprar Cardano",
                             Date = new DateTime(2023, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentMethod = "Tarjeta de Crédito",
+                            TypeOfAsset = "Crypto",
                             UserId = 2
                         },
                         new
                         {
                             Id = 4,
-                            Amount = 0.050000000000000003,
+                            Amount = 50.0,
                             AssetId = 1,
-                            Concept = "Venta de Bitcoin",
+                            Concept = "Vender Bitcoin",
                             Date = new DateTime(2023, 10, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentMethod = "Wallet",
+                            TypeOfAsset = "Crypto",
                             UserId = 2
                         },
                         new
                         {
                             Id = 5,
-                            Amount = 0.29999999999999999,
+                            Amount = 100.0,
                             AssetId = 1,
-                            Concept = "Compra de Bitcoin",
+                            Concept = "Comprar Bitcoin",
                             Date = new DateTime(2023, 11, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentMethod = "Transferencia Bancaria",
+                            TypeOfAsset = "Crypto",
                             UserId = 2
                         },
                         new
                         {
                             Id = 6,
-                            Amount = 2.0,
+                            Amount = 50.0,
                             AssetId = 2,
-                            Concept = "Compra de Ethereum",
+                            Concept = "Comprar Ethereum",
                             Date = new DateTime(2023, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentMethod = "Tarjeta de Crédito",
+                            TypeOfAsset = "Crypto",
                             UserId = 3
                         },
                         new
@@ -335,79 +338,79 @@ namespace CryptoTrade.Data.Migrations
                             Id = 7,
                             Amount = 1000.0,
                             AssetId = 3,
-                            Concept = "Compra de Cardano",
+                            Concept = "Comprar Cardano",
                             Date = new DateTime(2023, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentMethod = "Wallet",
+                            TypeOfAsset = "Crypto",
                             UserId = 3
                         },
                         new
                         {
                             Id = 8,
-                            Amount = 500.0,
+                            Amount = 100.0,
                             AssetId = 3,
-                            Concept = "Venta de Cardano",
+                            Concept = "Vender Cardano",
                             Date = new DateTime(2023, 10, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentMethod = "Transferencia Bancaria",
+                            TypeOfAsset = "Crypto",
                             UserId = 3
                         },
                         new
                         {
                             Id = 9,
-                            Amount = 0.20000000000000001,
+                            Amount = 300.0,
                             AssetId = 1,
-                            Concept = "Compra de Bitcoin",
+                            Concept = "Comprar Bitcoin",
                             Date = new DateTime(2023, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentMethod = "Wallet",
+                            TypeOfAsset = "Crypto",
                             UserId = 4
                         },
                         new
                         {
                             Id = 10,
-                            Amount = 0.5,
+                            Amount = 20.0,
                             AssetId = 2,
-                            Concept = "Venta de Ethereum",
+                            Concept = "Vender Ethereum",
                             Date = new DateTime(2023, 7, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentMethod = "Tarjeta de Crédito",
+                            TypeOfAsset = "Crypto",
                             UserId = 4
                         },
                         new
                         {
                             Id = 11,
-                            Amount = 0.14999999999999999,
+                            Amount = 500.0,
                             AssetId = 1,
-                            Concept = "Compra de Bitcoin",
+                            Concept = "Comprar Bitcoin",
                             Date = new DateTime(2023, 10, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentMethod = "Transferencia Bancaria",
+                            TypeOfAsset = "Crypto",
                             UserId = 4
                         },
                         new
                         {
                             Id = 12,
-                            Amount = 10.0,
+                            Amount = 100.0,
                             AssetId = 1,
-                            Concept = "Compra de acciones de Apple",
+                            Concept = "Comprar Apple Inc.",
                             Date = new DateTime(2023, 9, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentMethod = "Wallet",
+                            TypeOfAsset = "Stock",
                             UserId = 2
                         },
                         new
                         {
                             Id = 13,
-                            Amount = 5.0,
+                            Amount = 500.0,
                             AssetId = 2,
-                            Concept = "Compra de acciones de Microsoft",
+                            Concept = "Comprar Microsoft Corporation",
                             Date = new DateTime(2023, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentMethod = "Tarjeta de Crédito",
+                            TypeOfAsset = "Stock",
                             UserId = 3
                         },
                         new
                         {
                             Id = 14,
-                            Amount = 2.0,
+                            Amount = 200.0,
                             AssetId = 3,
-                            Concept = "Venta de acciones de Tesla",
+                            Concept = "Vender Tesla Inc.",
                             Date = new DateTime(2023, 9, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PaymentMethod = "Transferencia Bancaria",
+                            TypeOfAsset = "Stock",
                             UserId = 4
                         });
                 });
