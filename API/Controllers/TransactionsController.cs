@@ -135,4 +135,21 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [HttpPost("crypto-converter")]
+    public IActionResult CryptoConverter(CryptoConverterDTO cryptoConverterDTO)
+    {
+        try {
+            _transactionService.CryptoConverter(cryptoConverterDTO);
+            return Ok("Conversión realizada correctamente.");
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado la criptomoneda con ID: {cryptoConverterDTO.CryptoId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al hacer la conversión del usuario con ID: {cryptoConverterDTO.UserId}. {ex.Message}");
+        }
+    }
+
 }

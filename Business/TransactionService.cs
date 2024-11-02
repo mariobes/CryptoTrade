@@ -179,6 +179,46 @@ public class TransactionService : ITransactionService
         _transactionRepository.AddTransaction(transaction);
     }
 
+    public void CryptoConverter(CryptoConverterDTO cryptoConverterDTO)
+    {
+        var user = _userRepository.GetUser(cryptoConverterDTO.UserId);
+        if (user == null) 
+        {
+            throw new KeyNotFoundException($"Usuario con ID {cryptoConverterDTO.UserId} no encontrado");
+        }
+
+        var crypto = _cryptoRepository.GetCrypto(cryptoConverterDTO.CryptoId);
+        if (crypto == null)
+        {
+            throw new KeyNotFoundException($"Criptomoneda con ID {cryptoConverterDTO.CryptoId} no encontrada");
+        } 
+
+        var newCrypto = _cryptoRepository.GetCrypto(cryptoConverterDTO.NewCryptoId);
+        if (newCrypto == null)
+        {
+            throw new KeyNotFoundException($"Criptomoneda con ID {cryptoConverterDTO.NewCryptoId} no encontrada");
+        } 
+
+        var userHasCrypto = HasCrypto(cryptoConverterDTO.UserId, cryptoConverterDTO.CryptoId);
+        if (!userHasCrypto)
+        {
+            throw new Exception($"El usuario {cryptoConverterDTO.UserId} no tiene la criptomoneda {cryptoConverterDTO.CryptoId}");
+        }
+
+        var userCryptoBalance = GetCryptoBalance(cryptoConverterDTO.UserId, cryptoConverterDTO.CryptoId);
+        if (cryptoConverterDTO.Amount > userCryptoBalance)
+        {
+            throw new Exception($"No tienes suficientes fondos para realizar la venta");
+        }
+
+        //Transaction transaction = new(userId, cryptoId, $"Convertir {crypto.Name} a {newCrypto.Name}", amount, "Crypto");
+        Transaction sellTransaction = new(cryptoConverterDTO.UserId, cryptoConverterDTO.CryptoId, $"Vender {crypto.Name}", cryptoConverterDTO.Amount, "Crypto");
+        Transaction buyTransaction = new(cryptoConverterDTO.UserId, cryptoConverterDTO.CryptoId, $"Comprar {newCrypto.Name}", cryptoConverterDTO.Amount, "Crypto");
+        _userRepository.UpdateUser(user);
+        _transactionRepository.AddTransaction(sellTransaction);
+        _transactionRepository.AddTransaction(buyTransaction);
+    }
+
     public bool HasCrypto(int userId, int cryptoId)
     {
         var userTransactions = _transactionRepository.GetAllTransactions(userId);
