@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CryptoTrade.Business;
 using CryptoTrade.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CryptoTrade.API.Controllers;
 
@@ -9,15 +10,21 @@ namespace CryptoTrade.API.Controllers;
 public class TransactionsController : ControllerBase
 {
     private readonly ITransactionService _transactionService;
+    private readonly IAuthService _authService;
 
-    public TransactionsController(ITransactionService transactionService)
+    public TransactionsController(ITransactionService transactionService, IAuthService authService)
     {
         _transactionService = transactionService;
+        _authService = authService;
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{userId}")]
     public ActionResult<IEnumerable<Transaction>> GetAllTransactions(int userId)
     {
+        if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
+            {return Forbid(); }
+
         try 
         {
             var transactions = _transactionService.GetAllTransactions(userId);
@@ -33,10 +40,15 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("deposit")]
     public IActionResult MakeDeposit([FromBody] DepositWithdrawalDTO depositWithdrawalDTO)
     {
-        try {
+        if (!_authService.HasAccessToResource(Convert.ToInt32(depositWithdrawalDTO.UserId), null, HttpContext.User)) 
+            {return Forbid(); }
+
+        try 
+        {
             _transactionService.MakeDeposit(depositWithdrawalDTO);
             return Ok("Depósito realizado correctamente.");
         }     
@@ -50,10 +62,15 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("withdrawal")]
     public IActionResult MakeWithdrawal([FromBody] DepositWithdrawalDTO depositWithdrawalDTO)
     {
-        try {
+        if (!_authService.HasAccessToResource(Convert.ToInt32(depositWithdrawalDTO.UserId), null, HttpContext.User)) 
+            {return Forbid(); }
+
+        try 
+        {
             _transactionService.MakeWithdrawal(depositWithdrawalDTO);
             return Ok("Retiro realizado correctamente.");
         }     
@@ -67,10 +84,15 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("buy-crypto")]
     public IActionResult BuyCrypto([FromBody] BuySellAsset buySellAsset)
     {
-        try {
+        if (!_authService.HasAccessToResource(Convert.ToInt32(buySellAsset.UserId), null, HttpContext.User)) 
+            {return Forbid(); }
+
+        try 
+        {
             _transactionService.BuyCrypto(buySellAsset);
             return Ok("Compra realizada correctamente.");
         }     
@@ -84,10 +106,15 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("sell-crypto")]
     public IActionResult SellCrypto([FromBody] BuySellAsset buySellAsset)
     {
-        try {
+        if (!_authService.HasAccessToResource(Convert.ToInt32(buySellAsset.UserId), null, HttpContext.User)) 
+            {return Forbid(); }
+
+        try 
+        {
             _transactionService.SellCrypto(buySellAsset);
             return Ok("Venta realizada correctamente.");
         }     
@@ -101,10 +128,15 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("buy-stock")]
     public IActionResult BuyStock([FromBody] BuySellAsset buySellAsset)
     {
-        try {
+        if (!_authService.HasAccessToResource(Convert.ToInt32(buySellAsset.UserId), null, HttpContext.User)) 
+            {return Forbid(); }
+
+        try 
+        {
             _transactionService.BuyStock(buySellAsset);
             return Ok("Compra realizada correctamente.");
         }     
@@ -118,10 +150,15 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("sell-stock")]
     public IActionResult SellStock([FromBody] BuySellAsset buySellAsset)
     {
-        try {
+        if (!_authService.HasAccessToResource(Convert.ToInt32(buySellAsset.UserId), null, HttpContext.User)) 
+            {return Forbid(); }
+
+        try 
+        {
             _transactionService.SellStock(buySellAsset);
             return Ok("Venta realizada correctamente.");
         }     
@@ -135,10 +172,15 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("crypto-converter")]
     public IActionResult CryptoConverter(CryptoConverterDTO cryptoConverterDTO)
     {
-        try {
+        if (!_authService.HasAccessToResource(Convert.ToInt32(cryptoConverterDTO.UserId), null, HttpContext.User)) 
+            {return Forbid(); }
+
+        try 
+        {
             _transactionService.CryptoConverter(cryptoConverterDTO);
             return Ok("Conversión realizada correctamente.");
         }     
@@ -152,10 +194,15 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{userId}/cryptos")]
     public ActionResult<IEnumerable<Transaction>> GetCryptos(int userId)
     {
-        try {
+        if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
+            {return Forbid(); }
+
+        try 
+        {
             var userCryptos = _transactionService.MyCryptos(userId);
             return Ok(userCryptos);
         }     
@@ -169,10 +216,15 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{userId}/stocks")]
     public ActionResult<IEnumerable<Transaction>> GetStocks(int userId)
     {
-        try {
+        if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
+            {return Forbid(); }
+
+        try 
+        {
             var userStocks = _transactionService.MyStocks(userId);
             return Ok(userStocks);
         }     

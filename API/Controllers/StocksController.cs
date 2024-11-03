@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CryptoTrade.Business;
 using CryptoTrade.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CryptoTrade.API.Controllers;
 
@@ -15,12 +16,14 @@ public class StocksController : ControllerBase
         _stockService = stockService;
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpPost]
     public IActionResult CreateStock([FromBody] StockCreateUpdateDTO stockCreateUpdateDTO)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
-        try {
+        try 
+        {
             var stock = _stockService.RegisterStock(stockCreateUpdateDTO);
             return CreatedAtAction(nameof(GetStock), new { stockId = stock.Id }, stock);
         }     
@@ -44,6 +47,7 @@ public class StocksController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{stockId}")]
     public IActionResult GetStock(int stockId)
     {
@@ -62,12 +66,14 @@ public class StocksController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpPut("{stockId}")]
     public IActionResult UpdateStock(int stockId, StockCreateUpdateDTO stockCreateUpdateDTO)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
-        try {
+        try 
+        {
             _stockService.UpdateStock(stockId, stockCreateUpdateDTO);
             return Ok("Acción actualizada correctamente.");
         }     
@@ -81,12 +87,12 @@ public class StocksController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpDelete("{stockId}")]
     public IActionResult DeleteStock(int stockId)
     {
         try
         {
-            
             // if (!_transactionService.IsStockPurchased(stockId))
             // {
                 _stockService.DeleteStock(stockId);
