@@ -152,4 +152,21 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [HttpGet("{userId}/cryptos")]
+    public ActionResult<IEnumerable<Transaction>> GetCryptos(int userId)
+    {
+        try {
+            var userCryptos = _transactionService.MyCryptos(userId);
+            return Ok(userCryptos);
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado el usuario con ID: {userId}. {knfex.Message}");
+        }  
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al obtener las criptomonedas del usuario {userId}. {ex.Message}");
+        }
+    }
+
 }
