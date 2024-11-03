@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CryptoTrade.Business;
 using CryptoTrade.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CryptoTrade.API.Controllers;
 
@@ -17,6 +18,7 @@ public class UsersController : ControllerBase
         _authService = authService;
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpGet]
     public ActionResult<IEnumerable<User>> GetAllUsers()
     {
@@ -31,6 +33,7 @@ public class UsersController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," +  Roles.User)]
     [HttpGet("{userId}")]
     public IActionResult GetUser(int userId)
     {
@@ -52,6 +55,7 @@ public class UsersController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," +  Roles.User)]
     [HttpGet("by-email")]
     public IActionResult GetUserByEmail(string userEmail)
     {
@@ -73,6 +77,7 @@ public class UsersController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," +  Roles.User)]
     [HttpPut("{userId}")]
     public IActionResult UpdateUser(int userId, UserUpdateDTO userUpdateDTO)
     {
@@ -96,6 +101,7 @@ public class UsersController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," +  Roles.User)]
     [HttpDelete("{userId}")]
     public IActionResult DeleteUser(int userId)
     {

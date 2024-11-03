@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CryptoTrade.Business;
 using CryptoTrade.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CryptoTrade.API.Controllers;
 
@@ -15,6 +16,7 @@ public class StocksController : ControllerBase
         _stockService = stockService;
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpPost]
     public IActionResult CreateStock([FromBody] StockCreateUpdateDTO stockCreateUpdateDTO)
     {
@@ -45,6 +47,7 @@ public class StocksController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{stockId}")]
     public IActionResult GetStock(int stockId)
     {
@@ -63,6 +66,7 @@ public class StocksController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpPut("{stockId}")]
     public IActionResult UpdateStock(int stockId, StockCreateUpdateDTO stockCreateUpdateDTO)
     {
@@ -83,6 +87,7 @@ public class StocksController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpDelete("{stockId}")]
     public IActionResult DeleteStock(int stockId)
     {

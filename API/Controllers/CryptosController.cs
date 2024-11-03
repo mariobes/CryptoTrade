@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CryptoTrade.Business;
 using CryptoTrade.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CryptoTrade.API.Controllers;
 
@@ -15,6 +16,7 @@ public class CryptosController : ControllerBase
         _cryptoService = cryptoService;
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpPost]
     public IActionResult CreateCrypto([FromBody] CryptoCreateUpdateDTO cryptoCreateUpdateDTO)
     {
@@ -45,6 +47,7 @@ public class CryptosController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{cryptoId}")]
     public IActionResult GetCrypto(int cryptoId)
     {
@@ -63,6 +66,7 @@ public class CryptosController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpPut("{cryptoId}")]
     public IActionResult UpdateCrypto(int cryptoId, CryptoCreateUpdateDTO cryptoCreateUpdateDTO)
     {
@@ -83,6 +87,7 @@ public class CryptosController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpDelete("{cryptoId}")]
     public IActionResult DeleteCrypto(int cryptoId)
     {

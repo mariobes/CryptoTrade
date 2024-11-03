@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CryptoTrade.Business;
 using CryptoTrade.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CryptoTrade.API.Controllers;
 
@@ -17,6 +18,7 @@ public class TransactionsController : ControllerBase
         _authService = authService;
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{userId}")]
     public ActionResult<IEnumerable<Transaction>> GetAllTransactions(int userId)
     {
@@ -38,6 +40,7 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("deposit")]
     public IActionResult MakeDeposit([FromBody] DepositWithdrawalDTO depositWithdrawalDTO)
     {
@@ -59,6 +62,7 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("withdrawal")]
     public IActionResult MakeWithdrawal([FromBody] DepositWithdrawalDTO depositWithdrawalDTO)
     {
@@ -80,6 +84,7 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("buy-crypto")]
     public IActionResult BuyCrypto([FromBody] BuySellAsset buySellAsset)
     {
@@ -101,6 +106,7 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("sell-crypto")]
     public IActionResult SellCrypto([FromBody] BuySellAsset buySellAsset)
     {
@@ -122,6 +128,7 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("buy-stock")]
     public IActionResult BuyStock([FromBody] BuySellAsset buySellAsset)
     {
@@ -143,6 +150,7 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("sell-stock")]
     public IActionResult SellStock([FromBody] BuySellAsset buySellAsset)
     {
@@ -164,6 +172,7 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("crypto-converter")]
     public IActionResult CryptoConverter(CryptoConverterDTO cryptoConverterDTO)
     {
@@ -185,6 +194,7 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{userId}/cryptos")]
     public ActionResult<IEnumerable<Transaction>> GetCryptos(int userId)
     {
@@ -206,6 +216,7 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{userId}/stocks")]
     public ActionResult<IEnumerable<Transaction>> GetStocks(int userId)
     {
