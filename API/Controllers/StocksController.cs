@@ -20,7 +20,8 @@ public class StocksController : ControllerBase
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
-        try {
+        try 
+        {
             var stock = _stockService.RegisterStock(stockCreateUpdateDTO);
             return CreatedAtAction(nameof(GetStock), new { stockId = stock.Id }, stock);
         }     
@@ -67,7 +68,8 @@ public class StocksController : ControllerBase
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
-        try {
+        try 
+        {
             _stockService.UpdateStock(stockId, stockCreateUpdateDTO);
             return Ok("Acción actualizada correctamente.");
         }     
@@ -86,7 +88,6 @@ public class StocksController : ControllerBase
     {
         try
         {
-            
             // if (!_transactionService.IsStockPurchased(stockId))
             // {
                 _stockService.DeleteStock(stockId);

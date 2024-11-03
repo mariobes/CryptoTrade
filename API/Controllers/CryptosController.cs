@@ -20,7 +20,8 @@ public class CryptosController : ControllerBase
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
-        try {
+        try 
+        {
             var crypto = _cryptoService.RegisterCrypto(cryptoCreateUpdateDTO);
             return CreatedAtAction(nameof(GetCrypto), new { cryptoId = crypto.Id }, crypto);
         }     
@@ -67,7 +68,8 @@ public class CryptosController : ControllerBase
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
-        try {
+        try 
+        {
             _cryptoService.UpdateCrypto(cryptoId, cryptoCreateUpdateDTO);
             return Ok("Criptomoneda actualizada correctamente.");
         }     
@@ -86,7 +88,6 @@ public class CryptosController : ControllerBase
     {
         try
         {
-            
             // if (!_transactionService.IsCryptoPurchased(cryptoId))
             // {
                 _cryptoService.DeleteCrypto(cryptoId);

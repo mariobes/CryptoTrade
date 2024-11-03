@@ -9,10 +9,12 @@ namespace CryptoTrade.API.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IAuthService _authService;
 
-    public UsersController(IUserService userService)
+    public UsersController(IUserService userService, IAuthService authService)
     {
         _userService = userService;
+        _authService = authService;
     }
 
     [HttpGet]
@@ -32,6 +34,9 @@ public class UsersController : ControllerBase
     [HttpGet("{userId}")]
     public IActionResult GetUser(int userId)
     {
+        if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
+            {return Forbid(); }
+
         try
         {
             var user = _userService.GetUserById(userId);
@@ -50,6 +55,9 @@ public class UsersController : ControllerBase
     [HttpGet("by-email")]
     public IActionResult GetUserByEmail(string userEmail)
     {
+        if (!_authService.HasAccessToResource(null, userEmail, HttpContext.User)) 
+            {return Forbid(); }
+
         try
         {
             var user = _userService.GetUserByEmail(userEmail);
@@ -70,7 +78,11 @@ public class UsersController : ControllerBase
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
-        try {
+        if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
+            {return Forbid(); }
+
+        try 
+        {
             _userService.UpdateUser(userId, userUpdateDTO);
             return Ok("Usuario actualizado correctamente.");
         }     
@@ -87,6 +99,9 @@ public class UsersController : ControllerBase
     [HttpDelete("{userId}")]
     public IActionResult DeleteUser(int userId)
     {
+        if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
+            {return Forbid(); }
+
         try
         {
             _userService.DeleteUser(userId);
