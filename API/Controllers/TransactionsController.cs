@@ -169,4 +169,21 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [HttpGet("{userId}/stocks")]
+    public ActionResult<IEnumerable<Transaction>> GetStocks(int userId)
+    {
+        try {
+            var userStocks = _transactionService.MyStocks(userId);
+            return Ok(userStocks);
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado el usuario con ID: {userId}. {knfex.Message}");
+        }  
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al obtener las acciones del usuario {userId}. {ex.Message}");
+        }
+    }
+
 }

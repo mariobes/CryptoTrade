@@ -256,6 +256,43 @@ public class TransactionService : ITransactionService
         return totalAmountByCrypto;
     }
 
+    public Dictionary<string, double> MyStocks(int userId)
+    {
+        var user = _userRepository.GetUser(userId);
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"Usuario con ID {userId} no encontrado");
+        }
+
+        var userTransactions = _transactionRepository.GetAllTransactions(userId);
+            
+        var stocks = _stockRepository.GetAllStocks().ToDictionary(s => s.Id, s => s.Name);
+
+        var totalAmountByStock = new Dictionary<string, double>();
+
+        foreach (var transaction in userTransactions)
+        {
+            if (transaction.AssetId.HasValue && transaction.TypeOfAsset.Equals("Stock"))
+            {
+                var stockName = stocks[transaction.AssetId.Value];
+
+                if (!totalAmountByStock.ContainsKey(stockName))
+                {
+                    totalAmountByStock[stockName] = 0;
+                }
+                if (transaction.Concept.StartsWith("Comprar"))
+                {
+                    totalAmountByStock[stockName] += transaction.Amount;
+                }
+                if (transaction.Concept.StartsWith("Vender"))
+                {
+                    totalAmountByStock[stockName] -= transaction.Amount;
+                }  
+            }
+        }
+        return totalAmountByStock;
+    }
+
     public bool HasCrypto(int userId, int cryptoId)
     {
         var userTransactions = _transactionRepository.GetAllTransactions(userId);
