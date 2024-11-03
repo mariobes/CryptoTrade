@@ -135,4 +135,55 @@ public class TransactionsController : ControllerBase
         }
     }
 
+    [HttpPost("crypto-converter")]
+    public IActionResult CryptoConverter(CryptoConverterDTO cryptoConverterDTO)
+    {
+        try {
+            _transactionService.CryptoConverter(cryptoConverterDTO);
+            return Ok("Conversión realizada correctamente.");
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado la criptomoneda con ID: {cryptoConverterDTO.CryptoId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al hacer la conversión del usuario con ID: {cryptoConverterDTO.UserId}. {ex.Message}");
+        }
+    }
+
+    [HttpGet("{userId}/cryptos")]
+    public ActionResult<IEnumerable<Transaction>> GetCryptos(int userId)
+    {
+        try {
+            var userCryptos = _transactionService.MyCryptos(userId);
+            return Ok(userCryptos);
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado el usuario con ID: {userId}. {knfex.Message}");
+        }  
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al obtener las criptomonedas del usuario {userId}. {ex.Message}");
+        }
+    }
+
+    [HttpGet("{userId}/stocks")]
+    public ActionResult<IEnumerable<Transaction>> GetStocks(int userId)
+    {
+        try {
+            var userStocks = _transactionService.MyStocks(userId);
+            return Ok(userStocks);
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado el usuario con ID: {userId}. {knfex.Message}");
+        }  
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al obtener las acciones del usuario {userId}. {ex.Message}");
+        }
+    }
+
 }

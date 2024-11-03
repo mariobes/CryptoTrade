@@ -179,6 +179,120 @@ public class TransactionService : ITransactionService
         _transactionRepository.AddTransaction(transaction);
     }
 
+    public void CryptoConverter(CryptoConverterDTO cryptoConverterDTO)
+    {
+        var user = _userRepository.GetUser(cryptoConverterDTO.UserId);
+        if (user == null) 
+        {
+            throw new KeyNotFoundException($"Usuario con ID {cryptoConverterDTO.UserId} no encontrado");
+        }
+
+        var crypto = _cryptoRepository.GetCrypto(cryptoConverterDTO.CryptoId);
+        if (crypto == null)
+        {
+            throw new KeyNotFoundException($"Criptomoneda con ID {cryptoConverterDTO.CryptoId} no encontrada");
+        } 
+
+        var newCrypto = _cryptoRepository.GetCrypto(cryptoConverterDTO.NewCryptoId);
+        if (newCrypto == null)
+        {
+            throw new KeyNotFoundException($"Criptomoneda con ID {cryptoConverterDTO.NewCryptoId} no encontrada");
+        } 
+
+        var userHasCrypto = HasCrypto(cryptoConverterDTO.UserId, cryptoConverterDTO.CryptoId);
+        if (!userHasCrypto)
+        {
+            throw new Exception($"El usuario {cryptoConverterDTO.UserId} no tiene la criptomoneda {cryptoConverterDTO.CryptoId}");
+        }
+
+        var userCryptoBalance = GetCryptoBalance(cryptoConverterDTO.UserId, cryptoConverterDTO.CryptoId);
+        if (cryptoConverterDTO.Amount > userCryptoBalance)
+        {
+            throw new Exception($"No tienes suficientes fondos para realizar la venta");
+        }
+
+        //Transaction transaction = new(userId, cryptoId, $"Convertir {crypto.Name} a {newCrypto.Name}", amount, "Crypto");
+        Transaction sellTransaction = new(cryptoConverterDTO.UserId, cryptoConverterDTO.CryptoId, $"Vender {crypto.Name}", cryptoConverterDTO.Amount, "Crypto");
+        Transaction buyTransaction = new(cryptoConverterDTO.UserId, cryptoConverterDTO.CryptoId, $"Comprar {newCrypto.Name}", cryptoConverterDTO.Amount, "Crypto");
+        _userRepository.UpdateUser(user);
+        _transactionRepository.AddTransaction(sellTransaction);
+        _transactionRepository.AddTransaction(buyTransaction);
+    }
+
+    public Dictionary<string, double> MyCryptos(int userId)
+    {
+        var user = _userRepository.GetUser(userId);
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"Usuario con ID {userId} no encontrado");
+        }
+
+        var userTransactions = _transactionRepository.GetAllTransactions(userId);
+            
+        var cryptos = _cryptoRepository.GetAllCryptos().ToDictionary(c => c.Id, c => c.Name);
+
+        var totalAmountByCrypto = new Dictionary<string, double>();
+
+        foreach (var transaction in userTransactions)
+        {
+            if (transaction.AssetId.HasValue && transaction.TypeOfAsset.Equals("Crypto"))
+            {
+                var cryptoName = cryptos[transaction.AssetId.Value];
+
+                if (!totalAmountByCrypto.ContainsKey(cryptoName))
+                {
+                    totalAmountByCrypto[cryptoName] = 0;
+                }
+                if (transaction.Concept.StartsWith("Comprar"))
+                {
+                    totalAmountByCrypto[cryptoName] += transaction.Amount;
+                }
+                if (transaction.Concept.StartsWith("Vender"))
+                {
+                    totalAmountByCrypto[cryptoName] -= transaction.Amount;
+                }  
+            }
+        }
+        return totalAmountByCrypto;
+    }
+
+    public Dictionary<string, double> MyStocks(int userId)
+    {
+        var user = _userRepository.GetUser(userId);
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"Usuario con ID {userId} no encontrado");
+        }
+
+        var userTransactions = _transactionRepository.GetAllTransactions(userId);
+            
+        var stocks = _stockRepository.GetAllStocks().ToDictionary(s => s.Id, s => s.Name);
+
+        var totalAmountByStock = new Dictionary<string, double>();
+
+        foreach (var transaction in userTransactions)
+        {
+            if (transaction.AssetId.HasValue && transaction.TypeOfAsset.Equals("Stock"))
+            {
+                var stockName = stocks[transaction.AssetId.Value];
+
+                if (!totalAmountByStock.ContainsKey(stockName))
+                {
+                    totalAmountByStock[stockName] = 0;
+                }
+                if (transaction.Concept.StartsWith("Comprar"))
+                {
+                    totalAmountByStock[stockName] += transaction.Amount;
+                }
+                if (transaction.Concept.StartsWith("Vender"))
+                {
+                    totalAmountByStock[stockName] -= transaction.Amount;
+                }  
+            }
+        }
+        return totalAmountByStock;
+    }
+
     public bool HasCrypto(int userId, int cryptoId)
     {
         var userTransactions = _transactionRepository.GetAllTransactions(userId);

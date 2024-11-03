@@ -141,10 +141,10 @@ namespace CryptoTrade.Data.Migrations
                 columns: new[] { "Id", "Birthdate", "Cash", "DNI", "Email", "IsBanned", "Name", "Nationality", "Password", "Phone", "Role", "Wallet" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2001, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0.0, "32452464D", "mario@gmail.com", false, "Mario", "España", "mario12345", "4574", "admin", 0.0 },
-                    { 2, new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 146.0, "23523562D", "carlos@gmail.com", false, "Carlos", "Argentina", "carlos12345", "4567477", "user", 350.0 },
-                    { 3, new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 0.0, "23526445X", "fernando@gmail.com", false, "Fernando", "España", "fernando12345", "4745", "user", 0.0 },
-                    { 4, new DateTime(2004, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 0.0, "52353425D", "eduardo@gmail.com", false, "Eduardo", "España", "eduardo12345", "4574548", "user", 0.0 }
+                    { 1, new DateTime(2001, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 500.0, "32452464D", "mario@gmail.com", false, "Mario", "España", "mario12345", "4574", "admin", 300.0 },
+                    { 2, new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 400.0, "23523562D", "carlos@gmail.com", false, "Carlos", "Argentina", "carlos12345", "4567477", "user", 750.0 },
+                    { 3, new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 300.0, "23526445X", "fernando@gmail.com", false, "Fernando", "España", "fernando12345", "4745", "user", 1650.0 },
+                    { 4, new DateTime(2004, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 200.0, "52353425D", "eduardo@gmail.com", false, "Eduardo", "España", "eduardo12345", "4574548", "user", 1020.0 }
                 });
 
             migrationBuilder.InsertData(

@@ -470,7 +470,7 @@ namespace CryptoTrade.Data.Migrations
                         {
                             Id = 1,
                             Birthdate = new DateTime(2001, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Cash = 0.0,
+                            Cash = 500.0,
                             DNI = "32452464D",
                             Email = "mario@gmail.com",
                             IsBanned = false,
@@ -479,13 +479,13 @@ namespace CryptoTrade.Data.Migrations
                             Password = "mario12345",
                             Phone = "4574",
                             Role = "admin",
-                            Wallet = 0.0
+                            Wallet = 300.0
                         },
                         new
                         {
                             Id = 2,
                             Birthdate = new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Cash = 146.0,
+                            Cash = 400.0,
                             DNI = "23523562D",
                             Email = "carlos@gmail.com",
                             IsBanned = false,
@@ -494,13 +494,13 @@ namespace CryptoTrade.Data.Migrations
                             Password = "carlos12345",
                             Phone = "4567477",
                             Role = "user",
-                            Wallet = 350.0
+                            Wallet = 750.0
                         },
                         new
                         {
                             Id = 3,
                             Birthdate = new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Cash = 0.0,
+                            Cash = 300.0,
                             DNI = "23526445X",
                             Email = "fernando@gmail.com",
                             IsBanned = false,
@@ -509,13 +509,13 @@ namespace CryptoTrade.Data.Migrations
                             Password = "fernando12345",
                             Phone = "4745",
                             Role = "user",
-                            Wallet = 0.0
+                            Wallet = 1650.0
                         },
                         new
                         {
                             Id = 4,
                             Birthdate = new DateTime(2004, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Cash = 0.0,
+                            Cash = 200.0,
                             DNI = "52353425D",
                             Email = "eduardo@gmail.com",
                             IsBanned = false,
@@ -524,7 +524,7 @@ namespace CryptoTrade.Data.Migrations
                             Password = "eduardo12345",
                             Phone = "4574548",
                             Role = "user",
-                            Wallet = 0.0
+                            Wallet = 1020.0
                         });
                 });
 
