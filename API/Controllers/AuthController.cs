@@ -25,7 +25,8 @@ public class AuthController : ControllerBase
             var user = _authService.CheckLogin(userLoginDTO.Email, userLoginDTO.Password);
             if (user != null)
             {
-                return Ok("Has iniciado sesión");
+                var token = _authService.GenerateJwtToken(user);
+                return Ok(token);
             }
             else
             {
@@ -47,7 +48,8 @@ public class AuthController : ControllerBase
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
-        try {
+        try 
+        {
             var user = _userService.RegisterUser(userCreateDTO);
             return CreatedAtAction(nameof(Login), new { userId = user.Id }, user);
         }     
@@ -60,8 +62,8 @@ public class AuthController : ControllerBase
     [HttpPost("logout")]
     public IActionResult Logout()
     {
-        try {
-            //Limpiar el token
+        try 
+        {
             return Ok("Has cerrado sesión");
         }     
         catch (Exception ex)

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CryptoTrade.Business;
 using CryptoTrade.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CryptoTrade.API.Controllers;
 
@@ -15,12 +16,14 @@ public class CryptosController : ControllerBase
         _cryptoService = cryptoService;
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpPost]
     public IActionResult CreateCrypto([FromBody] CryptoCreateUpdateDTO cryptoCreateUpdateDTO)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
-        try {
+        try 
+        {
             var crypto = _cryptoService.RegisterCrypto(cryptoCreateUpdateDTO);
             return CreatedAtAction(nameof(GetCrypto), new { cryptoId = crypto.Id }, crypto);
         }     
@@ -44,6 +47,7 @@ public class CryptosController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{cryptoId}")]
     public IActionResult GetCrypto(int cryptoId)
     {
@@ -62,12 +66,14 @@ public class CryptosController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpPut("{cryptoId}")]
     public IActionResult UpdateCrypto(int cryptoId, CryptoCreateUpdateDTO cryptoCreateUpdateDTO)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
-        try {
+        try 
+        {
             _cryptoService.UpdateCrypto(cryptoId, cryptoCreateUpdateDTO);
             return Ok("Criptomoneda actualizada correctamente.");
         }     
@@ -81,12 +87,12 @@ public class CryptosController : ControllerBase
         }
     }
 
+    [Authorize(Roles = Roles.Admin)]
     [HttpDelete("{cryptoId}")]
     public IActionResult DeleteCrypto(int cryptoId)
     {
         try
         {
-            
             // if (!_transactionService.IsCryptoPurchased(cryptoId))
             // {
                 _cryptoService.DeleteCrypto(cryptoId);
