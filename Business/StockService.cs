@@ -24,9 +24,9 @@ public class StockService : IStockService
         return stock;
     }
 
-    public IEnumerable<Stock> GetAllStocks()
+    public IEnumerable<Stock> GetAllStocks(StockQueryParameters stockQueryParameters)
     {
-        return _repository.GetAllStocks();
+        return _repository.GetAllStocks(stockQueryParameters);
     }
 
     public Stock GetStockById(int stockId)

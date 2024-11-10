@@ -34,11 +34,11 @@ public class StocksController : ControllerBase
     }
 
     [HttpGet(Name = "GetAllStocks")] 
-    public ActionResult<IEnumerable<Stock>> GetAllStocks()
+    public ActionResult<IEnumerable<Stock>> GetAllStocks([FromQuery] StockQueryParameters stockQueryParameters)
     {
         try 
         {
-            var stocks = _stockService.GetAllStocks();
+            var stocks = _stockService.GetAllStocks(stockQueryParameters);
             return Ok(stocks);
         }
         catch (Exception ex)

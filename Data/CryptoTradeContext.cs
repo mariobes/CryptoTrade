@@ -40,9 +40,9 @@ namespace CryptoTrade.Data
             );
 
             modelBuilder.Entity<Transaction>().HasData(
-                new Transaction { Id = 1, UserId = 2, Concept = "Ingresar dinero", Amount = 1200, Date = new DateTime(2023, 6, 12), PaymentMethod = PaymentMethodOptions.TransferenciaBancaria },
-                new Transaction { Id = 2, UserId = 3, Concept = "Ingresar dinero", Amount = 2000, Date = new DateTime(2023, 6, 12), PaymentMethod = PaymentMethodOptions.TarjetaCredito },
-                new Transaction { Id = 3, UserId = 4, Concept = "Ingresar dinero", Amount = 1000, Date = new DateTime(2023, 6, 12), PaymentMethod = PaymentMethodOptions.GooglePay },
+                new Transaction { Id = 1, UserId = 2, Concept = "Ingresar dinero", Amount = 1200, Date = new DateTime(2023, 6, 12), PaymentMethod = EnumPaymentMethodOptions.TransferenciaBancaria },
+                new Transaction { Id = 2, UserId = 3, Concept = "Ingresar dinero", Amount = 2000, Date = new DateTime(2023, 6, 12), PaymentMethod = EnumPaymentMethodOptions.TarjetaCredito },
+                new Transaction { Id = 3, UserId = 4, Concept = "Ingresar dinero", Amount = 1000, Date = new DateTime(2023, 6, 12), PaymentMethod = EnumPaymentMethodOptions.GooglePay },
                 new Transaction { Id = 4, UserId = 2, AssetId = 1, Concept = "Comprar Bitcoin", Amount = 100, PurchasePrice = 60000, AssetAmount = 0.00167, Date = new DateTime(2023, 6, 12), TypeOfAsset = "Crypto" },
                 new Transaction { Id = 5, UserId = 2, AssetId = 2, Concept = "Comprar Ethereum", Amount = 200, PurchasePrice = 4000, AssetAmount = 0.05, Date = new DateTime(2023, 8, 5), TypeOfAsset = "Crypto" },
                 new Transaction { Id = 6, UserId = 2, AssetId = 3, Concept = "Comprar Cardano", Amount = 500, PurchasePrice = 2.15, AssetAmount = 232.56, Date = new DateTime(2023, 9, 10), TypeOfAsset = "Crypto" },

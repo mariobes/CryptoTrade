@@ -18,10 +18,30 @@ namespace CryptoTrade.Data
             SaveChanges();
         }
 
-        public IEnumerable<Stock> GetAllStocks() 
+        public IEnumerable<Stock> GetAllStocks(StockQueryParameters stockQueryParameters) 
         {
-            var stock = _context.Stocks;
-            return stock;
+            var query = _context.Stocks.AsQueryable();
+
+            if (stockQueryParameters != null)
+            {
+                query = stockQueryParameters.SortBy switch
+                {
+                    EnumSortOptions.name => stockQueryParameters.Order == EnumOrderOptions.asc
+                        ? query.OrderBy(s => s.Name)
+                        : query.OrderByDescending(s => s.Name),
+
+                    EnumSortOptions.marketCap => stockQueryParameters.Order == EnumOrderOptions.asc
+                        ? query.OrderBy(s => s.CompanyValue)
+                        : query.OrderByDescending(s => s.CompanyValue),
+
+                    _ => stockQueryParameters.Order == EnumOrderOptions.asc
+                        ? query.OrderBy(s => s.Value)
+                        : query.OrderByDescending(s => s.Value),
+                };
+            }
+
+            var result = query.ToList();
+            return result;
         }
 
         public Stock GetStock(int stockId)

@@ -2,18 +2,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CryptoTrade.Models;
 
-public enum PaymentMethodOptions
-{
-    [Display(Name = "Transferencia bancaria")]
-    TransferenciaBancaria = 0,
-
-    [Display(Name = "Tarjeta de crédito")]
-    TarjetaCredito = 1,
-
-    [Display(Name = "Google Pay")]
-    GooglePay = 2
-}
-
 public class DepositDTO
 {
     [Required]
@@ -25,6 +13,6 @@ public class DepositDTO
     public double Amount { get; set; }
 
     [Required]
-    [EnumDataType(typeof(PaymentMethodOptions), ErrorMessage = "El método de pago no es válido")]
-    public PaymentMethodOptions PaymentMethod { get; set; }
+    [EnumDataType(typeof(EnumPaymentMethodOptions), ErrorMessage = "El método de pago no es válido")]
+    public EnumPaymentMethodOptions PaymentMethod { get; set; }
 }

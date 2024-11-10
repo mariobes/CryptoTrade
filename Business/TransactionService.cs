@@ -55,7 +55,7 @@ public class TransactionService : ITransactionService
             throw new Exception("No tienes suficiente saldo para realizar el retiro");
         }
 
-        Transaction transaction = new(withdrawalDTO.UserId, "Retirar dinero", withdrawalDTO.Amount, PaymentMethodOptions.TransferenciaBancaria);
+        Transaction transaction = new(withdrawalDTO.UserId, "Retirar dinero", withdrawalDTO.Amount, EnumPaymentMethodOptions.TransferenciaBancaria);
         user.Cash -= withdrawalDTO.Amount;
         _userRepository.UpdateUser(user);
         _transactionRepository.AddTransaction(transaction);

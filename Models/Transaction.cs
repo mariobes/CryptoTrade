@@ -33,8 +33,8 @@ public class Transaction
     //public double Charge { get; set; } = 1.0;
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonConverter(typeof(EnumDisplayConverter<PaymentMethodOptions>))]
-    public PaymentMethodOptions? PaymentMethod { get; set; }
+    [JsonConverter(typeof(EnumDisplayConverter<EnumPaymentMethodOptions>))]
+    public EnumPaymentMethodOptions? PaymentMethod { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? TypeOfAsset { get; set; }
@@ -50,7 +50,7 @@ public class Transaction
 
     public Transaction() {}
 
-    public Transaction (int userId, string concept, double amount, PaymentMethodOptions  paymentMethod)
+    public Transaction (int userId, string concept, double amount, EnumPaymentMethodOptions  paymentMethod)
     {
         UserId = userId;
         Concept = concept;
