@@ -20,9 +20,6 @@ public class Stock
     public string? Description { get; set; }
 
     [Required]
-    public int Ranking { get; set; }
-
-    [Required]
     public string? Website { get; set; }
 
     [Required]
@@ -39,12 +36,11 @@ public class Stock
 
     public Stock() {}
 
-    public Stock(string name, double value, string description, int ranking, string website, double companyValue, double earningPerShare, string category, double dividendYield) 
+    public Stock(string name, double value, string description, string website, double companyValue, double earningPerShare, string category, double dividendYield) 
     {
         Name = name;
         Value = value;
         Description = description;
-        Ranking = ranking;
         Website = website;
         CompanyValue = companyValue;
         EarningPerShare = earningPerShare;

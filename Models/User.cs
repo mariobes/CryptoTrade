@@ -29,9 +29,9 @@ public class User
     [Required]
     public string? Nationality { get; set; }
     
-    public double Cash { get; set; }
+    public double Cash { get; set; } = 0;
 
-    public double Wallet { get; set; }
+    public double Wallet { get; set; } = 0;
 
     public bool IsBanned { get; set; } = false;
 
@@ -52,7 +52,5 @@ public class User
         Phone = phone;
         DNI = dni;
         Nationality = nationality;
-        Cash = 0.0;
-        Wallet = 0.0;
     }
 }
