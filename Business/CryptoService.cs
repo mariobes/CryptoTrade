@@ -19,14 +19,14 @@ public class CryptoService : ICryptoService
         {
             throw new Exception("El nombre de la criptomoneda ya existe.");
         }
-        Crypto crypto = new(cryptoCreateUpdateDTO.Name, cryptoCreateUpdateDTO.Symbol, cryptoCreateUpdateDTO.MarketCap, cryptoCreateUpdateDTO.Description, cryptoCreateUpdateDTO.Value, cryptoCreateUpdateDTO.Ranking, cryptoCreateUpdateDTO.Website, cryptoCreateUpdateDTO.TotalSupply, cryptoCreateUpdateDTO.CirculatingSupply, cryptoCreateUpdateDTO.Contract, cryptoCreateUpdateDTO.AllTimeHigh, cryptoCreateUpdateDTO.AllTimeLow);
+        Crypto crypto = new(cryptoCreateUpdateDTO.Name, cryptoCreateUpdateDTO.Symbol, cryptoCreateUpdateDTO.MarketCap, cryptoCreateUpdateDTO.Description, cryptoCreateUpdateDTO.Value, cryptoCreateUpdateDTO.Website, cryptoCreateUpdateDTO.TotalSupply, cryptoCreateUpdateDTO.CirculatingSupply, cryptoCreateUpdateDTO.Contract, cryptoCreateUpdateDTO.AllTimeHigh, cryptoCreateUpdateDTO.AllTimeLow);
         _repository.AddCrypto(crypto);
         return crypto;
     }
 
-    public IEnumerable<Crypto> GetAllCryptos()
+    public IEnumerable<Crypto> GetAllCryptos(CryptoQueryParameters cryptoQueryParameters)
     {
-        return _repository.GetAllCryptos();
+        return _repository.GetAllCryptos(cryptoQueryParameters);
     }
 
     public Crypto GetCryptoById(int cryptoId)
@@ -58,7 +58,6 @@ public class CryptoService : ICryptoService
         crypto.MarketCap = cryptoCreateUpdateDTO.MarketCap;
         crypto.Description = cryptoCreateUpdateDTO.Description;
         crypto.Value = cryptoCreateUpdateDTO.Value;
-        crypto.Ranking = cryptoCreateUpdateDTO.Ranking;
         crypto.Website = cryptoCreateUpdateDTO.Website;
         crypto.TotalSupply = cryptoCreateUpdateDTO.TotalSupply;
         crypto.CirculatingSupply = cryptoCreateUpdateDTO.CirculatingSupply;

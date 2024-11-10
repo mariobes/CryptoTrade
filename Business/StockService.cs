@@ -19,14 +19,14 @@ public class StockService : IStockService
         {
             throw new Exception("El nombre de la acción ya existe.");
         }
-        Stock stock = new(stockCreateUpdateDTO.Name, stockCreateUpdateDTO.Value, stockCreateUpdateDTO.Description, stockCreateUpdateDTO.Ranking, stockCreateUpdateDTO.Website, stockCreateUpdateDTO.CompanyValue, stockCreateUpdateDTO.EarningPerShare, stockCreateUpdateDTO.Category, stockCreateUpdateDTO.DividendYield);
+        Stock stock = new(stockCreateUpdateDTO.Name, stockCreateUpdateDTO.Value, stockCreateUpdateDTO.Description, stockCreateUpdateDTO.Website, stockCreateUpdateDTO.CompanyValue, stockCreateUpdateDTO.EarningPerShare, stockCreateUpdateDTO.Category, stockCreateUpdateDTO.DividendYield);
         _repository.AddStock(stock);
         return stock;
     }
 
-    public IEnumerable<Stock> GetAllStocks()
+    public IEnumerable<Stock> GetAllStocks(StockQueryParameters stockQueryParameters)
     {
-        return _repository.GetAllStocks();
+        return _repository.GetAllStocks(stockQueryParameters);
     }
 
     public Stock GetStockById(int stockId)
@@ -56,7 +56,6 @@ public class StockService : IStockService
         stock.Name = stockCreateUpdateDTO.Name;
         stock.Value = stockCreateUpdateDTO.Value;
         stock.Description = stockCreateUpdateDTO.Description;
-        stock.Ranking = stockCreateUpdateDTO.Ranking;
         stock.Website = stockCreateUpdateDTO.Website;
         stock.CompanyValue = stockCreateUpdateDTO.CompanyValue;
         stock.EarningPerShare = stockCreateUpdateDTO.EarningPerShare;

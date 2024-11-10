@@ -14,7 +14,7 @@ public class Crypto
     public string? Symbol { get; set; }
 
     [Required]
-    public string? MarketCap { get; set; }
+    public double MarketCap { get; set; }
 
     [Required]
     public DateTime CreationDate { get; set; } = DateTime.Now;
@@ -24,9 +24,6 @@ public class Crypto
 
     [Required]
     public double Value { get; set; }
-
-    [Required]
-    public int Ranking { get; set; }
 
     [Required]
     public string? Website { get; set; }
@@ -48,14 +45,13 @@ public class Crypto
 
     public Crypto() {}
 
-    public Crypto(string name, string symbol, string marketCap, string description, double value, int ranking, string website, double totalSupply, double circulatingSupply, string contract, double allTimeHigh, double allTimeLow) 
+    public Crypto(string name, string symbol, double marketCap, string description, double value, string website, double totalSupply, double circulatingSupply, string contract, double allTimeHigh, double allTimeLow) 
     {
         Name = name;
         Symbol = symbol;
         MarketCap = marketCap;
         Description = description;
         Value = value;
-        Ranking = ranking;
         Website = website;
         TotalSupply = totalSupply;
         CirculatingSupply = circulatingSupply;

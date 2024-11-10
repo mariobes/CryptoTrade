@@ -18,10 +18,30 @@ namespace CryptoTrade.Data
             SaveChanges();
         }
 
-        public IEnumerable<Crypto> GetAllCryptos() 
+        public IEnumerable<Crypto> GetAllCryptos(CryptoQueryParameters cryptoQueryParameters) 
         {
-            var cryptos = _context.Cryptos;
-            return cryptos;
+            var query = _context.Cryptos.AsQueryable();
+
+            if (cryptoQueryParameters != null)
+            {
+                query = cryptoQueryParameters.SortBy switch
+                {
+                    EnumSortOptions.name => cryptoQueryParameters.Order == EnumOrderOptions.asc
+                        ? query.OrderBy(c => c.Name)
+                        : query.OrderByDescending(c => c.Name),
+
+                    EnumSortOptions.marketCap => cryptoQueryParameters.Order == EnumOrderOptions.asc
+                        ? query.OrderBy(c => c.MarketCap)
+                        : query.OrderByDescending(c => c.MarketCap),
+
+                    _ => cryptoQueryParameters.Order == EnumOrderOptions.asc
+                        ? query.OrderBy(c => c.Value)
+                        : query.OrderByDescending(c => c.Value),
+                };
+            }
+
+            var result = query.ToList();
+            return result;
         }
 
         public Crypto GetCrypto(int cryptoId)

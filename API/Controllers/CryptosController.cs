@@ -34,11 +34,11 @@ public class CryptosController : ControllerBase
     }
 
     [HttpGet(Name = "GetAllCryptos")] 
-    public ActionResult<IEnumerable<Crypto>> GetAllCryptos()
+    public ActionResult<IEnumerable<Crypto>> GetAllCryptos([FromQuery] CryptoQueryParameters cryptoQueryParameters)
     {
         try 
         {
-            var cryptos = _cryptoService.GetAllCryptos();
+            var cryptos = _cryptoService.GetAllCryptos(cryptoQueryParameters);
             return Ok(cryptos);
         }
         catch (Exception ex)

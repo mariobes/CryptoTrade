@@ -13,8 +13,8 @@ public class CryptoCreateUpdateDTO
     public string? Symbol { get; set; }
 
     [Required]
-    [StringLength(10, ErrorMessage = "La capitalización de mercado debe tener menos de 20 caracteres")]
-    public string? MarketCap { get; set; }
+    [Range(0, double.MaxValue, ErrorMessage = "La capitalización de mercado no puede ser negativa")]
+    public double MarketCap { get; set; }
 
     [Required]
     [StringLength(500, ErrorMessage = "La descripción debe tener menos de 500 caracteres")]
@@ -23,10 +23,6 @@ public class CryptoCreateUpdateDTO
     [Required]
     [Range(0, double.MaxValue, ErrorMessage = "El valor no puede ser negativo")]
     public double Value { get; set; }
-
-    [Required]
-    [Range(0, int.MaxValue, ErrorMessage = "La posición no puede ser negativa")]
-    public int Ranking { get; set; }
 
     [Required]
     [Url(ErrorMessage = "Debe ser una URL válida")]

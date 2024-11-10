@@ -6,7 +6,7 @@ public interface ICryptoRepository
 {
     public void AddCrypto(Crypto crypto);
     public Crypto GetCrypto(int cryptoId);
-    IEnumerable<Crypto> GetAllCryptos();
+    IEnumerable<Crypto> GetAllCryptos(CryptoQueryParameters? cryptoQueryParameters = null);
     public void UpdateCrypto(Crypto crypto);
     public void DeleteCrypto(int cryptoId);
     void SaveChanges();
