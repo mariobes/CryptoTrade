@@ -30,13 +30,27 @@ builder.Services.AddScoped<IStockRepository, StockEFRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionEFRepository>();
 
-var connectionString = builder.Configuration.GetConnectionString("ServerDB_localhost");
+var connectionString = builder.Configuration.GetConnectionString("ServerDB_dockernet");
 
 builder.Services.AddDbContext<CryptoTradeContext>(options =>
     options.UseSqlServer(connectionString));
 
+// Configurar CORS para permitir todas las solicitudes
+builder.Services.AddCors(options =>
+{
+options.AddPolicy("MyAllowedOrigins",
+    policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 // Add services to the container.
 builder.Services.AddControllers();
+
+builder.Services.AddHttpClient();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -70,22 +84,15 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+// Configurar CORS
+app.UseCors("MyAllowedOrigins");
+
 // Configure Swagger
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
 });
-
-// app.Use(async (context, next) =>
-// {
-//     if (context.Request.Path == "/")
-//     {
-//         context.Response.Redirect("/swagger");
-//         return;
-//     }
-//     await next();
-// });
 
 app.UseHttpsRedirection();
 

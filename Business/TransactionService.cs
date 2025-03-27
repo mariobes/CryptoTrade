@@ -28,192 +28,237 @@ public class TransactionService : ITransactionService
         return _transactionRepository.GetAllTransactions(userId);
     }
 
-    public void MakeDeposit(DepositDTO depositDTO)
+    public void MakeDeposit(DepositDTO dto)
     {
-        var user = _userRepository.GetUser(depositDTO.UserId);
+        var user = _userRepository.GetUser(dto.UserId);
         if (user == null)
         {
-            throw new KeyNotFoundException($"Usuario con ID {depositDTO.UserId} no encontrado");
+            throw new KeyNotFoundException($"Usuario con ID {dto.UserId} no encontrado");
         }
 
-        Transaction transaction = new(depositDTO.UserId, "Ingresar dinero", depositDTO.Amount, depositDTO.PaymentMethod);
-        user.Cash += depositDTO.Amount;
+        Transaction transaction = new Transaction
+        {
+            UserId = dto.UserId,
+            Concept = "+",
+            Amount = dto.Amount,
+            PaymentMethod = dto.PaymentMethod
+        };
+
+        user.Cash += dto.Amount;
         _userRepository.UpdateUser(user);
         _transactionRepository.AddTransaction(transaction);
     }
 
-    public void MakeWithdrawal(WithdrawalDTO withdrawalDTO)
+    public void MakeWithdrawal(WithdrawalDTO dto)
     {
-        var user = _userRepository.GetUser(withdrawalDTO.UserId);
+        var user = _userRepository.GetUser(dto.UserId);
         if (user == null)
         {
-            throw new KeyNotFoundException($"Usuario con ID {withdrawalDTO.UserId} no encontrado");
+            throw new KeyNotFoundException($"Usuario con ID {dto.UserId} no encontrado");
         }
 
-        if (user.Cash < withdrawalDTO.Amount)
+        if (user.Cash < dto.Amount)
         {
             throw new Exception("No tienes suficiente saldo para realizar el retiro");
         }
 
-        Transaction transaction = new(withdrawalDTO.UserId, "Retirar dinero", withdrawalDTO.Amount, EnumPaymentMethodOptions.TransferenciaBancaria);
-        user.Cash -= withdrawalDTO.Amount;
+        Transaction transaction = new Transaction
+        {
+            UserId = dto.UserId,
+            Concept = "-",
+            Amount = dto.Amount,
+            PaymentMethod = EnumPaymentMethodOptions.TransferenciaBancaria
+        };
+        user.Cash -= dto.Amount;
         _userRepository.UpdateUser(user);
         _transactionRepository.AddTransaction(transaction);
     }
 
-    public void BuyCrypto(BuySellAssetDTO buySellAssetDTO)
+    public void BuyCrypto(BuySellAssetDTO dto)
     {
-        var user = _userRepository.GetUser(buySellAssetDTO.UserId);
+        var user = _userRepository.GetUser(dto.UserId);
         if (user == null) 
         {
-            throw new KeyNotFoundException($"Usuario con ID {buySellAssetDTO.UserId} no encontrado");
+            throw new KeyNotFoundException($"Usuario con ID {dto.UserId} no encontrado");
         }
 
-        var crypto = _cryptoRepository.GetCrypto(buySellAssetDTO.AssetId);
+        var crypto = _cryptoRepository.GetCrypto(dto.AssetId);
         if (crypto == null) 
         {
-            throw new KeyNotFoundException($"Criptomoneda con ID {buySellAssetDTO.AssetId} no encontrada");
+            throw new KeyNotFoundException($"Criptomoneda con ID {dto.AssetId} no encontrada");
         }
 
-        if (user.Cash < buySellAssetDTO.Amount)
+        if (user.Cash < dto.Amount)
         {
             throw new Exception("No tienes suficiente saldo para realizar la compra");
         }
 
-        Transaction transaction = new(buySellAssetDTO.UserId, buySellAssetDTO.AssetId, $"Comprar {crypto.Name}", buySellAssetDTO.Amount, "Crypto");
+        Transaction transaction = new Transaction
+        {
+            UserId = dto.UserId,
+            AssetId = dto.AssetId,
+            Concept = $"+ {crypto.Name}",
+            Amount = dto.Amount,
+            TypeOfAsset = "Crypto"
+        };
         user.Cash -= transaction.Amount;
         user.Wallet += transaction.Amount;
         _userRepository.UpdateUser(user);
         _transactionRepository.AddTransaction(transaction);
     }
 
-    public void SellCrypto(BuySellAssetDTO buySellAssetDTO)
+    public void SellCrypto(BuySellAssetDTO dto)
     {
-        var user = _userRepository.GetUser(buySellAssetDTO.UserId);
+        var user = _userRepository.GetUser(dto.UserId);
         if (user == null) 
         {
-            throw new KeyNotFoundException($"Usuario con ID {buySellAssetDTO.UserId} no encontrado");
+            throw new KeyNotFoundException($"Usuario con ID {dto.UserId} no encontrado");
         }
 
-        var crypto = _cryptoRepository.GetCrypto(buySellAssetDTO.AssetId);
+        var crypto = _cryptoRepository.GetCrypto(dto.AssetId);
         if (crypto == null)
         {
-            throw new KeyNotFoundException($"Criptomoneda con ID {buySellAssetDTO.AssetId} no encontrada");
+            throw new KeyNotFoundException($"Criptomoneda con ID {dto.AssetId} no encontrada");
         } 
 
-        var userHasCrypto = HasCrypto(buySellAssetDTO.UserId, buySellAssetDTO.AssetId);
+        var userHasCrypto = HasCrypto(dto.UserId, dto.AssetId);
         if (!userHasCrypto)
         {
-            throw new Exception($"El usuario {buySellAssetDTO.UserId} no tiene la criptomoneda {buySellAssetDTO.AssetId}");
+            throw new Exception($"El usuario {dto.UserId} no tiene la criptomoneda {dto.AssetId}");
         }
 
-        var userCryptoBalance = GetCryptoBalance(buySellAssetDTO.UserId, buySellAssetDTO.AssetId);
-        if (buySellAssetDTO.Amount > userCryptoBalance)
+        var userCryptoBalance = GetCryptoBalance(dto.UserId, dto.AssetId);
+        if (dto.Amount > userCryptoBalance)
         {
             throw new Exception($"No tienes suficientes fondos para realizar la venta");
         }
         
-        Transaction transaction = new(buySellAssetDTO.UserId, buySellAssetDTO.AssetId, $"Vender {crypto.Name}", buySellAssetDTO.Amount, "Crypto");
+        Transaction transaction = new Transaction
+        {
+            UserId = dto.UserId,
+            AssetId = dto.AssetId,
+            Concept = $"- {crypto.Name}",
+            Amount = dto.Amount,
+            TypeOfAsset = "Crypto"
+        };
         user.Cash += transaction.Amount;
         user.Wallet -= transaction.Amount;
         _userRepository.UpdateUser(user);
         _transactionRepository.AddTransaction(transaction);
     }
 
-    public void BuyStock(BuySellAssetDTO buySellAssetDTO)
+    public void BuyStock(BuySellAssetDTO dto)
     {
-        var user = _userRepository.GetUser(buySellAssetDTO.UserId);
+        var user = _userRepository.GetUser(dto.UserId);
         if (user == null) 
         {
-            throw new KeyNotFoundException($"Usuario con ID {buySellAssetDTO.UserId} no encontrado");
+            throw new KeyNotFoundException($"Usuario con ID {dto.UserId} no encontrado");
         }
 
-        var stock = _stockRepository.GetStock(buySellAssetDTO.AssetId);
+        var stockIdToInteger = Convert.ToInt32(dto.AssetId); //Id de string a int
+
+        var stock = _stockRepository.GetStock(stockIdToInteger);
         if (stock == null) 
         {
-            throw new KeyNotFoundException($"Acción con ID {buySellAssetDTO.AssetId} no encontrada");
+            throw new KeyNotFoundException($"Acción con ID {dto.AssetId} no encontrada");
         }
 
-        if (user.Cash < buySellAssetDTO.Amount)
+        if (user.Cash < dto.Amount)
         {
             throw new Exception("No tienes suficiente saldo para realizar la compra");
         }
 
-        Transaction transaction = new(buySellAssetDTO.UserId, buySellAssetDTO.AssetId, $"Comprar {stock.Name}", buySellAssetDTO.Amount, "Stock");
+        Transaction transaction = new Transaction
+        {
+            UserId = dto.UserId,
+            AssetId = dto.AssetId,
+            Concept = $"+ {stock.Name}",
+            Amount = dto.Amount,
+            TypeOfAsset = "Stock"
+        };
         user.Cash -= transaction.Amount;
         user.Wallet += transaction.Amount;
         _userRepository.UpdateUser(user);
         _transactionRepository.AddTransaction(transaction);
     }
 
-    public void SellStock(BuySellAssetDTO buySellAssetDTO)
+    public void SellStock(BuySellAssetDTO dto)
     {
-        var user = _userRepository.GetUser(buySellAssetDTO.UserId);
+        var user = _userRepository.GetUser(dto.UserId);
         if (user == null) 
         {
-            throw new KeyNotFoundException($"Usuario con ID {buySellAssetDTO.UserId} no encontrado");
+            throw new KeyNotFoundException($"Usuario con ID {dto.UserId} no encontrado");
         }
+        
+        var stockIdToInteger = Convert.ToInt32(dto.AssetId); //Id de string a int
 
-        var stock = _stockRepository.GetStock(buySellAssetDTO.AssetId);
+        var stock = _stockRepository.GetStock(stockIdToInteger);
         if (stock == null)
         {
-            throw new KeyNotFoundException($"Acción con ID {buySellAssetDTO.AssetId} no encontrada");
+            throw new KeyNotFoundException($"Acción con ID {dto.AssetId} no encontrada");
         } 
 
-        var userHasStock = HasStock(buySellAssetDTO.UserId, buySellAssetDTO.AssetId);
+        var userHasStock = HasStock(dto.UserId, dto.AssetId);
         if (!userHasStock)
         {
-            throw new Exception($"El usuario {buySellAssetDTO.UserId} no tiene la acción {buySellAssetDTO.AssetId}");
+            throw new Exception($"El usuario {dto.UserId} no tiene la acción {dto.AssetId}");
         }
 
-        var userStockBalance = GetStockBalance(buySellAssetDTO.UserId, buySellAssetDTO.AssetId);
-        if (buySellAssetDTO.Amount > userStockBalance)
+        var userStockBalance = GetStockBalance(dto.UserId, dto.AssetId);
+        if (dto.Amount > userStockBalance)
         {
             throw new Exception($"No tienes suficientes fondos para realizar la venta");
         }
         
-        Transaction transaction = new(buySellAssetDTO.UserId, buySellAssetDTO.AssetId, $"Vender {stock.Name}", buySellAssetDTO.Amount, "Stock");
+        Transaction transaction = new Transaction
+        {
+            UserId = dto.UserId,
+            AssetId = dto.AssetId,
+            Concept = $"- {stock.Name}",
+            Amount = dto.Amount,
+            TypeOfAsset = "Stock"
+        };
         user.Cash += transaction.Amount;
         user.Wallet -= transaction.Amount;
         _userRepository.UpdateUser(user);
         _transactionRepository.AddTransaction(transaction);
     }
 
-    public void CryptoConverter(CryptoConverterDTO cryptoConverterDTO)
+    public void CryptoConverter(CryptoConverterDTO dto)
     {
-        var user = _userRepository.GetUser(cryptoConverterDTO.UserId);
+        var user = _userRepository.GetUser(dto.UserId);
         if (user == null) 
         {
-            throw new KeyNotFoundException($"Usuario con ID {cryptoConverterDTO.UserId} no encontrado");
+            throw new KeyNotFoundException($"Usuario con ID {dto.UserId} no encontrado");
         }
 
-        var crypto = _cryptoRepository.GetCrypto(cryptoConverterDTO.CryptoId);
+        var crypto = _cryptoRepository.GetCrypto(dto.CryptoId);
         if (crypto == null)
         {
-            throw new KeyNotFoundException($"Criptomoneda con ID {cryptoConverterDTO.CryptoId} no encontrada");
+            throw new KeyNotFoundException($"Criptomoneda con ID {dto.CryptoId} no encontrada");
         } 
 
-        var newCrypto = _cryptoRepository.GetCrypto(cryptoConverterDTO.NewCryptoId);
+        var newCrypto = _cryptoRepository.GetCrypto(dto.NewCryptoId);
         if (newCrypto == null)
         {
-            throw new KeyNotFoundException($"Criptomoneda con ID {cryptoConverterDTO.NewCryptoId} no encontrada");
+            throw new KeyNotFoundException($"Criptomoneda con ID {dto.NewCryptoId} no encontrada");
         } 
 
-        var userHasCrypto = HasCrypto(cryptoConverterDTO.UserId, cryptoConverterDTO.CryptoId);
+        var userHasCrypto = HasCrypto(dto.UserId, dto.CryptoId);
         if (!userHasCrypto)
         {
-            throw new Exception($"El usuario {cryptoConverterDTO.UserId} no tiene la criptomoneda {cryptoConverterDTO.CryptoId}");
+            throw new Exception($"El usuario {dto.UserId} no tiene la criptomoneda {dto.CryptoId}");
         }
 
-        var userCryptoBalance = GetCryptoBalance(cryptoConverterDTO.UserId, cryptoConverterDTO.CryptoId);
-        if (cryptoConverterDTO.Amount > userCryptoBalance)
+        var userCryptoBalance = GetCryptoBalance(dto.UserId, dto.CryptoId);
+        if (dto.Amount > userCryptoBalance)
         {
             throw new Exception($"No tienes suficientes fondos para realizar la venta");
         }
 
         //Transaction transaction = new(userId, cryptoId, $"Convertir {crypto.Name} a {newCrypto.Name}", amount, "Crypto");
-        Transaction sellTransaction = new(cryptoConverterDTO.UserId, cryptoConverterDTO.CryptoId, $"Vender {crypto.Name}", cryptoConverterDTO.Amount, "Crypto");
-        Transaction buyTransaction = new(cryptoConverterDTO.UserId, cryptoConverterDTO.CryptoId, $"Comprar {newCrypto.Name}", cryptoConverterDTO.Amount, "Crypto");
+        Transaction sellTransaction = new(dto.UserId, dto.CryptoId, $"Vender {crypto.Name}", dto.Amount, "Crypto");
+        Transaction buyTransaction = new(dto.UserId, dto.CryptoId, $"Comprar {newCrypto.Name}", dto.Amount, "Crypto");
         _userRepository.UpdateUser(user);
         _transactionRepository.AddTransaction(sellTransaction);
         _transactionRepository.AddTransaction(buyTransaction);
@@ -235,19 +280,19 @@ public class TransactionService : ITransactionService
 
         foreach (var transaction in userTransactions)
         {
-            if (transaction.AssetId.HasValue && transaction.TypeOfAsset.Equals("Crypto"))
+            if (transaction.AssetId != null && transaction.TypeOfAsset.Equals("Crypto"))
             {
-                var cryptoName = cryptos[transaction.AssetId.Value];
+                var cryptoName = cryptos[transaction.AssetId];
 
                 if (!totalAmountByCrypto.ContainsKey(cryptoName))
                 {
                     totalAmountByCrypto[cryptoName] = 0;
                 }
-                if (transaction.Concept.StartsWith("Comprar"))
+                if (transaction.Concept.StartsWith("+"))
                 {
                     totalAmountByCrypto[cryptoName] += transaction.Amount;
                 }
-                if (transaction.Concept.StartsWith("Vender"))
+                if (transaction.Concept.StartsWith("-"))
                 {
                     totalAmountByCrypto[cryptoName] -= transaction.Amount;
                 }  
@@ -272,19 +317,19 @@ public class TransactionService : ITransactionService
 
         foreach (var transaction in userTransactions)
         {
-            if (transaction.AssetId.HasValue && transaction.TypeOfAsset.Equals("Stock"))
+            if (transaction.AssetId != null && transaction.TypeOfAsset.Equals("Stock"))
             {
-                var stockName = stocks[transaction.AssetId.Value];
+                var stockName = stocks[Convert.ToInt32(transaction.AssetId)];
 
                 if (!totalAmountByStock.ContainsKey(stockName))
                 {
                     totalAmountByStock[stockName] = 0;
                 }
-                if (transaction.Concept.StartsWith("Comprar"))
+                if (transaction.Concept.StartsWith("+"))
                 {
                     totalAmountByStock[stockName] += transaction.Amount;
                 }
-                if (transaction.Concept.StartsWith("Vender"))
+                if (transaction.Concept.StartsWith("-"))
                 {
                     totalAmountByStock[stockName] -= transaction.Amount;
                 }  
@@ -293,13 +338,13 @@ public class TransactionService : ITransactionService
         return totalAmountByStock;
     }
 
-    public bool HasCrypto(int userId, int cryptoId)
+    public bool HasCrypto(int userId, string cryptoId)
     {
         var userTransactions = _transactionRepository.GetAllTransactions(userId);
 
         foreach (var transaction in userTransactions)
         {
-            if (transaction.AssetId == cryptoId && transaction.TypeOfAsset.Equals("Crypto"))
+            if (transaction.AssetId.Equals(cryptoId) && transaction.TypeOfAsset.Equals("Crypto"))
             {
                 return true;
             }
@@ -307,13 +352,13 @@ public class TransactionService : ITransactionService
         return false;
     }
 
-    public bool HasStock(int userId, int stockId)
+    public bool HasStock(int userId, string stockId)
     {
         var userTransactions = _transactionRepository.GetAllTransactions(userId);
 
         foreach (var transaction in userTransactions)
         {
-            if (transaction.AssetId == stockId && transaction.TypeOfAsset.Equals("Stock"))
+            if (transaction.AssetId.Equals(stockId) && transaction.TypeOfAsset.Equals("Stock"))
             {
                 return true;
             }
@@ -321,7 +366,7 @@ public class TransactionService : ITransactionService
         return false;
     }
 
-    public double GetCryptoBalance(int userId, int cryptoId)
+    public double GetCryptoBalance(int userId, string cryptoId)
     {
         var userTransactions = _transactionRepository.GetAllTransactions(userId);
 
@@ -329,13 +374,13 @@ public class TransactionService : ITransactionService
 
         foreach (var transaction in userTransactions)
         {
-            if (transaction.AssetId == cryptoId && transaction.TypeOfAsset.Equals("Crypto"))
+            if (transaction.AssetId.Equals(cryptoId) && transaction.TypeOfAsset.Equals("Crypto"))
             {
-                if (transaction.Concept.StartsWith("Comprar"))
+                if (transaction.Concept.StartsWith("+"))
                 {
                     balance += transaction.Amount;
                 }
-                else if (transaction.Concept.StartsWith("Vender"))
+                else if (transaction.Concept.StartsWith("-"))
                 {
                     balance -= transaction.Amount;
                 }
@@ -344,7 +389,7 @@ public class TransactionService : ITransactionService
         return balance;
     }
 
-    public double GetStockBalance(int userId, int stockId)
+    public double GetStockBalance(int userId, string stockId)
     {
         var userTransactions = _transactionRepository.GetAllTransactions(userId);
 
@@ -352,13 +397,13 @@ public class TransactionService : ITransactionService
 
         foreach (var transaction in userTransactions)
         {
-            if (transaction.AssetId == stockId && transaction.TypeOfAsset.Equals("Stock"))
+            if (transaction.AssetId.Equals(stockId) && transaction.TypeOfAsset.Equals("Stock"))
             {
-                if (transaction.Concept.StartsWith("Comprar"))
+                if (transaction.Concept.StartsWith("+"))
                 {
                     balance += transaction.Amount;
                 }
-                else if (transaction.Concept.StartsWith("Vender"))
+                else if (transaction.Concept.StartsWith("-"))
                 {
                     balance -= transaction.Amount;
                 }
