@@ -12,21 +12,32 @@ public class StockService : IStockService
         _repository = repository;
     }
 
-    public Stock RegisterStock(StockCreateUpdateDTO stockCreateUpdateDTO)
+    public Stock RegisterStock(StockCreateUpdateDTO dto)
     {
-        var registeredStock = _repository.GetAllStocks().FirstOrDefault(s => s.Name.Equals(stockCreateUpdateDTO.Name, StringComparison.OrdinalIgnoreCase));
+        var registeredStock = _repository.GetAllStocks().FirstOrDefault(s => s.Name.Equals(dto.Name, StringComparison.OrdinalIgnoreCase));
         if (registeredStock != null)
         {
             throw new Exception("El nombre de la acción ya existe.");
         }
-        Stock stock = new(stockCreateUpdateDTO.Name, stockCreateUpdateDTO.Value, stockCreateUpdateDTO.Description, stockCreateUpdateDTO.Website, stockCreateUpdateDTO.CompanyValue, stockCreateUpdateDTO.EarningPerShare, stockCreateUpdateDTO.Category, stockCreateUpdateDTO.DividendYield);
+        
+        Stock stock = new Stock
+        {
+            Name = dto.Name,
+            Value = dto.Value,
+            Description = dto.Description,
+            Website = dto.Website,
+            CompanyValue = dto.CompanyValue,
+            EarningPerShare = dto.EarningPerShare,
+            Category = dto.Category,
+            DividendYield = dto.DividendYield
+        };
         _repository.AddStock(stock);
         return stock;
     }
 
-    public IEnumerable<Stock> GetAllStocks(StockQueryParameters stockQueryParameters)
+    public IEnumerable<Stock> GetAllStocks(StockQueryParameters dto)
     {
-        return _repository.GetAllStocks(stockQueryParameters);
+        return _repository.GetAllStocks(dto);
     }
 
     public Stock GetStockById(int stockId)
@@ -39,7 +50,7 @@ public class StockService : IStockService
         return stock;
     }
 
-    public void UpdateStock(int stockId, StockCreateUpdateDTO stockCreateUpdateDTO)
+    public void UpdateStock(int stockId, StockCreateUpdateDTO dto)
     {
         var stock = _repository.GetStock(stockId);
         if (stock == null)
@@ -47,20 +58,20 @@ public class StockService : IStockService
             throw new KeyNotFoundException($"Acción con ID {stockId} no encontrada");
         }
 
-        var registeredStock = _repository.GetAllStocks().FirstOrDefault(s => s.Name.Equals(stockCreateUpdateDTO.Name, StringComparison.OrdinalIgnoreCase));
+        var registeredStock = _repository.GetAllStocks().FirstOrDefault(s => s.Name.Equals(dto.Name, StringComparison.OrdinalIgnoreCase));
         if ((registeredStock != null) && (stockId != registeredStock.Id))
         {
             throw new Exception("El nombre de la acción ya existe.");
         }
 
-        stock.Name = stockCreateUpdateDTO.Name;
-        stock.Value = stockCreateUpdateDTO.Value;
-        stock.Description = stockCreateUpdateDTO.Description;
-        stock.Website = stockCreateUpdateDTO.Website;
-        stock.CompanyValue = stockCreateUpdateDTO.CompanyValue;
-        stock.EarningPerShare = stockCreateUpdateDTO.EarningPerShare;
-        stock.Category = stockCreateUpdateDTO.Category;
-        stock.DividendYield = stockCreateUpdateDTO.DividendYield;
+        stock.Name = dto.Name;
+        stock.Value = dto.Value;
+        stock.Description = dto.Description;
+        stock.Website = dto.Website;
+        stock.CompanyValue = dto.CompanyValue;
+        stock.EarningPerShare = dto.EarningPerShare;
+        stock.Category = dto.Category;
+        stock.DividendYield = dto.DividendYield;
         _repository.UpdateStock(stock);
     }
 

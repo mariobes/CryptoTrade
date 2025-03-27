@@ -12,14 +12,24 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
-    public User RegisterUser(UserCreateDTO userCreateDTO)
+    public User RegisterUser(UserCreateDTO dto)
     {
-        var registeredUser = _userRepository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(userCreateDTO.Email, StringComparison.OrdinalIgnoreCase));
+        var registeredUser = _userRepository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase));
         if (registeredUser != null)
         {
             throw new Exception("El correo electrónico ya está registrado.");
         }
-        User user = new(userCreateDTO.Name, userCreateDTO.Birthdate, userCreateDTO.Email, userCreateDTO.Password, userCreateDTO.Phone, userCreateDTO.DNI, userCreateDTO.Nationality);
+
+        User user = new User
+        {
+            Name = dto.Name,
+            Birthdate = dto.Birthdate,
+            Email = dto.Email,
+            Password = dto.Password,
+            Phone = dto.Phone,
+            DNI = dto.DNI,
+            Nationality = dto.Nationality
+        };
         _userRepository.AddUser(user);
         return user;
     }
@@ -49,7 +59,7 @@ public class UserService : IUserService
         return user;
     }
 
-    public void UpdateUser(int userId, UserUpdateDTO userUpdateDTO)
+    public void UpdateUser(int userId, UserUpdateDTO dto)
     {
         var user = _userRepository.GetUser(userId);
         if (user == null)
@@ -57,15 +67,15 @@ public class UserService : IUserService
             throw new KeyNotFoundException($"Usuario con ID {userId} no encontrado");
         }
 
-        var registeredUser = _userRepository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(userUpdateDTO.Email, StringComparison.OrdinalIgnoreCase));
+        var registeredUser = _userRepository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase));
         if (registeredUser != null)
         {
             throw new Exception("El correo electrónico ya está registrado.");
         }
 
-        user.Email = userUpdateDTO.Email;
-        user.Password = userUpdateDTO.Password;
-        user.Phone = userUpdateDTO.Phone;
+        user.Email = dto.Email;
+        user.Password = dto.Password;
+        user.Phone = dto.Phone;
         _userRepository.UpdateUser(user);
     }
 

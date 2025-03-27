@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using CryptoTrade.Business;
 using CryptoTrade.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
 
 namespace CryptoTrade.API.Controllers;
 
@@ -10,21 +11,23 @@ namespace CryptoTrade.API.Controllers;
 public class CryptosController : ControllerBase
 {
     private readonly ICryptoService _cryptoService;
+    private readonly IHttpClientFactory _httpClientFactory;
 
-    public CryptosController(ICryptoService cryptoService)
+    public CryptosController(ICryptoService cryptoService, IHttpClientFactory httpClientFactory)
     {
         _cryptoService = cryptoService;
+        _httpClientFactory = httpClientFactory;
     }
 
     [Authorize(Roles = Roles.Admin)]
     [HttpPost]
-    public IActionResult CreateCrypto([FromBody] CryptoCreateUpdateDTO cryptoCreateUpdateDTO)
+    public IActionResult CreateCrypto([FromBody] CryptoCreateUpdateDTO dto)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
         try 
         {
-            var crypto = _cryptoService.RegisterCrypto(cryptoCreateUpdateDTO);
+            var crypto = _cryptoService.RegisterCrypto(dto);
             return CreatedAtAction(nameof(GetCrypto), new { cryptoId = crypto.Id }, crypto);
         }     
         catch (Exception ex)
@@ -34,22 +37,22 @@ public class CryptosController : ControllerBase
     }
 
     [HttpGet(Name = "GetAllCryptos")] 
-    public ActionResult<IEnumerable<Crypto>> GetAllCryptos([FromQuery] CryptoQueryParameters cryptoQueryParameters)
+    public ActionResult<IEnumerable<Crypto>> GetAllCryptos([FromQuery] CryptoQueryParameters dto)
     {
         try 
         {
-            var cryptos = _cryptoService.GetAllCryptos(cryptoQueryParameters);
+            var cryptos = _cryptoService.GetAllCryptos(dto);
             return Ok(cryptos);
         }
         catch (Exception ex)
         {
-            return BadRequest(ex);
+            return BadRequest($"Error al obtener todas las criptomonedas. {ex.Message}");
         }
     }
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{cryptoId}")]
-    public IActionResult GetCrypto(int cryptoId)
+    public IActionResult GetCrypto(string cryptoId)
     {
         try
         {
@@ -68,13 +71,13 @@ public class CryptosController : ControllerBase
 
     [Authorize(Roles = Roles.Admin)]
     [HttpPut("{cryptoId}")]
-    public IActionResult UpdateCrypto(int cryptoId, CryptoCreateUpdateDTO cryptoCreateUpdateDTO)
+    public IActionResult UpdateCrypto(string cryptoId, CryptoCreateUpdateDTO dto)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
         try 
         {
-            _cryptoService.UpdateCrypto(cryptoId, cryptoCreateUpdateDTO);
+            _cryptoService.UpdateCrypto(cryptoId, dto);
             return Ok("Criptomoneda actualizada correctamente.");
         }     
         catch (KeyNotFoundException knfex)
@@ -89,14 +92,11 @@ public class CryptosController : ControllerBase
 
     [Authorize(Roles = Roles.Admin)]
     [HttpDelete("{cryptoId}")]
-    public IActionResult DeleteCrypto(int cryptoId)
+    public IActionResult DeleteCrypto(string cryptoId)
     {
         try
         {
-            // if (!_transactionService.IsCryptoPurchased(cryptoId))
-            // {
-                _cryptoService.DeleteCrypto(cryptoId);
-            // }
+             _cryptoService.DeleteCrypto(cryptoId);
             return Ok("Criptomoneda eliminada correctamente.");
         }
         catch (KeyNotFoundException knfex)

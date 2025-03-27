@@ -18,25 +18,21 @@ namespace CryptoTrade.Data
             SaveChanges();
         }
 
-        public IEnumerable<Crypto> GetAllCryptos(CryptoQueryParameters cryptoQueryParameters) 
+        public IEnumerable<Crypto> GetAllCryptos(CryptoQueryParameters dto) 
         {
             var query = _context.Cryptos.AsQueryable();
 
-            if (cryptoQueryParameters != null)
+            if (dto != null)
             {
-                query = cryptoQueryParameters.SortBy switch
+                query = dto.SortBy switch
                 {
-                    EnumSortOptions.name => cryptoQueryParameters.Order == EnumOrderOptions.asc
+                    EnumSortOptions.name => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(c => c.Name)
                         : query.OrderByDescending(c => c.Name),
 
-                    EnumSortOptions.marketCap => cryptoQueryParameters.Order == EnumOrderOptions.asc
+                    _ => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(c => c.MarketCap)
                         : query.OrderByDescending(c => c.MarketCap),
-
-                    _ => cryptoQueryParameters.Order == EnumOrderOptions.asc
-                        ? query.OrderBy(c => c.Value)
-                        : query.OrderByDescending(c => c.Value),
                 };
             }
 
@@ -44,9 +40,9 @@ namespace CryptoTrade.Data
             return result;
         }
 
-        public Crypto GetCrypto(int cryptoId)
+        public Crypto GetCrypto(string cryptoId)
         {
-            var crypto = _context.Cryptos.FirstOrDefault(crypto => crypto.Id == cryptoId);
+            var crypto = _context.Cryptos.FirstOrDefault(c => c.Id == cryptoId);
             return crypto;
         }
 
@@ -56,7 +52,7 @@ namespace CryptoTrade.Data
             SaveChanges();
         }
 
-        public void DeleteCrypto(int cryptoId) {
+        public void DeleteCrypto(string cryptoId) {
             var crypto = GetCrypto(cryptoId);
             _context.Cryptos.Remove(crypto);
             SaveChanges();

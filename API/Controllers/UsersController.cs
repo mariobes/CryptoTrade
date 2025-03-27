@@ -79,7 +79,7 @@ public class UsersController : ControllerBase
 
     [Authorize(Roles = Roles.Admin + "," +  Roles.User)]
     [HttpPut("{userId}")]
-    public IActionResult UpdateUser(int userId, UserUpdateDTO userUpdateDTO)
+    public IActionResult UpdateUser(int userId, UserUpdateDTO dto)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
@@ -88,7 +88,7 @@ public class UsersController : ControllerBase
 
         try 
         {
-            _userService.UpdateUser(userId, userUpdateDTO);
+            _userService.UpdateUser(userId, dto);
             return Ok("Usuario actualizado correctamente.");
         }     
         catch (KeyNotFoundException knfex)

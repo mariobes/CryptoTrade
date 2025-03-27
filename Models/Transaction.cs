@@ -14,7 +14,7 @@ public class Transaction
     public int UserId { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public int? AssetId { get; set; }
+    public string? AssetId { get; set; }
 
     [Required]
     public string? Concept { get; set; }
@@ -58,7 +58,7 @@ public class Transaction
         PaymentMethod = paymentMethod;
     }
 
-    public Transaction (int userId, int assetId, string concept, double amount, string typeOfAsset)
+    public Transaction (int userId, string assetId, string concept, double amount, string typeOfAsset)
     {
         UserId = userId;
         AssetId = assetId;

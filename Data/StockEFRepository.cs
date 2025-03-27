@@ -18,23 +18,23 @@ namespace CryptoTrade.Data
             SaveChanges();
         }
 
-        public IEnumerable<Stock> GetAllStocks(StockQueryParameters stockQueryParameters) 
+        public IEnumerable<Stock> GetAllStocks(StockQueryParameters dto) 
         {
             var query = _context.Stocks.AsQueryable();
 
-            if (stockQueryParameters != null)
+            if (dto != null)
             {
-                query = stockQueryParameters.SortBy switch
+                query = dto.SortBy switch
                 {
-                    EnumSortOptions.name => stockQueryParameters.Order == EnumOrderOptions.asc
+                    EnumSortOptions.name => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(s => s.Name)
                         : query.OrderByDescending(s => s.Name),
 
-                    EnumSortOptions.marketCap => stockQueryParameters.Order == EnumOrderOptions.asc
+                    EnumSortOptions.marketCap => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(s => s.CompanyValue)
                         : query.OrderByDescending(s => s.CompanyValue),
 
-                    _ => stockQueryParameters.Order == EnumOrderOptions.asc
+                    _ => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(s => s.Value)
                         : query.OrderByDescending(s => s.Value),
                 };
@@ -46,7 +46,7 @@ namespace CryptoTrade.Data
 
         public Stock GetStock(int stockId)
         {
-            var stock = _context.Stocks.FirstOrDefault(stock => stock.Id == stockId);
+            var stock = _context.Stocks.FirstOrDefault(s => s.Id == stockId);
             return stock;
         }
 
