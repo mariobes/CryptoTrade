@@ -31,7 +31,7 @@ public class CryptoApiController : ControllerBase
             Headers =
             {
                 { "accept", "application/json" },
-                { "x-cg-demo-api-key", "CG-WVWH2AAYPrz7fXiztDF8so6L" },
+                { "x-cg-demo-api-key", _configuration["CoinGekoApi:ApiKey"] },
             },
         };
 
@@ -50,7 +50,7 @@ public class CryptoApiController : ControllerBase
         }
     }
 
-    [HttpGet("GetCryptosApi")]
+    [HttpGet("cryptos")]
     public async Task<IActionResult> GetCryptosApi()
     {
         var client = _httpClientFactory.CreateClient();
@@ -89,7 +89,7 @@ public class CryptoApiController : ControllerBase
         }
     }
 
-    [HttpGet("GetCryptosTrending")]
+    [HttpGet("cryptos-trending")]
     public async Task<IActionResult> GetCryptosTrending()
     {
         var client = _httpClientFactory.CreateClient();
@@ -120,10 +120,8 @@ public class CryptoApiController : ControllerBase
         }
     }
 
-    //Métodos de la API de CoinMarketCap
-
-    [HttpGet("TotalMarketCap")]
-    public async Task<IActionResult> TotalMarketCap()
+    [HttpGet("total-market-cap")]
+    public async Task<IActionResult> GetTotalMarketCap()
     {
         var request = new HttpRequestMessage
         {
@@ -163,8 +161,8 @@ public class CryptoApiController : ControllerBase
         }
     }
 
-    [HttpGet("FearGreedIndex")]
-    public async Task<IActionResult> FearGreedIndex()
+    [HttpGet("fear-greed-index")]
+    public async Task<IActionResult> GetFearGreedIndex()
     {
         var request = new HttpRequestMessage
         {
@@ -202,8 +200,8 @@ public class CryptoApiController : ControllerBase
         }
     }
 
-    [HttpGet("CMC100Index")]
-    public async Task<IActionResult> CMC100Index()
+    [HttpGet("CMC100-index")]
+    public async Task<IActionResult> GetCMC100Index()
     {
         var request = new HttpRequestMessage
         {
