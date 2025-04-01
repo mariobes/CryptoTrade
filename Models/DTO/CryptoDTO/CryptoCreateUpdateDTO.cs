@@ -14,7 +14,7 @@ public class CryptoCreateUpdateDTO
     public string? Name { get; set; }
 
     [Required]
-    [StringLength(10, ErrorMessage = "La abreviatura debe tener menos de 10 caracteres")]
+    [StringLength(10, ErrorMessage = "El símbolo debe tener menos de 10 caracteres")]
     public string? Symbol { get; set; }
 
     [Required]
