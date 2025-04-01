@@ -5,9 +5,9 @@ namespace CryptoTrade.Data;
 public interface ICryptoRepository
 {
     public void AddCrypto(Crypto crypto);
-    public Crypto GetCrypto(int cryptoId);
-    IEnumerable<Crypto> GetAllCryptos(CryptoQueryParameters? cryptoQueryParameters = null);
+    public Crypto GetCrypto(string cryptoId);
+    IEnumerable<Crypto> GetAllCryptos(CryptoQueryParameters? dto = null);
     public void UpdateCrypto(Crypto crypto);
-    public void DeleteCrypto(int cryptoId);
+    public void DeleteCrypto(string cryptoId);
     void SaveChanges();
 }

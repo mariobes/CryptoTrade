@@ -18,11 +18,11 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public IActionResult Login([FromBody] UserLoginDTO userLoginDTO)
+    public IActionResult Login([FromBody] UserLoginDTO dto)
     {
         try
         {
-            var user = _authService.CheckLogin(userLoginDTO.Email, userLoginDTO.Password);
+            var user = _authService.CheckLogin(dto.Email, dto.Password);
             if (user != null)
             {
                 var token = _authService.GenerateJwtToken(user);
@@ -44,13 +44,13 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public IActionResult Register([FromBody] UserCreateDTO userCreateDTO)
+    public IActionResult Register([FromBody] UserCreateDTO dto)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
         try 
         {
-            var user = _userService.RegisterUser(userCreateDTO);
+            var user = _userService.RegisterUser(dto);
             return CreatedAtAction(nameof(Login), new { userId = user.Id }, user);
         }     
         catch (Exception ex)

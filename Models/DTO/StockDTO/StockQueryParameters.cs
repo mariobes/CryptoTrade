@@ -5,8 +5,8 @@ namespace CryptoTrade.Models;
 public class StockQueryParameters
 {
 
-    [DefaultValue(EnumSortOptions.value)]
-    public EnumSortOptions SortBy { get; set; } = EnumSortOptions.value;
+    [DefaultValue(EnumSortOptions.marketCap)]
+    public EnumSortOptions SortBy { get; set; } = EnumSortOptions.marketCap;
 
 
     [DefaultValue(EnumOrderOptions.desc)]

@@ -1,50 +1,98 @@
 using System.ComponentModel.DataAnnotations;
-
-namespace CryptoTrade.Models;
+using System.Text.Json.Serialization;
 
 public class Stock
 {
     [Key]
-    public int Id { get; set; }
+    public string? Id { get; set; }
 
     [Required]
+    [JsonPropertyName("companyName")]
     public string? Name { get; set; }
 
     [Required]
-    public double Value { get; set; }
+    [JsonPropertyName("symbol")]
+    public string? Symbol { get; set; }
 
     [Required]
-    public DateTime CreationDate { get; set; } = DateTime.Now;
+    [JsonPropertyName("price")]
+    public double? Price { get; set; }
 
     [Required]
-    public string? Description { get; set; }
+    [JsonPropertyName("mktCap")]
+    public double? MarketCap { get; set; }
 
-    [Required]
+    [JsonPropertyName("sector")]
+    public string? Sector { get; set; }
+
+    [JsonPropertyName("industry")]
+    public string? Industry { get; set; }
+
+    [JsonPropertyName("lastDiv")]
+    public double? LastAnnualDividend { get; set; }
+
+    [JsonPropertyName("volAvg")]
+    public double? Volume { get; set; }
+
+    [JsonPropertyName("exchange")]
+    public string? Exchange { get; set; }
+
+    [JsonPropertyName("exchangeShortName")]
+    public string? ExchangeShortName { get; set; }
+
+    [JsonPropertyName("country")]
+    public string? Country { get; set; }
+
+    [JsonPropertyName("changes")]
+    public double? Changes { get; set; }
+
+    [JsonPropertyName("currency")]
+    public string? Currency { get; set; }
+
+    [JsonPropertyName("isin")]
+    public string? Isin { get; set; }
+
+    [JsonPropertyName("website")]
     public string? Website { get; set; }
 
-    [Required]
-    public double CompanyValue { get; set; }
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    [JsonPropertyName("ceo")]
+    public string? Ceo { get; set; }
+
+    [JsonPropertyName("image")]
+    public string? Image { get; set; }
 
     [Required]
-    public double EarningPerShare { get; set; }
+    public DateTime LastUpdated { get; set; }
 
-    [Required]
-    public string? Category { get; set; }
-
-    [Required]
-    public double DividendYield { get; set; }
 
     public Stock() {}
 
-    public Stock(string name, double value, string description, string website, double companyValue, double earningPerShare, string category, double dividendYield) 
+    public Stock(string id, string name, string symbol, double price, double marketCap, string sector, string industry,
+                 double lastAnnualDividend, double volume, string exchange, string exchangeShortName, string country, double changes,
+                 string currency, string isin, string website, string description, string ceo, string image, DateTime lastUpdated)
     {
+        Id = id;
         Name = name;
-        Value = value;
-        Description = description;
+        Symbol = symbol;
+        Price = price;
+        MarketCap = marketCap;
+        Sector = sector;
+        Industry = industry;
+        LastAnnualDividend = lastAnnualDividend;
+        Volume = volume;
+        Exchange = exchange;
+        ExchangeShortName = exchangeShortName;
+        Country = country;
+        Changes = changes;
+        Currency = currency;
+        Isin = isin;
         Website = website;
-        CompanyValue = companyValue;
-        EarningPerShare = earningPerShare;
-        Category = category;
-        DividendYield = dividendYield;
+        Description = description;
+        Ceo = ceo;
+        Image = image;
+        LastUpdated = lastUpdated;
     }
 }

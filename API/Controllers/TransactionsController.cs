@@ -42,155 +42,155 @@ public class TransactionsController : ControllerBase
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("deposit")]
-    public IActionResult MakeDeposit([FromBody] DepositDTO depositDTO)
+    public IActionResult MakeDeposit([FromBody] DepositDTO dto)
     {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(depositDTO.UserId), null, HttpContext.User)) 
+        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
             {return Forbid(); }
 
         try 
         {
-            _transactionService.MakeDeposit(depositDTO);
+            _transactionService.MakeDeposit(dto);
             return Ok("Depósito realizado correctamente.");
         }     
         catch (KeyNotFoundException knfex)
         {
-            return NotFound($"No se ha encontrado el usuario con ID: {depositDTO.UserId}. {knfex.Message}");
+            return NotFound($"No se ha encontrado el usuario con ID: {dto.UserId}. {knfex.Message}");
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error al realizar el depósito del usuario con ID: {depositDTO.UserId}. {ex.Message}");
+            return BadRequest($"Error al realizar el depósito del usuario con ID: {dto.UserId}. {ex.Message}");
         }
     }
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("withdrawal")]
-    public IActionResult MakeWithdrawal([FromBody] WithdrawalDTO withdrawalDTO)
+    public IActionResult MakeWithdrawal([FromBody] WithdrawalDTO dto)
     {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(withdrawalDTO.UserId), null, HttpContext.User)) 
+        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
             {return Forbid(); }
 
         try 
         {
-            _transactionService.MakeWithdrawal(withdrawalDTO);
+            _transactionService.MakeWithdrawal(dto);
             return Ok("Retiro realizado correctamente.");
         }     
         catch (KeyNotFoundException knfex)
         {
-            return NotFound($"No se ha encontrado el usuario con ID: {withdrawalDTO.UserId}. {knfex.Message}");
+            return NotFound($"No se ha encontrado el usuario con ID: {dto.UserId}. {knfex.Message}");
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error al hacer el retiro del usuario con ID: {withdrawalDTO.UserId}. {ex.Message}");
+            return BadRequest($"Error al hacer el retiro del usuario con ID: {dto.UserId}. {ex.Message}");
         }
     }
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("buy-crypto")]
-    public IActionResult BuyCrypto([FromBody] BuySellAssetDTO buySellAssetDTO)
+    public IActionResult BuyCrypto([FromBody] BuySellAssetDTO dto)
     {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(buySellAssetDTO.UserId), null, HttpContext.User)) 
+        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
             {return Forbid(); }
 
         try 
         {
-            _transactionService.BuyCrypto(buySellAssetDTO);
+            _transactionService.BuyCrypto(dto);
             return Ok("Compra realizada correctamente.");
         }     
         catch (KeyNotFoundException knfex)
         {
-            return NotFound($"No se ha encontrado la criptomoneda con ID: {buySellAssetDTO.AssetId}. {knfex.Message}");
+            return NotFound($"No se ha encontrado la criptomoneda con ID: {dto.AssetId}. {knfex.Message}");
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error al hacer la compra del usuario con ID: {buySellAssetDTO.UserId}. {ex.Message}");
+            return BadRequest($"Error al hacer la compra del usuario con ID: {dto.UserId}. {ex.Message}");
         }
     }
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("sell-crypto")]
-    public IActionResult SellCrypto([FromBody] BuySellAssetDTO buySellAssetDTO)
+    public IActionResult SellCrypto([FromBody] BuySellAssetDTO dto)
     {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(buySellAssetDTO.UserId), null, HttpContext.User)) 
+        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
             {return Forbid(); }
 
         try 
         {
-            _transactionService.SellCrypto(buySellAssetDTO);
+            _transactionService.SellCrypto(dto);
             return Ok("Venta realizada correctamente.");
         }     
         catch (KeyNotFoundException knfex)
         {
-            return NotFound($"No se ha encontrado la criptomoneda con ID: {buySellAssetDTO.AssetId}. {knfex.Message}");
+            return NotFound($"No se ha encontrado la criptomoneda con ID: {dto.AssetId}. {knfex.Message}");
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error al hacer la venta del usuario con ID: {buySellAssetDTO.UserId}. {ex.Message}");
+            return BadRequest($"Error al hacer la venta del usuario con ID: {dto.UserId}. {ex.Message}");
         }
     }
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("buy-stock")]
-    public IActionResult BuyStock([FromBody] BuySellAssetDTO buySellAssetDTO)
+    public IActionResult BuyStock([FromBody] BuySellAssetDTO dto)
     {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(buySellAssetDTO.UserId), null, HttpContext.User)) 
+        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
             {return Forbid(); }
 
         try 
         {
-            _transactionService.BuyStock(buySellAssetDTO);
+            _transactionService.BuyStock(dto);
             return Ok("Compra realizada correctamente.");
         }     
         catch (KeyNotFoundException knfex)
         {
-            return NotFound($"No se ha encontrado la acción con ID: {buySellAssetDTO.AssetId}. {knfex.Message}");
+            return NotFound($"No se ha encontrado la acción con ID: {dto.AssetId}. {knfex.Message}");
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error al hacer la compra del usuario con ID: {buySellAssetDTO.UserId}. {ex.Message}");
+            return BadRequest($"Error al hacer la compra del usuario con ID: {dto.UserId}. {ex.Message}");
         }
     }
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("sell-stock")]
-    public IActionResult SellStock([FromBody] BuySellAssetDTO buySellAssetDTO)
+    public IActionResult SellStock([FromBody] BuySellAssetDTO dto)
     {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(buySellAssetDTO.UserId), null, HttpContext.User)) 
+        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
             {return Forbid(); }
 
         try 
         {
-            _transactionService.SellStock(buySellAssetDTO);
+            _transactionService.SellStock(dto);
             return Ok("Venta realizada correctamente.");
         }     
         catch (KeyNotFoundException knfex)
         {
-            return NotFound($"No se ha encontrado la acción con ID: {buySellAssetDTO.AssetId}. {knfex.Message}");
+            return NotFound($"No se ha encontrado la acción con ID: {dto.AssetId}. {knfex.Message}");
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error al hacer la venta del usuario con ID: {buySellAssetDTO.UserId}. {ex.Message}");
+            return BadRequest($"Error al hacer la venta del usuario con ID: {dto.UserId}. {ex.Message}");
         }
     }
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("crypto-converter")]
-    public IActionResult CryptoConverter(CryptoConverterDTO cryptoConverterDTO)
+    public IActionResult CryptoConverter(CryptoConverterDTO dto)
     {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(cryptoConverterDTO.UserId), null, HttpContext.User)) 
+        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
             {return Forbid(); }
 
         try 
         {
-            _transactionService.CryptoConverter(cryptoConverterDTO);
+            _transactionService.CryptoConverter(dto);
             return Ok("Conversión realizada correctamente.");
         }     
         catch (KeyNotFoundException knfex)
         {
-            return NotFound($"No se ha encontrado la criptomoneda con ID: {cryptoConverterDTO.CryptoId}. {knfex.Message}");
+            return NotFound($"No se ha encontrado la criptomoneda con ID: {dto.CryptoId}. {knfex.Message}");
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error al hacer la conversión del usuario con ID: {cryptoConverterDTO.UserId}. {ex.Message}");
+            return BadRequest($"Error al hacer la conversión del usuario con ID: {dto.UserId}. {ex.Message}");
         }
     }
 

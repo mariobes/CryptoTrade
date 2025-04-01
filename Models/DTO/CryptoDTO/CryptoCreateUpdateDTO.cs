@@ -1,50 +1,81 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace CryptoTrade.Models;
 
 public class CryptoCreateUpdateDTO
 {
+    [JsonIgnore]
+    public string? Id { get; set; } // El ID de la criptomoneda
+
     [Required]
     [StringLength(50, ErrorMessage = "El nombre debe tener menos de 50 caracteres")]
+    [RegularExpression(@"^[a-zA-Z0-9 ]+$", ErrorMessage = "El nombre solo puede contener letras, números y espacios.")]
     public string? Name { get; set; }
 
     [Required]
-    [StringLength(10, ErrorMessage = "La abreviatura debe tener menos de 10 caracteres")]
+    [StringLength(10, ErrorMessage = "El símbolo debe tener menos de 10 caracteres")]
     public string? Symbol { get; set; }
 
     [Required]
-    [Range(0, double.MaxValue, ErrorMessage = "La capitalización de mercado no puede ser negativa")]
-    public double MarketCap { get; set; }
-
-    [Required]
-    [StringLength(500, ErrorMessage = "La descripción debe tener menos de 500 caracteres")]
-    public string? Description { get; set; }
-
-    [Required]
-    [Range(0, double.MaxValue, ErrorMessage = "El valor no puede ser negativo")]
-    public double Value { get; set; }
-
-    [Required]
     [Url(ErrorMessage = "Debe ser una URL válida")]
-    public string? Website { get; set; }
+    public string? Image { get; set; } // URL de la imagen
 
     [Required]
-    [Range(0, double.MaxValue, ErrorMessage = "El suministro total no puede ser negativo")]
-    public double TotalSupply { get; set; }
+    [Range(0, double.MaxValue, ErrorMessage = "El precio no puede ser negativo")]
+    public double? Price { get; set; } // Precio actual
 
     [Required]
+    [Range(0, double.MaxValue, ErrorMessage = "La capitalización de mercado no puede ser negativa")]
+    public double? MarketCap { get; set; } // Capitalización de mercado
+
+    [Range(0, double.MaxValue, ErrorMessage = "La valoración totalmente diluida no puede ser negativo")]
+    public double? FullyDilutedValuation { get; set; } // Valoración totalmente diluida (opcional)
+
+    [Range(0, double.MaxValue, ErrorMessage = "El volumen total de operaciones no puede ser negativo")]
+    public double? TotalVolume { get; set; } // Volumen total de operaciones
+
+    [Range(0, double.MaxValue, ErrorMessage = "El precio más alto en 24h no puede ser negativo")]
+    public double? High24h { get; set; } // Precio más alto en 24h
+
+    [Range(0, double.MaxValue, ErrorMessage = "El precio más bajo en 24h no puede ser negativo")]
+    public double? Low24h { get; set; } // Precio más bajo en 24h
+
+    [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio de precio en 24h no puede ser nulo")]
+    public double? PriceChange24h { get; set; } // Cambio de precio en 24h
+
+    [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio porcentual en 24h no puede ser nulo")]
+    public double? PriceChangePercentage24h { get; set; } // Cambio porcentual en 24h
+
+    [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio en capitalización de mercado en 24h no puede ser nulo")]
+    public double? MarketCapChange24h { get; set; } // Cambio en capitalización de mercado en 24h
+
+    [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio porcentual en capitalización de mercado en 24h no puede ser nulo")]
+    public double? MarketCapChangePercentage24h { get; set; } // Cambio porcentual en capitalización de mercado en 24h
+
     [Range(0, double.MaxValue, ErrorMessage = "El suministro circulante no puede ser negativo")]
-    public double CirculatingSupply { get; set; }
-    
-    [Required]
-    [RegularExpression(@"^0x[a-fA-F0-9]{40}$", ErrorMessage = "El contrato debe ser una dirección hexadecimal válida")]
-    public string? Contract { get; set; }
+    public double? CirculatingSupply { get; set; } // Suministro circulante
 
-    [Required]
+    [Range(0, double.MaxValue, ErrorMessage = "El suministro total no puede ser negativo")]
+    public double? TotalSupply { get; set; } // Suministro total
+
+    [Range(0, double.MaxValue, ErrorMessage = "El suministro máximo no puede ser negativo")]
+    public double? MaxSupply { get; set; } //  (opcional)
+
     [Range(0, double.MaxValue, ErrorMessage = "El máximo histórico no puede ser negativo")]
-    public double AllTimeHigh { get; set; }
+    public double? AllTimeHigh { get; set; } // Máximo histórico
+
+    [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio porcentual desde el máximo histórico no puede ser nulo")]
+    public double? AllTimeHighChangePercentage { get; set; } // Cambio porcentual desde el máximo histórico
+
+    public DateTime? AllTimeHighDate { get; set; } // Fecha del máximo histórico
+
+    [Range(0, double.MaxValue, ErrorMessage = "El mínimo histórico no puede ser negativo")]
+    public double? AllTimeLow { get; set; } // Mínimo histórico
+
+    [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio porcentual desde el mínimo histórico no puede ser nulo")]
+    public double? AllTimeLowChangePercentage { get; set; } // Cambio porcentual desde el mínimo histórico
 
     [Required]
-    [Range(0, double.MaxValue, ErrorMessage = "El mínimo histórico no puede ser negativo")]
-    public double AllTimeLow { get; set; }
+    public DateTime? AllTimeLowDate { get; set; } // Fecha del mínimo histórico
 }

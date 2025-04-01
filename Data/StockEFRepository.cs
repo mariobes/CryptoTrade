@@ -18,25 +18,21 @@ namespace CryptoTrade.Data
             SaveChanges();
         }
 
-        public IEnumerable<Stock> GetAllStocks(StockQueryParameters stockQueryParameters) 
+        public IEnumerable<Stock> GetAllStocks(StockQueryParameters dto) 
         {
             var query = _context.Stocks.AsQueryable();
 
-            if (stockQueryParameters != null)
+            if (dto != null)
             {
-                query = stockQueryParameters.SortBy switch
+                query = dto.SortBy switch
                 {
-                    EnumSortOptions.name => stockQueryParameters.Order == EnumOrderOptions.asc
+                    EnumSortOptions.name => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(s => s.Name)
                         : query.OrderByDescending(s => s.Name),
 
-                    EnumSortOptions.marketCap => stockQueryParameters.Order == EnumOrderOptions.asc
-                        ? query.OrderBy(s => s.CompanyValue)
-                        : query.OrderByDescending(s => s.CompanyValue),
-
-                    _ => stockQueryParameters.Order == EnumOrderOptions.asc
-                        ? query.OrderBy(s => s.Value)
-                        : query.OrderByDescending(s => s.Value),
+                    _ => dto.Order == EnumOrderOptions.asc
+                        ? query.OrderBy(s => s.MarketCap)
+                        : query.OrderByDescending(s => s.MarketCap),
                 };
             }
 
@@ -44,9 +40,9 @@ namespace CryptoTrade.Data
             return result;
         }
 
-        public Stock GetStock(int stockId)
+        public Stock GetStock(string stockId)
         {
-            var stock = _context.Stocks.FirstOrDefault(stock => stock.Id == stockId);
+            var stock = _context.Stocks.FirstOrDefault(s => s.Id == stockId);
             return stock;
         }
 
@@ -56,7 +52,7 @@ namespace CryptoTrade.Data
             SaveChanges();
         }
 
-        public void DeleteStock(int stockId) {
+        public void DeleteStock(string stockId) {
             var stock = GetStock(stockId);
             _context.Stocks.Remove(stock);
             SaveChanges();

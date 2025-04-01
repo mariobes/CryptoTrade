@@ -9,12 +9,10 @@ public class CryptoConverterDTO
     public int UserId { get; set; }
 
     [Required]
-    [Range(1, int.MaxValue, ErrorMessage = "El ID de la criptomoneda no es válido")]
-    public int CryptoId { get; set; }
+    public string? CryptoId { get; set; }
 
     [Required]
-    [Range(1, int.MaxValue, ErrorMessage = "El ID de la criptomoneda no es válido")]
-    public int NewCryptoId { get; set; }
+    public string? NewCryptoId { get; set; }
 
     [Required]
     [Range(0, double.MaxValue, ErrorMessage = "El valor no puede ser negativo")]

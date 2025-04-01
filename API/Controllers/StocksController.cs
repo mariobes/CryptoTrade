@@ -18,13 +18,13 @@ public class StocksController : ControllerBase
 
     [Authorize(Roles = Roles.Admin)]
     [HttpPost]
-    public IActionResult CreateStock([FromBody] StockCreateUpdateDTO stockCreateUpdateDTO)
+    public IActionResult CreateStock([FromBody] StockCreateUpdateDTO dto)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
         try 
         {
-            var stock = _stockService.RegisterStock(stockCreateUpdateDTO);
+            var stock = _stockService.RegisterStock(dto);
             return CreatedAtAction(nameof(GetStock), new { stockId = stock.Id }, stock);
         }     
         catch (Exception ex)
@@ -34,22 +34,21 @@ public class StocksController : ControllerBase
     }
 
     [HttpGet(Name = "GetAllStocks")] 
-    public ActionResult<IEnumerable<Stock>> GetAllStocks([FromQuery] StockQueryParameters stockQueryParameters)
+    public ActionResult<IEnumerable<Stock>> GetAllStocks([FromQuery] StockQueryParameters dto)
     {
         try 
         {
-            var stocks = _stockService.GetAllStocks(stockQueryParameters);
+            var stocks = _stockService.GetAllStocks(dto);
             return Ok(stocks);
         }
         catch (Exception ex)
         {
-            return BadRequest(ex);
+            return BadRequest($"Error al obtener todas las acciones. {ex.Message}");
         }
     }
 
-    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{stockId}")]
-    public IActionResult GetStock(int stockId)
+    public IActionResult GetStock(string stockId)
     {
         try
         {
@@ -68,13 +67,13 @@ public class StocksController : ControllerBase
 
     [Authorize(Roles = Roles.Admin)]
     [HttpPut("{stockId}")]
-    public IActionResult UpdateStock(int stockId, StockCreateUpdateDTO stockCreateUpdateDTO)
+    public IActionResult UpdateStock(string stockId, StockCreateUpdateDTO dto)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
         try 
         {
-            _stockService.UpdateStock(stockId, stockCreateUpdateDTO);
+            _stockService.UpdateStock(stockId, dto);
             return Ok("Acción actualizada correctamente.");
         }     
         catch (KeyNotFoundException knfex)
@@ -89,14 +88,11 @@ public class StocksController : ControllerBase
 
     [Authorize(Roles = Roles.Admin)]
     [HttpDelete("{stockId}")]
-    public IActionResult DeleteStock(int stockId)
+    public IActionResult DeleteStock(string stockId)
     {
         try
         {
-            // if (!_transactionService.IsStockPurchased(stockId))
-            // {
-                _stockService.DeleteStock(stockId);
-            // }
+            _stockService.DeleteStock(stockId);
             return Ok("Acción eliminada correctamente.");
         }
         catch (KeyNotFoundException knfex)
