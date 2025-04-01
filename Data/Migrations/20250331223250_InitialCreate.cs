@@ -47,17 +47,26 @@ namespace CryptoTrade.Data.Migrations
                 name: "Stocks",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Value = table.Column<double>(type: "float", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Website = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyValue = table.Column<double>(type: "float", nullable: false),
-                    EarningPerShare = table.Column<double>(type: "float", nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DividendYield = table.Column<double>(type: "float", nullable: false)
+                    Symbol = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    MarketCap = table.Column<double>(type: "float", nullable: false),
+                    Sector = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Industry = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastAnnualDividend = table.Column<double>(type: "float", nullable: true),
+                    Volume = table.Column<double>(type: "float", nullable: true),
+                    Exchange = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExchangeShortName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Changes = table.Column<double>(type: "float", nullable: true),
+                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Isin = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Website = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Ceo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -103,7 +112,7 @@ namespace CryptoTrade.Data.Migrations
                     PaymentMethod = table.Column<int>(type: "int", nullable: true),
                     TypeOfAsset = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CryptoId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    StockId = table.Column<int>(type: "int", nullable: true)
+                    StockId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CryptoTrade.Data.Migrations
 {
     [DbContext(typeof(CryptoTradeContext))]
-    [Migration("20250325170515_InitialCreate")]
+    [Migration("20250331223250_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -108,50 +108,6 @@ namespace CryptoTrade.Data.Migrations
                     b.ToTable("Cryptos");
                 });
 
-            modelBuilder.Entity("CryptoTrade.Models.Stock", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("CompanyValue")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("DividendYield")
-                        .HasColumnType("float");
-
-                    b.Property<double>("EarningPerShare")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Value")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Website")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Stocks");
-                });
-
             modelBuilder.Entity("CryptoTrade.Models.Transaction", b =>
                 {
                     b.Property<int>("Id")
@@ -185,8 +141,8 @@ namespace CryptoTrade.Data.Migrations
                     b.Property<double?>("PurchasePrice")
                         .HasColumnType("float");
 
-                    b.Property<int?>("StockId")
-                        .HasColumnType("int");
+                    b.Property<string>("StockId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("TypeOfAsset")
                         .HasColumnType("nvarchar(max)");
@@ -320,13 +276,84 @@ namespace CryptoTrade.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Stock", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Ceo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Changes")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Currency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Exchange")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExchangeShortName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Industry")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Isin")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("LastAnnualDividend")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double?>("MarketCap")
+                        .IsRequired()
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Price")
+                        .IsRequired()
+                        .HasColumnType("float");
+
+                    b.Property<string>("Sector")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Volume")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Website")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Stocks");
+                });
+
             modelBuilder.Entity("CryptoTrade.Models.Transaction", b =>
                 {
                     b.HasOne("Crypto", "Crypto")
                         .WithMany()
                         .HasForeignKey("CryptoId");
 
-                    b.HasOne("CryptoTrade.Models.Stock", "Stock")
+                    b.HasOne("Stock", "Stock")
                         .WithMany()
                         .HasForeignKey("StockId");
 

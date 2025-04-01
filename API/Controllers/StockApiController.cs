@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CryptoTrade.Business;
 using System.Text.Json;
+using CryptoTrade.Models;
 
 namespace CryptoTrade.API.Controllers;
 
@@ -17,6 +18,45 @@ public class StockApiController : ControllerBase
         _stockService = stockService;
         _httpClientFactory = httpClientFactory;
         _configuration = configuration;
+    }
+
+    [HttpGet("coins")]
+    public async Task<IActionResult> Coins()
+    {
+        var client = _httpClientFactory.CreateClient();
+        var apiKey = _configuration["FMPApi:ApiKey"];
+
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri($"https://financialmodelingprep.com/stable/company-screener?limit=100&apikey={apiKey}"),
+            Headers =
+            {
+                { "accept", "application/json" }
+            },
+        };
+
+        try
+        {
+            using (var response = await client.SendAsync(request))
+            {
+                response.EnsureSuccessStatusCode();
+                var body = await response.Content.ReadAsStringAsync();
+
+                var stocks = JsonSerializer.Deserialize<List<StockApiDTO>>(body);
+
+                var validStocks = stocks?
+                    .Where(s => s.Price != null && s.IsEtf == false && s.IsFund == false && s.IsActivelyTrading)
+                    .OrderByDescending(s => s.MarketCap)
+                    .ToList();
+
+                return Ok(validStocks);
+            }
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al obtener las acciones de Financial Modeling Prep API. {ex.Message}");
+        }
     }
 
     [HttpGet("stocks")]
@@ -42,17 +82,31 @@ public class StockApiController : ControllerBase
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
 
-                // var stocks = JsonSerializer.Deserialize<List<Stock>>(body);
+                var stocks = JsonSerializer.Deserialize<List<StockApiDTO>>(body);
+                if (stocks == null || !stocks.Any())
+                {
+                    return BadRequest("Error al deserializar.");
+                }
 
-                // // Filtramos las acciones que:
-                // // - Tienen un precio no nulo
-                // // - No son ETFs ni fondos
-                // var validStocks = stocks?
-                //     .Where(stock => stock.Price != null && stock.IsEtf == false && stock.IsFund == false && stock.IsActivelyTrading)
-                //     .ToList();
+                var validStocks = stocks
+                    .Where(s => s.Price != null && s.IsEtf == false && s.IsFund == false && s.IsActivelyTrading)
+                    .OrderByDescending(s => s.MarketCap)
+                    .Take(50)
+                    .ToList();
 
-                // return Ok(validStocks);
-                return Ok(body);
+                var resultStocks = new List<Stock>();
+
+                foreach (var stock in validStocks)
+                {
+                    var stockDetails = await GetStockDetails(stock.Symbol);
+                    if (stockDetails != null)
+                    {
+                        resultStocks.Add(stockDetails);
+                    }
+                }
+
+                await _stockService.UpdateStocksDatabase(resultStocks);
+                return Ok("Acciones obtenidas y actualizadas en la base de datos con éxito.");
             }
         }
         catch (Exception ex)
@@ -61,8 +115,8 @@ public class StockApiController : ControllerBase
         }
     }
 
-    [HttpGet("stock/{symbol}")]
-    public async Task<IActionResult> GetStockDetails(string symbol)
+    [HttpGet("stock-details/{symbol}")]
+    public async Task<Stock?> GetStockDetails(string symbol)
     {
         var client = _httpClientFactory.CreateClient();
         var apiKey = _configuration["FMPApi:ApiKey"];
@@ -83,12 +137,14 @@ public class StockApiController : ControllerBase
             {
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
-                return Ok(body);
+                var stockDetailsList = JsonSerializer.Deserialize<List<Stock>>(body);
+                return stockDetailsList?.FirstOrDefault();
             }
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error al obtener los detalles de la acción {symbol}. {ex.Message}");
+            Console.WriteLine($"Error al obtener los detalles de la acción {symbol}. {ex.Message}");
+            return null;
         }
     }
 

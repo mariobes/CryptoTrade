@@ -47,9 +47,8 @@ public class StocksController : ControllerBase
         }
     }
 
-    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{stockId}")]
-    public IActionResult GetStock(int stockId)
+    public IActionResult GetStock(string stockId)
     {
         try
         {
@@ -68,7 +67,7 @@ public class StocksController : ControllerBase
 
     [Authorize(Roles = Roles.Admin)]
     [HttpPut("{stockId}")]
-    public IActionResult UpdateStock(int stockId, StockCreateUpdateDTO dto)
+    public IActionResult UpdateStock(string stockId, StockCreateUpdateDTO dto)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
@@ -89,7 +88,7 @@ public class StocksController : ControllerBase
 
     [Authorize(Roles = Roles.Admin)]
     [HttpDelete("{stockId}")]
-    public IActionResult DeleteStock(int stockId)
+    public IActionResult DeleteStock(string stockId)
     {
         try
         {

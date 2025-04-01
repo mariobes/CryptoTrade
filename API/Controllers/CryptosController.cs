@@ -11,12 +11,10 @@ namespace CryptoTrade.API.Controllers;
 public class CryptosController : ControllerBase
 {
     private readonly ICryptoService _cryptoService;
-    private readonly IHttpClientFactory _httpClientFactory;
 
-    public CryptosController(ICryptoService cryptoService, IHttpClientFactory httpClientFactory)
+    public CryptosController(ICryptoService cryptoService)
     {
         _cryptoService = cryptoService;
-        _httpClientFactory = httpClientFactory;
     }
 
     [Authorize(Roles = Roles.Admin)]
@@ -50,7 +48,6 @@ public class CryptosController : ControllerBase
         }
     }
 
-    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{cryptoId}")]
     public IActionResult GetCrypto(string cryptoId)
     {

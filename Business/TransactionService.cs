@@ -155,9 +155,7 @@ public class TransactionService : ITransactionService
             throw new KeyNotFoundException($"Usuario con ID {dto.UserId} no encontrado");
         }
 
-        var stockIdToInteger = Convert.ToInt32(dto.AssetId); //Id de string a int
-
-        var stock = _stockRepository.GetStock(stockIdToInteger);
+        var stock = _stockRepository.GetStock(dto.AssetId);
         if (stock == null) 
         {
             throw new KeyNotFoundException($"Acción con ID {dto.AssetId} no encontrada");
@@ -189,10 +187,8 @@ public class TransactionService : ITransactionService
         {
             throw new KeyNotFoundException($"Usuario con ID {dto.UserId} no encontrado");
         }
-        
-        var stockIdToInteger = Convert.ToInt32(dto.AssetId); //Id de string a int
 
-        var stock = _stockRepository.GetStock(stockIdToInteger);
+        var stock = _stockRepository.GetStock(dto.AssetId);
         if (stock == null)
         {
             throw new KeyNotFoundException($"Acción con ID {dto.AssetId} no encontrada");
@@ -257,8 +253,8 @@ public class TransactionService : ITransactionService
         }
 
         //Transaction transaction = new(userId, cryptoId, $"Convertir {crypto.Name} a {newCrypto.Name}", amount, "Crypto");
-        Transaction sellTransaction = new(dto.UserId, dto.CryptoId, $"Vender {crypto.Name}", dto.Amount, "Crypto");
-        Transaction buyTransaction = new(dto.UserId, dto.CryptoId, $"Comprar {newCrypto.Name}", dto.Amount, "Crypto");
+        Transaction sellTransaction = new(dto.UserId, dto.CryptoId, $"- {crypto.Name}", dto.Amount, "Crypto");
+        Transaction buyTransaction = new(dto.UserId, dto.CryptoId, $"+ {newCrypto.Name}", dto.Amount, "Crypto");
         _userRepository.UpdateUser(user);
         _transactionRepository.AddTransaction(sellTransaction);
         _transactionRepository.AddTransaction(buyTransaction);
@@ -319,7 +315,7 @@ public class TransactionService : ITransactionService
         {
             if (transaction.AssetId != null && transaction.TypeOfAsset.Equals("Stock"))
             {
-                var stockName = stocks[Convert.ToInt32(transaction.AssetId)];
+                var stockName = stocks[transaction.AssetId];
 
                 if (!totalAmountByStock.ContainsKey(stockName))
                 {
