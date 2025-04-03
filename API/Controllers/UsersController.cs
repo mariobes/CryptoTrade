@@ -78,6 +78,100 @@ public class UsersController : ControllerBase
     }
 
     [Authorize(Roles = Roles.Admin + "," +  Roles.User)]
+    [HttpGet("preferences")]
+    public IActionResult GetUserPreferences(int userId)
+    {
+        if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
+            {return Forbid(); }
+
+        try
+        {
+            var user = _userService.GetUserPreferences(userId);
+            return Ok(user);
+        }
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se han encontrado las preferencias del usuario con ID: {userId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al obtener las preferencias del usuario con ID: {userId}. {ex.Message}");
+        }
+    }
+
+    [Authorize(Roles = Roles.Admin + "," +  Roles.User)]
+    [HttpPut("{userId}/language")]
+    public IActionResult UpdateUserLanguage(int userId, string language)
+    {
+        if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
+
+        if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
+            {return Forbid(); }
+
+        try 
+        {
+            _userService.UpdateUserPreferences(userId, language: language);
+            return Ok("Idioma actualizado correctamente.");
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado el usuario con ID: {userId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al actualizar el idioma del usuario con ID: {userId}. {ex.Message}");
+        }
+    }
+
+    [Authorize(Roles = Roles.Admin + "," +  Roles.User)]
+    [HttpPut("{userId}/currency")]
+    public IActionResult UpdateUserCurrency(int userId, string currency)
+    {
+        if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
+
+        if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
+            {return Forbid(); }
+
+        try 
+        {
+            _userService.UpdateUserPreferences(userId, currency: currency);
+            return Ok("Moneda actualizada correctamente.");
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado el usuario con ID: {userId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al actualizar la moneda del usuario con ID: {userId}. {ex.Message}");
+        }
+    }
+
+    [Authorize(Roles = Roles.Admin + "," +  Roles.User)]
+    [HttpPut("{userId}/theme")]
+    public IActionResult UpdateUserTheme(int userId, string theme)
+    {
+        if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
+
+        if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
+            {return Forbid(); }
+
+        try 
+        {
+            _userService.UpdateUserPreferences(userId, theme: theme);
+            return Ok("Tema actualizado correctamente.");
+        }     
+        catch (KeyNotFoundException knfex)
+        {
+            return NotFound($"No se ha encontrado el usuario con ID: {userId}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al actualizar el tema del usuario con ID: {userId}. {ex.Message}");
+        }
+    }
+
+    [Authorize(Roles = Roles.Admin + "," +  Roles.User)]
     [HttpPut("{userId}")]
     public IActionResult UpdateUser(int userId, UserUpdateDTO dto)
     {

@@ -33,6 +33,12 @@ public class User
 
     public double Wallet { get; set; } = 0;
 
+    public string Language { get; set; } = "ES";
+
+    public string Currency { get; set; } = "USD";
+
+    public string Theme { get; set; } = "light";
+
     public bool IsBanned { get; set; } = false;
 
     [JsonIgnore]

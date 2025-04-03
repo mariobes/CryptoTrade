@@ -59,13 +59,29 @@ public class UserService : IUserService
         return user;
     }
 
+    public UserPreferencesDTO GetUserPreferences(int userId)
+    {
+        var user = GetUserById(userId);
+        return new UserPreferencesDTO
+        {
+            Language = user.Language,
+            Currency = user.Currency,
+            Theme = user.Theme
+        };
+    }
+
+    public void UpdateUserPreferences(int userId, string? language = null, string? currency = null, string? theme = null)
+    {
+        var user = GetUserById(userId);
+        if (language != null) user.Language = language;
+        if (currency != null) user.Currency = currency;
+        if (theme != null) user.Theme = theme;
+        _userRepository.UpdateUser(user);
+    }
+
     public void UpdateUser(int userId, UserUpdateDTO dto)
     {
-        var user = _userRepository.GetUser(userId);
-        if (user == null)
-        {
-            throw new KeyNotFoundException($"Usuario con ID {userId} no encontrado");
-        }
+        var user = GetUserById(userId);
 
         var registeredUser = _userRepository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase));
         if (registeredUser != null)
@@ -81,11 +97,7 @@ public class UserService : IUserService
 
     public void DeleteUser(int userId)
     {
-        var user = _userRepository.GetUser(userId);
-        if (user == null)
-        {
-            throw new KeyNotFoundException($"Usuario con ID {userId} no encontrado");
-        }
+        GetUserById(userId);
         _userRepository.DeleteUser(userId);
     }
     

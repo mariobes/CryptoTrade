@@ -88,6 +88,9 @@ namespace CryptoTrade.Data.Migrations
                     Nationality = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Cash = table.Column<double>(type: "float", nullable: false),
                     Wallet = table.Column<double>(type: "float", nullable: false),
+                    Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Theme = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsBanned = table.Column<bool>(type: "bit", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -137,13 +140,13 @@ namespace CryptoTrade.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Birthdate", "Cash", "DNI", "Email", "IsBanned", "Name", "Nationality", "Password", "Phone", "Role", "Wallet" },
+                columns: new[] { "Id", "Birthdate", "Cash", "Currency", "DNI", "Email", "IsBanned", "Language", "Name", "Nationality", "Password", "Phone", "Role", "Theme", "Wallet" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 10000.0, "ADMIN", "admin@cryptotrade.com", false, "Admin", "ADMIN", "admin12345", "0000", "admin", 0.0 },
-                    { 2, new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 400.0, "23523562D", "mario@gmail.com", false, "Mario", "Argentina", "mario12345", "4567477", "user", 750.0 },
-                    { 3, new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 300.0, "23526445X", "fernando@gmail.com", false, "Fernando", "España", "fernando12345", "4745", "user", 1650.0 },
-                    { 4, new DateTime(2004, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 200.0, "52353425D", "eduardo@gmail.com", false, "Eduardo", "España", "eduardo12345", "4574548", "user", 1020.0 }
+                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 10000.0, "USD", "ADMIN", "admin@cryptotrade.com", false, "ES", "Admin", "ADMIN", "admin12345", "0000", "admin", "light", 0.0 },
+                    { 2, new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 400.0, "USD", "23523562D", "mario@gmail.com", false, "ES", "Mario", "Argentina", "mario12345", "4567477", "user", "light", 750.0 },
+                    { 3, new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 300.0, "USD", "23526445X", "fernando@gmail.com", false, "ES", "Fernando", "España", "fernando12345", "4745", "user", "light", 1650.0 },
+                    { 4, new DateTime(2004, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 200.0, "USD", "52353425D", "eduardo@gmail.com", false, "ES", "Eduardo", "España", "eduardo12345", "4574548", "user", "light", 1020.0 }
                 });
 
             migrationBuilder.CreateIndex(
