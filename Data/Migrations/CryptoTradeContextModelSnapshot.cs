@@ -173,6 +173,10 @@ namespace CryptoTrade.Data.Migrations
                     b.Property<double>("Cash")
                         .HasColumnType("float");
 
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DNI")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -183,6 +187,10 @@ namespace CryptoTrade.Data.Migrations
 
                     b.Property<bool>("IsBanned")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -204,6 +212,10 @@ namespace CryptoTrade.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Theme")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("Wallet")
                         .HasColumnType("float");
 
@@ -217,14 +229,17 @@ namespace CryptoTrade.Data.Migrations
                             Id = 1,
                             Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 10000.0,
+                            Currency = "USD",
                             DNI = "ADMIN",
                             Email = "admin@cryptotrade.com",
                             IsBanned = false,
+                            Language = "ES",
                             Name = "Admin",
                             Nationality = "ADMIN",
                             Password = "admin12345",
                             Phone = "0000",
                             Role = "admin",
+                            Theme = "light",
                             Wallet = 0.0
                         },
                         new
@@ -232,14 +247,17 @@ namespace CryptoTrade.Data.Migrations
                             Id = 2,
                             Birthdate = new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 400.0,
+                            Currency = "USD",
                             DNI = "23523562D",
                             Email = "mario@gmail.com",
                             IsBanned = false,
+                            Language = "ES",
                             Name = "Mario",
                             Nationality = "Argentina",
                             Password = "mario12345",
                             Phone = "4567477",
                             Role = "user",
+                            Theme = "light",
                             Wallet = 750.0
                         },
                         new
@@ -247,14 +265,17 @@ namespace CryptoTrade.Data.Migrations
                             Id = 3,
                             Birthdate = new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 300.0,
+                            Currency = "USD",
                             DNI = "23526445X",
                             Email = "fernando@gmail.com",
                             IsBanned = false,
+                            Language = "ES",
                             Name = "Fernando",
                             Nationality = "España",
                             Password = "fernando12345",
                             Phone = "4745",
                             Role = "user",
+                            Theme = "light",
                             Wallet = 1650.0
                         },
                         new
@@ -262,14 +283,17 @@ namespace CryptoTrade.Data.Migrations
                             Id = 4,
                             Birthdate = new DateTime(2004, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 200.0,
+                            Currency = "USD",
                             DNI = "52353425D",
                             Email = "eduardo@gmail.com",
                             IsBanned = false,
+                            Language = "ES",
                             Name = "Eduardo",
                             Nationality = "España",
                             Password = "eduardo12345",
                             Phone = "4574548",
                             Role = "user",
+                            Theme = "light",
                             Wallet = 1020.0
                         });
                 });
