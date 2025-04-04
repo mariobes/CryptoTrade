@@ -12,7 +12,7 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
-    public User RegisterUser(UserCreateDTO dto)
+    public User RegisterUser(UserCreateDto dto)
     {
         var registeredUser = _userRepository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase));
         if (registeredUser != null)
@@ -59,10 +59,10 @@ public class UserService : IUserService
         return user;
     }
 
-    public UserPreferencesDTO GetUserPreferences(int userId)
+    public UserPreferencesDto GetUserPreferences(int userId)
     {
         var user = GetUserById(userId);
-        return new UserPreferencesDTO
+        return new UserPreferencesDto
         {
             Language = user.Language,
             Currency = user.Currency,
@@ -79,7 +79,7 @@ public class UserService : IUserService
         _userRepository.UpdateUser(user);
     }
 
-    public void UpdateUser(int userId, UserUpdateDTO dto)
+    public void UpdateUser(int userId, UserUpdateDto dto)
     {
         var user = GetUserById(userId);
 

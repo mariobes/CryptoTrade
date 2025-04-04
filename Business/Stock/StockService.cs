@@ -58,7 +58,7 @@ public class StockService : IStockService
         _repository.SaveChanges();
     }
 
-    public Stock RegisterStock(StockCreateUpdateDTO dto)
+    public Stock RegisterStock(StockCreateUpdateDto dto)
     {
         var registeredStock = _repository.GetAllStocks().FirstOrDefault(s => s.Symbol.Equals(dto.Symbol, StringComparison.OrdinalIgnoreCase));
         if (registeredStock != null)
@@ -108,7 +108,7 @@ public class StockService : IStockService
         return stock;
     }
 
-    public void UpdateStock(string stockId, StockCreateUpdateDTO dto)
+    public void UpdateStock(string stockId, StockCreateUpdateDto dto)
     {
         var stock = _repository.GetStock(stockId);
         if (stock == null)

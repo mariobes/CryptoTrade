@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CryptoTrade.Models;
 
-public class UserCreateDTO
+public class UserCreateDto
 {
     [Required]
     [StringLength(50, ErrorMessage = "El nombre debe tener menos de 50 caracteres")]

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace CryptoTrade.Models;
 
-public class StockApiDTO
+public class StockApiDto
 {
     [Required]
     [JsonPropertyName("companyName")]

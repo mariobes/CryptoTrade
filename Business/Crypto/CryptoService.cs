@@ -76,7 +76,7 @@ public class CryptoService : ICryptoService
         _repository.SaveChanges();
     }
 
-    public Crypto RegisterCrypto(CryptoCreateUpdateDTO dto)
+    public Crypto RegisterCrypto(CryptoCreateUpdateDto dto)
     {
         var registeredCrypto = _repository.GetAllCryptos().FirstOrDefault(c => c.Name.Equals(dto.Name, StringComparison.OrdinalIgnoreCase));
         if (registeredCrypto != null)
@@ -130,7 +130,7 @@ public class CryptoService : ICryptoService
         return crypto;
     }
 
-    public void UpdateCrypto(string cryptoId, CryptoCreateUpdateDTO dto)
+    public void UpdateCrypto(string cryptoId, CryptoCreateUpdateDto dto)
     {
         var crypto = _repository.GetCrypto(cryptoId);
         if (crypto == null)

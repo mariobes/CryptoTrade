@@ -19,7 +19,7 @@ public class CryptosController : ControllerBase
 
     [Authorize(Roles = Roles.Admin)]
     [HttpPost]
-    public IActionResult CreateCrypto([FromBody] CryptoCreateUpdateDTO dto)
+    public IActionResult CreateCrypto([FromBody] CryptoCreateUpdateDto dto)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
@@ -68,7 +68,7 @@ public class CryptosController : ControllerBase
 
     [Authorize(Roles = Roles.Admin)]
     [HttpPut("{cryptoId}")]
-    public IActionResult UpdateCrypto(string cryptoId, CryptoCreateUpdateDTO dto)
+    public IActionResult UpdateCrypto(string cryptoId, CryptoCreateUpdateDto dto)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 

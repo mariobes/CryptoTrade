@@ -42,7 +42,7 @@ public class TransactionsController : ControllerBase
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("deposit")]
-    public IActionResult MakeDeposit([FromBody] DepositDTO dto)
+    public IActionResult MakeDeposit([FromBody] DepositDto dto)
     {
         if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
             {return Forbid(); }
@@ -64,7 +64,7 @@ public class TransactionsController : ControllerBase
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("withdrawal")]
-    public IActionResult MakeWithdrawal([FromBody] WithdrawalDTO dto)
+    public IActionResult MakeWithdrawal([FromBody] WithdrawalDto dto)
     {
         if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
             {return Forbid(); }
@@ -86,7 +86,7 @@ public class TransactionsController : ControllerBase
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("buy-crypto")]
-    public IActionResult BuyCrypto([FromBody] BuySellAssetDTO dto)
+    public IActionResult BuyCrypto([FromBody] BuySellAssetDto dto)
     {
         if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
             {return Forbid(); }
@@ -108,7 +108,7 @@ public class TransactionsController : ControllerBase
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("sell-crypto")]
-    public IActionResult SellCrypto([FromBody] BuySellAssetDTO dto)
+    public IActionResult SellCrypto([FromBody] BuySellAssetDto dto)
     {
         if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
             {return Forbid(); }
@@ -130,7 +130,7 @@ public class TransactionsController : ControllerBase
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("buy-stock")]
-    public IActionResult BuyStock([FromBody] BuySellAssetDTO dto)
+    public IActionResult BuyStock([FromBody] BuySellAssetDto dto)
     {
         if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
             {return Forbid(); }
@@ -152,7 +152,7 @@ public class TransactionsController : ControllerBase
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("sell-stock")]
-    public IActionResult SellStock([FromBody] BuySellAssetDTO dto)
+    public IActionResult SellStock([FromBody] BuySellAssetDto dto)
     {
         if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
             {return Forbid(); }
@@ -174,7 +174,7 @@ public class TransactionsController : ControllerBase
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpPost("crypto-converter")]
-    public IActionResult CryptoConverter(CryptoConverterDTO dto)
+    public IActionResult CryptoConverter(CryptoConverterDto dto)
     {
         if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
             {return Forbid(); }

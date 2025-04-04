@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CryptoTrade.Models;
 
-public class WithdrawalDTO
+public class WithdrawalDto
 {
     [Required]
     [Range(1, int.MaxValue, ErrorMessage = "El ID del usuario no es válido")]

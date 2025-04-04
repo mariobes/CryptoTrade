@@ -173,7 +173,7 @@ public class UsersController : ControllerBase
 
     [Authorize(Roles = Roles.Admin + "," +  Roles.User)]
     [HttpPut("{userId}")]
-    public IActionResult UpdateUser(int userId, UserUpdateDTO dto)
+    public IActionResult UpdateUser(int userId, UserUpdateDto dto)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 

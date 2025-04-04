@@ -1,7 +1,7 @@
 
 namespace CryptoTrade.Models;
 
-public class UserPreferencesDTO
+public class UserPreferencesDto
 {
     public string? Language { get; set; }
 
