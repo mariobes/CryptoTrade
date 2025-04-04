@@ -43,7 +43,7 @@ public class StockApiController : ControllerBase
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
 
-                var stocks = JsonSerializer.Deserialize<List<StockApiDTO>>(body);
+                var stocks = JsonSerializer.Deserialize<List<StockApiDto>>(body);
 
                 var validStocks = stocks?
                     .Where(s => s.Price != null && s.IsEtf == false && s.IsFund == false && s.IsActivelyTrading)
@@ -82,7 +82,7 @@ public class StockApiController : ControllerBase
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
 
-                var stocks = JsonSerializer.Deserialize<List<StockApiDTO>>(body);
+                var stocks = JsonSerializer.Deserialize<List<StockApiDto>>(body);
                 if (stocks == null || !stocks.Any())
                 {
                     return BadRequest("Error al deserializar.");

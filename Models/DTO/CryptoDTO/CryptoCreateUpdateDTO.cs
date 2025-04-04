@@ -3,10 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace CryptoTrade.Models;
 
-public class CryptoCreateUpdateDTO
+public class CryptoCreateUpdateDto
 {
     [JsonIgnore]
-    public string? Id { get; set; } // El ID de la criptomoneda
+    public string? Id { get; set; }
 
     [Required]
     [StringLength(50, ErrorMessage = "El nombre debe tener menos de 50 caracteres")]
@@ -19,63 +19,63 @@ public class CryptoCreateUpdateDTO
 
     [Required]
     [Url(ErrorMessage = "Debe ser una URL válida")]
-    public string? Image { get; set; } // URL de la imagen
+    public string? Image { get; set; }
 
     [Required]
     [Range(0, double.MaxValue, ErrorMessage = "El precio no puede ser negativo")]
-    public double? Price { get; set; } // Precio actual
+    public double? Price { get; set; }
 
     [Required]
     [Range(0, double.MaxValue, ErrorMessage = "La capitalización de mercado no puede ser negativa")]
-    public double? MarketCap { get; set; } // Capitalización de mercado
+    public double? MarketCap { get; set; }
 
     [Range(0, double.MaxValue, ErrorMessage = "La valoración totalmente diluida no puede ser negativo")]
-    public double? FullyDilutedValuation { get; set; } // Valoración totalmente diluida (opcional)
+    public double? FullyDilutedValuation { get; set; }
 
     [Range(0, double.MaxValue, ErrorMessage = "El volumen total de operaciones no puede ser negativo")]
-    public double? TotalVolume { get; set; } // Volumen total de operaciones
+    public double? TotalVolume { get; set; }
 
     [Range(0, double.MaxValue, ErrorMessage = "El precio más alto en 24h no puede ser negativo")]
-    public double? High24h { get; set; } // Precio más alto en 24h
+    public double? High24h { get; set; }
 
     [Range(0, double.MaxValue, ErrorMessage = "El precio más bajo en 24h no puede ser negativo")]
-    public double? Low24h { get; set; } // Precio más bajo en 24h
+    public double? Low24h { get; set; }
 
     [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio de precio en 24h no puede ser nulo")]
-    public double? PriceChange24h { get; set; } // Cambio de precio en 24h
+    public double? PriceChange24h { get; set; }
 
     [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio porcentual en 24h no puede ser nulo")]
-    public double? PriceChangePercentage24h { get; set; } // Cambio porcentual en 24h
+    public double? PriceChangePercentage24h { get; set; }
 
     [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio en capitalización de mercado en 24h no puede ser nulo")]
-    public double? MarketCapChange24h { get; set; } // Cambio en capitalización de mercado en 24h
+    public double? MarketCapChange24h { get; set; }
 
     [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio porcentual en capitalización de mercado en 24h no puede ser nulo")]
-    public double? MarketCapChangePercentage24h { get; set; } // Cambio porcentual en capitalización de mercado en 24h
+    public double? MarketCapChangePercentage24h { get; set; }
 
     [Range(0, double.MaxValue, ErrorMessage = "El suministro circulante no puede ser negativo")]
-    public double? CirculatingSupply { get; set; } // Suministro circulante
+    public double? CirculatingSupply { get; set; }
 
     [Range(0, double.MaxValue, ErrorMessage = "El suministro total no puede ser negativo")]
-    public double? TotalSupply { get; set; } // Suministro total
+    public double? TotalSupply { get; set; }
 
     [Range(0, double.MaxValue, ErrorMessage = "El suministro máximo no puede ser negativo")]
-    public double? MaxSupply { get; set; } //  (opcional)
+    public double? MaxSupply { get; set; }
 
     [Range(0, double.MaxValue, ErrorMessage = "El máximo histórico no puede ser negativo")]
-    public double? AllTimeHigh { get; set; } // Máximo histórico
+    public double? AllTimeHigh { get; set; }
 
     [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio porcentual desde el máximo histórico no puede ser nulo")]
-    public double? AllTimeHighChangePercentage { get; set; } // Cambio porcentual desde el máximo histórico
+    public double? AllTimeHighChangePercentage { get; set; }
 
-    public DateTime? AllTimeHighDate { get; set; } // Fecha del máximo histórico
+    public DateTime? AllTimeHighDate { get; set; }
 
     [Range(0, double.MaxValue, ErrorMessage = "El mínimo histórico no puede ser negativo")]
-    public double? AllTimeLow { get; set; } // Mínimo histórico
+    public double? AllTimeLow { get; set; }
 
     [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio porcentual desde el mínimo histórico no puede ser nulo")]
-    public double? AllTimeLowChangePercentage { get; set; } // Cambio porcentual desde el mínimo histórico
+    public double? AllTimeLowChangePercentage { get; set; }
 
     [Required]
-    public DateTime? AllTimeLowDate { get; set; } // Fecha del mínimo histórico
+    public DateTime? AllTimeLowDate { get; set; }
 }

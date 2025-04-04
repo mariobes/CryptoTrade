@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace CryptoTrade.Models;
 
-public class StockCreateUpdateDTO
+public class StockCreateUpdateDto
 {
     [JsonIgnore]
     public string? Id { get; set; }

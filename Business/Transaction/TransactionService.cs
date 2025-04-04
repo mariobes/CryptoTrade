@@ -28,7 +28,7 @@ public class TransactionService : ITransactionService
         return _transactionRepository.GetAllTransactions(userId);
     }
 
-    public void MakeDeposit(DepositDTO dto)
+    public void MakeDeposit(DepositDto dto)
     {
         var user = _userRepository.GetUser(dto.UserId);
         if (user == null)
@@ -49,7 +49,7 @@ public class TransactionService : ITransactionService
         _transactionRepository.AddTransaction(transaction);
     }
 
-    public void MakeWithdrawal(WithdrawalDTO dto)
+    public void MakeWithdrawal(WithdrawalDto dto)
     {
         var user = _userRepository.GetUser(dto.UserId);
         if (user == null)
@@ -74,7 +74,7 @@ public class TransactionService : ITransactionService
         _transactionRepository.AddTransaction(transaction);
     }
 
-    public void BuyCrypto(BuySellAssetDTO dto)
+    public void BuyCrypto(BuySellAssetDto dto)
     {
         var user = _userRepository.GetUser(dto.UserId);
         if (user == null) 
@@ -107,7 +107,7 @@ public class TransactionService : ITransactionService
         _transactionRepository.AddTransaction(transaction);
     }
 
-    public void SellCrypto(BuySellAssetDTO dto)
+    public void SellCrypto(BuySellAssetDto dto)
     {
         var user = _userRepository.GetUser(dto.UserId);
         if (user == null) 
@@ -147,7 +147,7 @@ public class TransactionService : ITransactionService
         _transactionRepository.AddTransaction(transaction);
     }
 
-    public void BuyStock(BuySellAssetDTO dto)
+    public void BuyStock(BuySellAssetDto dto)
     {
         var user = _userRepository.GetUser(dto.UserId);
         if (user == null) 
@@ -180,7 +180,7 @@ public class TransactionService : ITransactionService
         _transactionRepository.AddTransaction(transaction);
     }
 
-    public void SellStock(BuySellAssetDTO dto)
+    public void SellStock(BuySellAssetDto dto)
     {
         var user = _userRepository.GetUser(dto.UserId);
         if (user == null) 
@@ -220,7 +220,7 @@ public class TransactionService : ITransactionService
         _transactionRepository.AddTransaction(transaction);
     }
 
-    public void CryptoConverter(CryptoConverterDTO dto)
+    public void CryptoConverter(CryptoConverterDto dto)
     {
         var user = _userRepository.GetUser(dto.UserId);
         if (user == null) 

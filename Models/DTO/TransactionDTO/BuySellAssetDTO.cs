@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CryptoTrade.Models;
 
-public class BuySellAssetDTO
+public class BuySellAssetDto
 {
     [Required]
     [Range(1, int.MaxValue, ErrorMessage = "El ID del usuario no es válido")]

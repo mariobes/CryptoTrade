@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CryptoTrade.Models;
 
-public class UserUpdateDTO
+public class UserUpdateDto
 {
     [Required]
     [EmailAddress(ErrorMessage = "El correo electrónico no es válido")]

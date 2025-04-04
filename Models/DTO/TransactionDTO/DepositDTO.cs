@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CryptoTrade.Models;
 
-public class DepositDTO
+public class DepositDto
 {
     [Required]
     [Range(1, int.MaxValue, ErrorMessage = "El ID del usuario no es válido")]

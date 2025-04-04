@@ -18,7 +18,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public IActionResult Login([FromBody] UserLoginDTO dto)
+    public IActionResult Login([FromBody] UserLoginDto dto)
     {
         try
         {
@@ -44,7 +44,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public IActionResult Register([FromBody] UserCreateDTO dto)
+    public IActionResult Register([FromBody] UserCreateDto dto)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 

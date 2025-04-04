@@ -5,9 +5,9 @@ namespace CryptoTrade.Business;
 public interface ICryptoService
 {
     public Task UpdateCryptosDatabase(List<Crypto> cryptos);
-    public Crypto RegisterCrypto(CryptoCreateUpdateDTO dto);
+    public Crypto RegisterCrypto(CryptoCreateUpdateDto dto);
     public IEnumerable<Crypto> GetAllCryptos(CryptoQueryParameters? dto = null);
     public Crypto GetCryptoById(string cryptoId);
-    public void UpdateCrypto(string cryptoId, CryptoCreateUpdateDTO dto);
+    public void UpdateCrypto(string cryptoId, CryptoCreateUpdateDto dto);
     public void DeleteCrypto(string cryptoId);
 }

@@ -18,7 +18,7 @@ public class StocksController : ControllerBase
 
     [Authorize(Roles = Roles.Admin)]
     [HttpPost]
-    public IActionResult CreateStock([FromBody] StockCreateUpdateDTO dto)
+    public IActionResult CreateStock([FromBody] StockCreateUpdateDto dto)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
@@ -67,7 +67,7 @@ public class StocksController : ControllerBase
 
     [Authorize(Roles = Roles.Admin)]
     [HttpPut("{stockId}")]
-    public IActionResult UpdateStock(string stockId, StockCreateUpdateDTO dto)
+    public IActionResult UpdateStock(string stockId, StockCreateUpdateDto dto)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
 
