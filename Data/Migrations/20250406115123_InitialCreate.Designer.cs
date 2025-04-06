@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CryptoTrade.Data.Migrations
 {
     [DbContext(typeof(CryptoTradeContext))]
-    [Migration("20250403131921_InitialCreate")]
+    [Migration("20250406115123_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,6 +76,9 @@ namespace CryptoTrade.Data.Migrations
                     b.Property<double?>("MarketCapChangePercentage24h")
                         .HasColumnType("float");
 
+                    b.Property<double?>("MarketCapRank")
+                        .HasColumnType("float");
+
                     b.Property<double?>("MaxSupply")
                         .HasColumnType("float");
 
@@ -90,8 +93,17 @@ namespace CryptoTrade.Data.Migrations
                     b.Property<double?>("PriceChange24h")
                         .HasColumnType("float");
 
+                    b.Property<double?>("PriceChangePercentage1h")
+                        .HasColumnType("float");
+
                     b.Property<double?>("PriceChangePercentage24h")
                         .HasColumnType("float");
+
+                    b.Property<double?>("PriceChangePercentage7d")
+                        .HasColumnType("float");
+
+                    b.Property<string>("SparklineIn7d")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Symbol")
                         .IsRequired()

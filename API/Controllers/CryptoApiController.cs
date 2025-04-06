@@ -27,7 +27,7 @@ public class CryptoApiController : ControllerBase
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri("https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&sparkline=true"),
+            RequestUri = new Uri("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true&price_change_percentage=1h%2C7d"),
             Headers =
             {
                 { "accept", "application/json" },
@@ -58,7 +58,7 @@ public class CryptoApiController : ControllerBase
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true"),
+            RequestUri = new Uri("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true&price_change_percentage=1h%2C7d"),
             Headers =
             {
                 { "accept", "application/json" },

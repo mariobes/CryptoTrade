@@ -19,12 +19,15 @@ namespace CryptoTrade.Data.Migrations
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
                     MarketCap = table.Column<double>(type: "float", nullable: false),
+                    MarketCapRank = table.Column<double>(type: "float", nullable: true),
                     FullyDilutedValuation = table.Column<double>(type: "float", nullable: true),
                     TotalVolume = table.Column<double>(type: "float", nullable: true),
                     High24h = table.Column<double>(type: "float", nullable: true),
                     Low24h = table.Column<double>(type: "float", nullable: true),
                     PriceChange24h = table.Column<double>(type: "float", nullable: true),
                     PriceChangePercentage24h = table.Column<double>(type: "float", nullable: true),
+                    PriceChangePercentage1h = table.Column<double>(type: "float", nullable: true),
+                    PriceChangePercentage7d = table.Column<double>(type: "float", nullable: true),
                     MarketCapChange24h = table.Column<double>(type: "float", nullable: true),
                     MarketCapChangePercentage24h = table.Column<double>(type: "float", nullable: true),
                     CirculatingSupply = table.Column<double>(type: "float", nullable: true),
@@ -36,6 +39,7 @@ namespace CryptoTrade.Data.Migrations
                     AllTimeLow = table.Column<double>(type: "float", nullable: true),
                     AllTimeLowChangePercentage = table.Column<double>(type: "float", nullable: true),
                     AllTimeLowDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SparklineIn7d = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

@@ -21,12 +21,15 @@ public class CryptoService : ICryptoService
             {
                 registeredCrypto.Price = crypto.Price;
                 registeredCrypto.MarketCap = crypto.MarketCap;
+                registeredCrypto.MarketCapRank = null;
                 registeredCrypto.FullyDilutedValuation = crypto.FullyDilutedValuation;
                 registeredCrypto.TotalVolume = crypto.TotalVolume;
                 registeredCrypto.High24h = crypto.High24h;
                 registeredCrypto.Low24h = crypto.Low24h;
                 registeredCrypto.PriceChange24h = crypto.PriceChange24h;
                 registeredCrypto.PriceChangePercentage24h = crypto.PriceChangePercentage24h;
+                registeredCrypto.PriceChangePercentage1h = crypto.PriceChangePercentage1h;
+                registeredCrypto.PriceChangePercentage7d = crypto.PriceChangePercentage7d;
                 registeredCrypto.MarketCapChange24h = crypto.MarketCapChange24h;
                 registeredCrypto.MarketCapChangePercentage24h = crypto.MarketCapChangePercentage24h;
                 registeredCrypto.CirculatingSupply = crypto.CirculatingSupply;
@@ -38,6 +41,7 @@ public class CryptoService : ICryptoService
                 registeredCrypto.AllTimeLow = crypto.AllTimeLow;
                 registeredCrypto.AllTimeLowChangePercentage = crypto.AllTimeLowChangePercentage;
                 registeredCrypto.AllTimeLowDate = crypto.AllTimeLowDate;
+                registeredCrypto.SparklineIn7d = crypto.SparklineIn7d;
                 registeredCrypto.LastUpdated = DateTime.Now;
                 _repository.UpdateCrypto(registeredCrypto);
             }
@@ -51,12 +55,15 @@ public class CryptoService : ICryptoService
                     Image = crypto.Image,
                     Price = crypto.Price,
                     MarketCap = crypto.MarketCap,
+                    MarketCapRank = null,
                     FullyDilutedValuation = crypto.FullyDilutedValuation,
                     TotalVolume = crypto.TotalVolume,
                     High24h = crypto.High24h,
                     Low24h = crypto.Low24h,
                     PriceChange24h = crypto.PriceChange24h,
                     PriceChangePercentage24h = crypto.PriceChangePercentage24h,
+                    PriceChangePercentage1h = crypto.PriceChangePercentage1h,
+                    PriceChangePercentage7d = crypto.PriceChangePercentage7d,
                     MarketCapChange24h = crypto.MarketCapChange24h,
                     MarketCapChangePercentage24h = crypto.MarketCapChangePercentage24h,
                     CirculatingSupply = crypto.CirculatingSupply,
@@ -68,10 +75,25 @@ public class CryptoService : ICryptoService
                     AllTimeLow = crypto.AllTimeLow,
                     AllTimeLowChangePercentage = crypto.AllTimeLowChangePercentage,
                     AllTimeLowDate = crypto.AllTimeLowDate,
+                    SparklineIn7d = crypto.SparklineIn7d,
                     LastUpdated = DateTime.Now
                 };
                 _repository.AddCrypto(newCrypto);
             }
+        }
+        _repository.SaveChanges();
+        await UpdateCryptoRankDatabase();
+    }
+
+    public async Task UpdateCryptoRankDatabase()
+    {
+        
+        var cryptos = _repository.GetAllCryptos().OrderByDescending(c => c.MarketCap);
+        var rank = 1;
+        foreach (var crypto in cryptos)
+        {
+            crypto.MarketCapRank = rank++;
+            _repository.UpdateCrypto(crypto);
         }
         _repository.SaveChanges();
     }
@@ -92,12 +114,15 @@ public class CryptoService : ICryptoService
             Image = dto.Image,
             Price = dto.Price,
             MarketCap = dto.MarketCap,
+            MarketCapRank = null,
             FullyDilutedValuation = dto.FullyDilutedValuation,
             TotalVolume = dto.TotalVolume,
             High24h = dto.High24h,
             Low24h = dto.Low24h,
             PriceChange24h = dto.PriceChange24h,
             PriceChangePercentage24h = dto.PriceChangePercentage24h,
+            PriceChangePercentage1h = dto.PriceChangePercentage1h,
+            PriceChangePercentage7d = dto.PriceChangePercentage7d,
             MarketCapChange24h = dto.MarketCapChange24h,
             MarketCapChangePercentage24h = dto.MarketCapChangePercentage24h,
             CirculatingSupply = dto.CirculatingSupply,
@@ -109,6 +134,7 @@ public class CryptoService : ICryptoService
             AllTimeLow = dto.AllTimeLow,
             AllTimeLowChangePercentage = dto.AllTimeLowChangePercentage,
             AllTimeLowDate = dto.AllTimeLowDate,
+            SparklineIn7d = dto.SparklineIn7d,
             LastUpdated = DateTime.Now
         };
         _repository.AddCrypto(crypto);
@@ -150,12 +176,15 @@ public class CryptoService : ICryptoService
         crypto.Image = dto.Image;
         crypto.Price = dto.Price;
         crypto.MarketCap = dto.MarketCap;
+        crypto.MarketCapRank = null;
         crypto.FullyDilutedValuation = dto.FullyDilutedValuation;
         crypto.TotalVolume = dto.TotalVolume;
         crypto.High24h = dto.High24h;
         crypto.Low24h = dto.Low24h;
         crypto.PriceChange24h = dto.PriceChange24h;
         crypto.PriceChangePercentage24h = dto.PriceChangePercentage24h;
+        crypto.PriceChangePercentage1h = dto.PriceChangePercentage1h;
+        crypto.PriceChangePercentage7d = dto.PriceChangePercentage7d;
         crypto.MarketCapChange24h = dto.MarketCapChange24h;
         crypto.MarketCapChangePercentage24h = dto.MarketCapChangePercentage24h;
         crypto.CirculatingSupply = dto.CirculatingSupply;
@@ -167,6 +196,7 @@ public class CryptoService : ICryptoService
         crypto.AllTimeLow = dto.AllTimeLow;
         crypto.AllTimeLowChangePercentage = dto.AllTimeLowChangePercentage;
         crypto.AllTimeLowDate = dto.AllTimeLowDate;
+        crypto.SparklineIn7d = dto.SparklineIn7d;
         crypto.LastUpdated = DateTime.Now;       
         _repository.UpdateCrypto(crypto);
     }
