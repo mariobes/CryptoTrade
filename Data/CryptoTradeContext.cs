@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using CryptoTrade.Models;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
 
 namespace CryptoTrade.Data
 {
@@ -17,6 +18,7 @@ namespace CryptoTrade.Data
         public DbSet<Crypto> Cryptos { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +48,39 @@ namespace CryptoTrade.Data
             //     new Transaction { Id = 16, UserId = 3, AssetId = 2, Concept = "Comprar Microsoft Corporation", Amount = 500, PurchasePrice = 300.55, AssetAmount = 1.664, Date = new DateTime(2023, 8, 16), TypeOfAsset = "Stock" },
             //     new Transaction { Id = 17, UserId = 4, AssetId = 3, Concept = "Vender Tesla Inc.", Amount = 200, PurchasePrice = 750.75, AssetAmount = 0.133, Date = new DateTime(2023, 9, 18), TypeOfAsset = "Stock" }
             // );
+
+            modelBuilder.Entity<Crypto>(entity =>
+            {
+                entity.Property(e => e.SparklineIn7d)
+                    .HasConversion(
+                        v => v != null && v.Price != null && v.Price.Any()
+                            ? string.Join(",", v.Price.Select(price => price.ToString("0.0000", CultureInfo.InvariantCulture)))  // Ahora con 4 decimales
+                            : string.Empty,
+                        v => 
+                            new SparklineIn7d
+                            {
+                                Price = string.IsNullOrEmpty(v)
+                                    ? new List<double>()  // Si es vacío, retornar una lista vacía
+                                    : ConvertToDoubleList(v)  // Convertir la cadena de nuevo a una lista
+                            }
+                    );
+            });
+        }
+
+        private List<double> ConvertToDoubleList(string v)
+        {
+            var priceStrings = v.Split(',');
+            var prices = new List<double>();
+
+            foreach (var price in priceStrings)
+            {
+                if (double.TryParse(price.Trim(), out var parsedPrice))
+                {
+                    prices.Add(parsedPrice);
+                }
+            }
+
+            return prices;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

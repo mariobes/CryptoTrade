@@ -74,6 +74,9 @@ namespace CryptoTrade.Data.Migrations
                     b.Property<double?>("MarketCapChangePercentage24h")
                         .HasColumnType("float");
 
+                    b.Property<double?>("MarketCapRank")
+                        .HasColumnType("float");
+
                     b.Property<double?>("MaxSupply")
                         .HasColumnType("float");
 
@@ -88,8 +91,17 @@ namespace CryptoTrade.Data.Migrations
                     b.Property<double?>("PriceChange24h")
                         .HasColumnType("float");
 
+                    b.Property<double?>("PriceChangePercentage1h")
+                        .HasColumnType("float");
+
                     b.Property<double?>("PriceChangePercentage24h")
                         .HasColumnType("float");
+
+                    b.Property<double?>("PriceChangePercentage7d")
+                        .HasColumnType("float");
+
+                    b.Property<string>("SparklineIn7d")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Symbol")
                         .IsRequired()

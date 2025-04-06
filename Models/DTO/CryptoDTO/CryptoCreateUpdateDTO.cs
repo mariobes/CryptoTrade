@@ -47,6 +47,12 @@ public class CryptoCreateUpdateDto
     [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio porcentual en 24h no puede ser nulo")]
     public double? PriceChangePercentage24h { get; set; }
 
+    [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio porcentual en 1h no puede ser nulo")]
+    public double? PriceChangePercentage1h { get; set; }
+
+    [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio porcentual en 7d no puede ser nulo")]
+    public double? PriceChangePercentage7d { get; set; }
+
     [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio en capitalización de mercado en 24h no puede ser nulo")]
     public double? MarketCapChange24h { get; set; }
 
@@ -75,6 +81,8 @@ public class CryptoCreateUpdateDto
 
     [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio porcentual desde el mínimo histórico no puede ser nulo")]
     public double? AllTimeLowChangePercentage { get; set; }
+
+    public SparklineIn7d? SparklineIn7d { get; set; }
 
     [Required]
     public DateTime? AllTimeLowDate { get; set; }
