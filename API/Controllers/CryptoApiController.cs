@@ -89,6 +89,37 @@ public class CryptoApiController : ControllerBase
         }
     }
 
+    [HttpGet("crypto-charts/{id}")]
+    public async Task<IActionResult> GetCryptoCharts(string id, [FromQuery] string days)
+    {
+        var client = _httpClientFactory.CreateClient();
+
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri($"https://api.coingecko.com/api/v3/coins/{id}/market_chart?vs_currency=usd&days={days}"),
+            Headers =
+            {
+                { "accept", "application/json" },
+                { "x-cg-demo-api-key", _configuration["CoinGekoApi:ApiKey"] },
+            },
+        };
+
+        try
+        {
+            using (var response = await client.SendAsync(request))
+            {
+                response.EnsureSuccessStatusCode();
+                var body = await response.Content.ReadAsStringAsync();
+                return Ok(body);
+            }
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al obtener las gráficas de la criptomoneda {id}. {ex.Message}");
+        }
+    }
+
     [HttpGet("cryptos-trending")]
     public async Task<IActionResult> GetCryptosTrending()
     {
@@ -117,6 +148,36 @@ public class CryptoApiController : ControllerBase
         catch (Exception ex)
         {
             return BadRequest($"Error al obtener las criptomonedas en tendencia. {ex.Message}");
+        }
+    }
+
+    [HttpGet("cryptos-gainers")]
+    public async Task<IActionResult> GetCryptosGainers()
+    {
+        try
+        {
+            var cryptos = _cryptoService.GetAllCryptos().OrderByDescending(c => c.PriceChangePercentage7d).ToList();
+
+            return Ok(cryptos);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al obtener las criptomonedas más ganadoras. {ex.Message}");
+        }
+    }
+
+    [HttpGet("cryptos-losers")]
+    public async Task<IActionResult> GetCryptosLosers()
+    {
+        try
+        {
+            var cryptos = _cryptoService.GetAllCryptos().OrderBy(c => c.PriceChangePercentage7d).ToList();
+
+            return Ok(cryptos);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al obtener las criptomonedas más perdedoras. {ex.Message}");
         }
     }
 

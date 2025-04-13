@@ -5,7 +5,7 @@ namespace CryptoTrade.Models;
 
 public class CryptoCreateUpdateDto
 {
-    [JsonIgnore]
+    [Required]
     public string? Id { get; set; }
 
     [Required]

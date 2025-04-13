@@ -26,28 +26,28 @@ namespace CryptoTrade.Data
             {
                 query = dto.SortBy switch
                 {
-                    EnumSortOptions.marketCapRank => dto.Order == EnumOrderOptions.asc
+                    EnumCryptoSortOptions.marketCapRank => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(c => c.MarketCapRank)
                         : query.OrderByDescending(c => c.MarketCapRank),
-                    EnumSortOptions.name => dto.Order == EnumOrderOptions.asc
+                    EnumCryptoSortOptions.name => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(c => c.Name)
                         : query.OrderByDescending(c => c.Name),
-                    EnumSortOptions.price => dto.Order == EnumOrderOptions.asc
+                    EnumCryptoSortOptions.price => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(c => c.Price)
                         : query.OrderByDescending(c => c.Price),
-                    EnumSortOptions.priceChangePercentage1h => dto.Order == EnumOrderOptions.asc
+                    EnumCryptoSortOptions.priceChangePercentage1h => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(c => c.PriceChangePercentage1h)
                         : query.OrderByDescending(c => c.PriceChangePercentage1h),
-                    EnumSortOptions.priceChangePercentage24h => dto.Order == EnumOrderOptions.asc
+                    EnumCryptoSortOptions.priceChangePercentage24h => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(c => c.PriceChangePercentage24h)
                         : query.OrderByDescending(c => c.PriceChangePercentage24h),
-                    EnumSortOptions.priceChangePercentage7d => dto.Order == EnumOrderOptions.asc
+                    EnumCryptoSortOptions.priceChangePercentage7d => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(c => c.PriceChangePercentage7d)
                         : query.OrderByDescending(c => c.PriceChangePercentage7d),
-                    EnumSortOptions.totalVolume => dto.Order == EnumOrderOptions.asc
+                    EnumCryptoSortOptions.totalVolume => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(c => c.TotalVolume)
                         : query.OrderByDescending(c => c.TotalVolume),
-                    EnumSortOptions.circulatingSupply => dto.Order == EnumOrderOptions.asc
+                    EnumCryptoSortOptions.circulatingSupply => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(c => c.CirculatingSupply)
                         : query.OrderByDescending(c => c.CirculatingSupply),
 

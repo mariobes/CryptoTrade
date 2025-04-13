@@ -106,4 +106,22 @@ public class CryptosController : ControllerBase
         }
     }
 
+    [HttpGet("search-crypto")]
+    public IActionResult SearchCrypto(string query)
+    {
+        try
+        {
+            List<Crypto> cryptos = _cryptoService.SearchCrypto(query);
+            return Ok(cryptos);
+        }
+        catch (KeyNotFoundException knfex)
+        {
+           return NotFound($"No se encontraron criptomonedas que coincidan con la búsqueda: {query}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al buscar criptomonedas con la búsqueda: {query}. {ex.Message}");
+        }
+    }
+
 }

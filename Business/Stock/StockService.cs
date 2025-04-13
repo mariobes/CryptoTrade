@@ -21,10 +21,12 @@ public class StockService : IStockService
             {
                 registeredStock.Price = stock.Price;
                 registeredStock.MarketCap = stock.MarketCap;
+                registeredStock.MarketCapRank = null;
                 registeredStock.LastAnnualDividend = stock.LastAnnualDividend;
                 registeredStock.Volume = stock.Volume;
                 registeredStock.Changes = stock.Changes;
-                registeredStock.LastUpdated = DateTime.Now;
+                registeredStock.ChangesPercentage = GetChangesPercentage(stock.Price ?? 0, stock.Changes ?? 0);
+                registeredStock.LastUpdated = DateTime.Now.AddHours(2);
                 _repository.UpdateStock(registeredStock);
             }
             else
@@ -36,6 +38,7 @@ public class StockService : IStockService
                     Symbol = stock.Symbol,
                     Price = stock.Price,
                     MarketCap = stock.MarketCap,
+                    MarketCapRank = null,
                     Sector = stock.Sector,
                     Industry = stock.Industry,
                     LastAnnualDividend = stock.LastAnnualDividend,
@@ -44,16 +47,31 @@ public class StockService : IStockService
                     ExchangeShortName = stock.ExchangeShortName,
                     Country = stock.Country,
                     Changes = stock.Changes,
+                    ChangesPercentage = GetChangesPercentage(stock.Price ?? 0, stock.Changes ?? 0),
                     Currency = stock.Currency,
                     Isin = stock.Isin,
                     Website = stock.Website,
                     Description = stock.Description,
                     Ceo = stock.Ceo,
                     Image = stock.Image,
-                    LastUpdated = DateTime.Now
+                    LastUpdated = DateTime.Now.AddHours(2)
                 };
                 _repository.AddStock(newStock);
             }
+        }
+        _repository.SaveChanges();
+        await UpdateStockRankDatabase();
+    }
+
+    public async Task UpdateStockRankDatabase()
+    {
+        
+        var stocks = _repository.GetAllStocks().OrderByDescending(s => s.MarketCap);
+        var rank = 1;
+        foreach (var stock in stocks)
+        {
+            stock.MarketCapRank = rank++;
+            _repository.UpdateStock(stock);
         }
         _repository.SaveChanges();
     }
@@ -68,11 +86,12 @@ public class StockService : IStockService
         
         Stock stock = new Stock
         {
-            Id = dto.Symbol.ToLower(),
+            Id = dto.Id,
             Name = dto.Name,
             Symbol = dto.Symbol,
             Price = dto.Price,
             MarketCap = dto.MarketCap,
+            MarketCapRank = null,
             Sector = dto.Sector,
             Industry = dto.Industry,
             LastAnnualDividend = dto.LastAnnualDividend,
@@ -81,13 +100,14 @@ public class StockService : IStockService
             ExchangeShortName = dto.ExchangeShortName,
             Country = dto.Country,
             Changes = dto.Changes,
+            ChangesPercentage = dto.ChangesPercentage,
             Currency = dto.Currency,
             Isin = dto.Isin,
             Website = dto.Website,
             Description = dto.Description,
             Ceo = dto.Ceo,
             Image = dto.Image,
-            LastUpdated = DateTime.Now
+            LastUpdated = DateTime.Now.AddHours(2)
         };
         _repository.AddStock(stock);
         return stock;
@@ -122,11 +142,12 @@ public class StockService : IStockService
             throw new Exception("El sñimbolo de la acción ya existe.");
         }
 
-        stock.Id = dto.Symbol.ToLower();
+        stock.Id = dto.Id;
         stock.Name = dto.Name;
         stock.Symbol = dto.Symbol;
         stock.Price = dto.Price;
         stock.MarketCap = dto.MarketCap;
+        stock.MarketCapRank = null;
         stock.Sector = dto.Sector;
         stock.Industry = dto.Industry;
         stock.LastAnnualDividend = dto.LastAnnualDividend;
@@ -135,13 +156,14 @@ public class StockService : IStockService
         stock.ExchangeShortName = dto.ExchangeShortName;
         stock.Country = dto.Country;
         stock.Changes = dto.Changes;
+        stock.ChangesPercentage = dto.ChangesPercentage;
         stock.Currency = dto.Currency;
         stock.Isin = dto.Isin;
         stock.Website = dto.Website;
         stock.Description = dto.Description;
         stock.Ceo = dto.Ceo;
         stock.Image = dto.Image;
-        stock.LastUpdated = DateTime.Now;
+        stock.LastUpdated = DateTime.Now.AddHours(2);
         _repository.UpdateStock(stock);
     }
 
@@ -153,6 +175,25 @@ public class StockService : IStockService
             throw new KeyNotFoundException($"Acción con ID {stockId} no encontrada");
         }
         _repository.DeleteStock(stockId);
+    }
+
+    private double GetChangesPercentage(double price, double changes)
+    {
+        return changes / (price + changes) * 100;
+    }
+
+    public List<Stock> SearchStock(string query)
+    {
+        var stocks = _repository.GetAllStocks()
+                                 .Where(s => s.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                                             s.Symbol.Contains(query, StringComparison.OrdinalIgnoreCase))
+                                             .OrderByDescending(s => s.MarketCap)
+                                             .ToList();
+        if (!stocks.Any())
+        {
+            throw new KeyNotFoundException($"No se encontraron acciones que coincidan con la búsqueda: {query}");
+        }
+        return stocks;
     }
     
 }

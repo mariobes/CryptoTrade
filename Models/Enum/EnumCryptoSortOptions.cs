@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-public enum EnumSortOptions
+public enum EnumCryptoSortOptions
 {
     [Display(Name = "Market Cap")]
     marketCap = 0,
@@ -27,5 +27,5 @@ public enum EnumSortOptions
     totalVolume = 7,
 
     [Display(Name = "Circulating Supply")]
-    circulatingSupply = 8,
+    circulatingSupply = 8
 }
