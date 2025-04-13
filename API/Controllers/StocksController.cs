@@ -105,4 +105,22 @@ public class StocksController : ControllerBase
         }
     }
 
+    [HttpGet("search-stock")]
+    public IActionResult SearchStock(string query)
+    {
+        try
+        {
+            List<Stock> stocks = _stockService.SearchStock(query);
+            return Ok(stocks);
+        }
+        catch (KeyNotFoundException knfex)
+        {
+           return NotFound($"No se encontraron acciones que coincidan con la búsqueda: {query}. {knfex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al buscar acciones con la búsqueda: {query}. {ex.Message}");
+        }
+    }
+
 }

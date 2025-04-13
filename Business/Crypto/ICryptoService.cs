@@ -11,4 +11,5 @@ public interface ICryptoService
     public Crypto GetCryptoById(string cryptoId);
     public void UpdateCrypto(string cryptoId, CryptoCreateUpdateDto dto);
     public void DeleteCrypto(string cryptoId);
+    public List<Crypto> SearchCrypto(string query);
 }

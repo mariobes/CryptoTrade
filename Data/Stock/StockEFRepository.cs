@@ -26,9 +26,30 @@ namespace CryptoTrade.Data
             {
                 query = dto.SortBy switch
                 {
-                    EnumSortOptions.name => dto.Order == EnumOrderOptions.asc
+                    EnumStockSortOptions.marketCapRank => dto.Order == EnumOrderOptions.asc
+                        ? query.OrderBy(s => s.MarketCapRank)
+                        : query.OrderByDescending(s => s.MarketCapRank),
+                    EnumStockSortOptions.name => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(s => s.Name)
                         : query.OrderByDescending(s => s.Name),
+                    EnumStockSortOptions.price => dto.Order == EnumOrderOptions.asc
+                        ? query.OrderBy(s => s.Price)
+                        : query.OrderByDescending(s => s.Price),
+                    EnumStockSortOptions.priceChange24h => dto.Order == EnumOrderOptions.asc
+                        ? query.OrderBy(s => s.Changes)
+                        : query.OrderByDescending(s => s.Changes),
+                    EnumStockSortOptions.priceChangePercentage24h => dto.Order == EnumOrderOptions.asc
+                        ? query.OrderBy(s => s.ChangesPercentage)
+                        : query.OrderByDescending(s => s.ChangesPercentage),
+                    EnumStockSortOptions.currency => dto.Order == EnumOrderOptions.asc
+                        ? query.OrderBy(s => s.Currency)
+                        : query.OrderByDescending(s => s.Currency),
+                    EnumStockSortOptions.lastDividend => dto.Order == EnumOrderOptions.asc
+                        ? query.OrderBy(s => s.LastAnnualDividend)
+                        : query.OrderByDescending(s => s.LastAnnualDividend),
+                    EnumStockSortOptions.averageVolume => dto.Order == EnumOrderOptions.asc
+                        ? query.OrderBy(s => s.Volume)
+                        : query.OrderByDescending(s => s.Volume),
 
                     _ => dto.Order == EnumOrderOptions.asc
                         ? query.OrderBy(s => s.MarketCap)

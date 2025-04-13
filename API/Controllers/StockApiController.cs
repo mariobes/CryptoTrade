@@ -29,7 +29,7 @@ public class StockApiController : ControllerBase
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri($"https://financialmodelingprep.com/stable/company-screener?limit=100&apikey={apiKey}"),
+            RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/stock-screener?limit=100&apikey={apiKey}"),
             Headers =
             {
                 { "accept", "application/json" }
@@ -46,7 +46,7 @@ public class StockApiController : ControllerBase
                 var stocks = JsonSerializer.Deserialize<List<StockApiDto>>(body);
 
                 var validStocks = stocks?
-                    .Where(s => s.Price != null && s.IsEtf == false && s.IsFund == false && s.IsActivelyTrading)
+                    .Where(s => s.Price != null && s.IsEtf == false && s.IsFund == false && s.IsActivelyTrading == true)
                     .OrderByDescending(s => s.MarketCap)
                     .ToList();
 
@@ -68,7 +68,7 @@ public class StockApiController : ControllerBase
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri($"https://financialmodelingprep.com/stable/company-screener?limit=100&apikey={apiKey}"),
+            RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/stock-screener?limit=100&apikey={apiKey}"),
             Headers =
             {
                 { "accept", "application/json" }
@@ -89,7 +89,7 @@ public class StockApiController : ControllerBase
                 }
 
                 var validStocks = stocks
-                    .Where(s => s.Price != null && s.IsEtf == false && s.IsFund == false && s.IsActivelyTrading)
+                    .Where(s => s.Price != null && s.IsEtf == false && s.IsFund == false && s.IsActivelyTrading == true)
                     .OrderByDescending(s => s.MarketCap)
                     .Take(50)
                     .ToList();
@@ -148,8 +148,8 @@ public class StockApiController : ControllerBase
         }
     }
 
-    [HttpGet("stock-charts/{time}/{symbol}")]
-    public async Task<IActionResult> GetStockCharts(string time, string symbol) //1min, 1day, 1month, 1year
+    [HttpGet("stock-charts/{symbol}")]
+    public async Task<IActionResult> GetStockCharts(string symbol, [FromQuery] string time) //1min, 1day, 1month, 1year
     {
         var client = _httpClientFactory.CreateClient();
         var apiKey = _configuration["FMPApi:ApiKey"];
@@ -210,8 +210,8 @@ public class StockApiController : ControllerBase
         }
     }
 
-    [HttpGet("biggest-gainers")]
-    public async Task<IActionResult> GetBiggestGainers()
+    [HttpGet("stocks-gainers")]
+    public async Task<IActionResult> GetStocksGainers()
     {
         var client = _httpClientFactory.CreateClient();
         var apiKey = _configuration["FMPApi:ApiKey"];
@@ -241,8 +241,8 @@ public class StockApiController : ControllerBase
         }
     }
 
-    [HttpGet("biggest-losers")]
-    public async Task<IActionResult> GetBiggestLosers()
+    [HttpGet("stocks-losers")]
+    public async Task<IActionResult> GetStocksLosers()
     {
         var client = _httpClientFactory.CreateClient();
         var apiKey = _configuration["FMPApi:ApiKey"];

@@ -42,14 +42,14 @@ public class CryptoService : ICryptoService
                 registeredCrypto.AllTimeLowChangePercentage = crypto.AllTimeLowChangePercentage;
                 registeredCrypto.AllTimeLowDate = crypto.AllTimeLowDate;
                 registeredCrypto.SparklineIn7d = crypto.SparklineIn7d;
-                registeredCrypto.LastUpdated = DateTime.Now;
+                registeredCrypto.LastUpdated = DateTime.Now.AddHours(2);
                 _repository.UpdateCrypto(registeredCrypto);
             }
             else
             {
                 var newCrypto = new Crypto
                 {
-                    Id = crypto.Name.ToLower().Replace(" ", "-"),
+                    Id = crypto.Id,
                     Name = crypto.Name,
                     Symbol = crypto.Symbol,
                     Image = crypto.Image,
@@ -76,7 +76,7 @@ public class CryptoService : ICryptoService
                     AllTimeLowChangePercentage = crypto.AllTimeLowChangePercentage,
                     AllTimeLowDate = crypto.AllTimeLowDate,
                     SparklineIn7d = crypto.SparklineIn7d,
-                    LastUpdated = DateTime.Now
+                    LastUpdated = DateTime.Now.AddHours(2)
                 };
                 _repository.AddCrypto(newCrypto);
             }
@@ -108,7 +108,7 @@ public class CryptoService : ICryptoService
 
         Crypto crypto = new Crypto
         {
-            Id = dto.Name.ToLower().Replace(" ", "-"),
+            Id = dto.Id,
             Name = dto.Name,
             Symbol = dto.Symbol,
             Image = dto.Image,
@@ -135,7 +135,7 @@ public class CryptoService : ICryptoService
             AllTimeLowChangePercentage = dto.AllTimeLowChangePercentage,
             AllTimeLowDate = dto.AllTimeLowDate,
             SparklineIn7d = dto.SparklineIn7d,
-            LastUpdated = DateTime.Now
+            LastUpdated = DateTime.Now.AddHours(2)
         };
         _repository.AddCrypto(crypto);
         return crypto;
@@ -170,7 +170,7 @@ public class CryptoService : ICryptoService
             throw new Exception("El nombre de la criptomoneda ya existe.");
         }
 
-        crypto.Id = dto.Name.ToLower().Replace(" ", "-");
+        crypto.Id = dto.Id;
         crypto.Name = dto.Name;
         crypto.Symbol = dto.Symbol;
         crypto.Image = dto.Image;
@@ -197,7 +197,7 @@ public class CryptoService : ICryptoService
         crypto.AllTimeLowChangePercentage = dto.AllTimeLowChangePercentage;
         crypto.AllTimeLowDate = dto.AllTimeLowDate;
         crypto.SparklineIn7d = dto.SparklineIn7d;
-        crypto.LastUpdated = DateTime.Now;       
+        crypto.LastUpdated = DateTime.Now.AddHours(2);      
         _repository.UpdateCrypto(crypto);
     }
 
@@ -209,6 +209,20 @@ public class CryptoService : ICryptoService
             throw new KeyNotFoundException($"Criptomoneda con ID {cryptoId} no encontrada");
         }
         _repository.DeleteCrypto(cryptoId);
+    }
+
+    public List<Crypto> SearchCrypto(string query)
+    {
+        var cryptos = _repository.GetAllCryptos()
+                                 .Where(c => c.Name.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                                             c.Symbol.Contains(query, StringComparison.OrdinalIgnoreCase))
+                                             .OrderByDescending(c => c.MarketCap)
+                                             .ToList();
+        if (!cryptos.Any())
+        {
+            throw new KeyNotFoundException($"No se encontraron criptomonedas que coincidan con la búsqueda: {query}");
+        }
+        return cryptos;
     }
     
 }

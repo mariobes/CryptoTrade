@@ -5,7 +5,7 @@ namespace CryptoTrade.Models;
 
 public class StockCreateUpdateDto
 {
-    [JsonIgnore]
+    [Required]
     public string? Id { get; set; }
 
     [Required]
@@ -42,6 +42,8 @@ public class StockCreateUpdateDto
     public string? Country { get; set; }
 
     public double? Changes { get; set; }
+
+    public double? ChangesPercentage { get; set; }
 
     public string? Currency { get; set; }
 

@@ -43,11 +43,11 @@ public class StockApiDto
     public string? Country { get; set; }
 
     [JsonPropertyName("isEtf")]
-    public bool IsEtf { get; set; }
+    public bool? IsEtf { get; set; }
 
     [JsonPropertyName("isFund")]
-    public bool IsFund { get; set; }
+    public bool? IsFund { get; set; }
 
     [JsonPropertyName("isActivelyTrading")]
-    public bool IsActivelyTrading { get; set; }
+    public bool? IsActivelyTrading { get; set; }
 }

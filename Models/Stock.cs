@@ -22,6 +22,8 @@ public class Stock
     [JsonPropertyName("mktCap")]
     public double? MarketCap { get; set; }
 
+    public double? MarketCapRank { get; set; }
+
     [JsonPropertyName("sector")]
     public string? Sector { get; set; }
 
@@ -45,6 +47,8 @@ public class Stock
 
     [JsonPropertyName("changes")]
     public double? Changes { get; set; }
+
+    public double? ChangesPercentage { get; set; }
 
     [JsonPropertyName("currency")]
     public string? Currency { get; set; }
@@ -72,7 +76,7 @@ public class Stock
 
     public Stock(string id, string name, string symbol, double price, double marketCap, string sector, string industry,
                  double lastAnnualDividend, double volume, string exchange, string exchangeShortName, string country, double changes,
-                 string currency, string isin, string website, string description, string ceo, string image, DateTime lastUpdated)
+                 double changesPercentage, string currency, string isin, string website, string description, string ceo, string image, DateTime lastUpdated)
     {
         Id = id;
         Name = name;
@@ -87,6 +91,7 @@ public class Stock
         ExchangeShortName = exchangeShortName;
         Country = country;
         Changes = changes;
+        ChangesPercentage = changesPercentage;
         Currency = currency;
         Isin = isin;
         Website = website;

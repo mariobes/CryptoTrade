@@ -321,6 +321,9 @@ namespace CryptoTrade.Data.Migrations
                     b.Property<double?>("Changes")
                         .HasColumnType("float");
 
+                    b.Property<double?>("ChangesPercentage")
+                        .HasColumnType("float");
+
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
@@ -353,6 +356,9 @@ namespace CryptoTrade.Data.Migrations
 
                     b.Property<double?>("MarketCap")
                         .IsRequired()
+                        .HasColumnType("float");
+
+                    b.Property<double?>("MarketCapRank")
                         .HasColumnType("float");
 
                     b.Property<string>("Name")
