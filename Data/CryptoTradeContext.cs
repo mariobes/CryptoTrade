@@ -23,10 +23,10 @@ namespace CryptoTrade.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, Name = "Admin", Email = "admin@cryptotrade.com", Password = "admin12345", Phone = "0000", DNI = "ADMIN", Nationality = "ADMIN", Cash = 10000, Wallet = 0, Role = Roles.Admin},
-                new User { Id = 2, Name = "Mario", Birthdate = new DateTime(2003, 3, 3), Email = "mario@gmail.com", Password = "mario12345", Phone = "4567477", DNI = "23523562D", Nationality = "Argentina", Cash = 400, Wallet = 750 },
-                new User { Id = 3, Name = "Fernando", Birthdate = new DateTime(2003, 3, 3), Email = "fernando@gmail.com", Password = "fernando12345", Phone = "4745", DNI = "23526445X", Nationality = "España", Cash = 300, Wallet = 1650 },
-                new User { Id = 4, Name = "Eduardo", Birthdate = new DateTime(2004, 4, 4), Email = "eduardo@gmail.com", Password = "eduardo12345", Phone = "4574548", DNI = "52353425D", Nationality = "España", Cash = 200, Wallet = 1020 }
+                new User { Id = 1, Name = "Admin", Birthdate = new DateTime(0001, 01, 01), Email = "admin@cryptotrade.com", Password = "Admin12345%", Phone = "000", DNI = "Admin", Nationality = "Admin", Cash = 10000, Wallet = 0, Role = Roles.Admin},
+                new User { Id = 2, Name = "Mario", Birthdate = new DateTime(2001, 09, 17), Email = "mario@gmail.com", Password = "Mario12345%", Phone = "567935418", DNI = "25463652D", Nationality = "España", Cash = 400, Wallet = 750 },
+                new User { Id = 3, Name = "Fernando", Birthdate = new DateTime(2003, 01, 28), Email = "fernando@gmail.com", Password = "Fernando12345%", Phone = "541298637", DNI = "26587463X", Nationality = "España", Cash = 300, Wallet = 1650 },
+                new User { Id = 4, Name = "Eduardo", Birthdate = new DateTime(1998, 11, 04), Email = "eduardo@gmail.com", Password = "Eduardo12345%", Phone = "658248974", DNI = "52684659D", Nationality = "España", Cash = 200, Wallet = 1020 }
             );
 
             // modelBuilder.Entity<Transaction>().HasData(

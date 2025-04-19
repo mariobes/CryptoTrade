@@ -5,6 +5,7 @@ using CryptoTrade.Data;
 using CryptoTrade.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using static CryptoTrade.Models.User;
 
 namespace CryptoTrade.Business
 {
@@ -25,7 +26,7 @@ namespace CryptoTrade.Business
             foreach (var userLogin in _repository.GetAllUsers())
             {
                 if (userLogin.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
-                    userLogin.Password.Equals(pasword))
+                    PasswordHasher.Verify(pasword, userLogin.Password))
                 {
                     user = userLogin;
                 }

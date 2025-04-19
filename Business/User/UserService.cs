@@ -1,5 +1,6 @@
 using CryptoTrade.Data;
 using CryptoTrade.Models;
+using static CryptoTrade.Models.User;
 
 namespace CryptoTrade.Business;
 
@@ -23,9 +24,9 @@ public class UserService : IUserService
         User user = new User
         {
             Name = dto.Name,
-            Birthdate = dto.Birthdate,
+            Birthdate = dto.Birthdate.AddHours(2),
             Email = dto.Email,
-            Password = dto.Password,
+            Password = PasswordHasher.Hash(dto.Password),
             Phone = dto.Phone,
             DNI = dto.DNI,
             Nationality = dto.Nationality
