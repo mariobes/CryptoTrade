@@ -16,7 +16,8 @@ public class UserCreateDto
     public string? Email { get; set; }
 
     [Required]
-    [MinLength(8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres")]
+    [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?\""{}|<>])[A-Za-z\d!@#$%^&*(),.?\""{}|<>]{8,}$", 
+        ErrorMessage = "La contraseña debe tener al menos 8 caracteres, 1 letra mayúscula, 1 número y 1 carácter especial.")]
     public string? Password { get; set; }
 
     [Required]
@@ -24,8 +25,11 @@ public class UserCreateDto
     public string? Phone { get; set; }
 
     [Required]
+    [RegularExpression(@"^\d{8}[A-Za-z]$", ErrorMessage = "El DNI no es válido.")]
     public string? DNI { get; set; }
 
     [Required]
     public string? Nationality { get; set; }
+
+    
 }

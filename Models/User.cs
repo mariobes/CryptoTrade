@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace CryptoTrade.Models;
@@ -58,5 +60,34 @@ public class User
         Phone = phone;
         DNI = dni;
         Nationality = nationality;
+    }
+
+    public static class PasswordHasher
+    {
+        public static string Hash(string? password)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(password);
+                byte[] hash = sha256.ComputeHash(bytes);
+                return Convert.ToBase64String(hash);
+            }
+        }
+
+        public static bool Verify(string inputPassword, string storedHashedPassword)
+        {
+            var hashedInput = Hash(inputPassword);
+            return hashedInput == storedHashedPassword;
+        }
+    }
+
+    public bool IsAdult()
+    {
+        var age = DateTime.UtcNow.Year - Birthdate.Year;
+        if (DateTime.UtcNow.DayOfYear < Birthdate.DayOfYear)
+        {
+            age--;
+        }
+        return age >= 18;
     }
 }

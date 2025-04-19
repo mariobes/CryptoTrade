@@ -51,24 +51,15 @@ public class AuthController : ControllerBase
         try 
         {
             var user = _userService.RegisterUser(dto);
+            if (!user.IsAdult())
+            {
+                return BadRequest("Debes ser mayor de 18 años para registrarte.");
+            }
             return CreatedAtAction(nameof(Login), new { userId = user.Id }, user);
         }     
         catch (Exception ex)
         {
             return BadRequest($"Error al registrar el usuario. {ex.Message}");
-        }
-    }
-
-    [HttpPost("logout")]
-    public IActionResult Logout()
-    {
-        try 
-        {
-            return Ok("Has cerrado sesión");
-        }     
-        catch (Exception ex)
-        {
-            return BadRequest($"Error al cerrar la sesión del usuario. {ex.Message}");
         }
     }
 
