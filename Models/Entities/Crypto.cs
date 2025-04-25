@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
+namespace CryptoTrade.Models;
+
 public class Crypto
 {
     [Key]
@@ -95,7 +97,11 @@ public class Crypto
 
     public Crypto() {}
 
-    public Crypto(string id, string name, string symbol, string image, double price, double marketCap, double marketCapRank, double fullyDilutedValuation, double totalVolume, double high24h, double low24h, double priceChange24h, double priceChangePercentage24h, double priceChangePercentage1h, double priceChangePercentage7d, double marketCapChange24h, double marketCapChangePercentage24h, double circulatingSupply, double totalSupply, double maxSupply, double allTimeHigh, double allTimeHighChangePercentage, DateTime allTimeHighDate, double allTimeLow, double allTimeLowChangePercentage, DateTime allTimeLowDate, SparklineIn7d sparklineIn7d, DateTime lastUpdated)
+    public Crypto(string id, string name, string symbol, string image, double price, double marketCap, double marketCapRank, double fullyDilutedValuation, 
+                  double totalVolume, double high24h, double low24h, double priceChange24h, double priceChangePercentage24h, double priceChangePercentage1h, 
+                  double priceChangePercentage7d, double marketCapChange24h, double marketCapChangePercentage24h, double circulatingSupply, double totalSupply, 
+                  double maxSupply, double allTimeHigh, double allTimeHighChangePercentage, DateTime allTimeHighDate, double allTimeLow, double allTimeLowChangePercentage, 
+                  DateTime allTimeLowDate, SparklineIn7d sparklineIn7d, DateTime lastUpdated)
     {
         Id = id;
         Name = name;

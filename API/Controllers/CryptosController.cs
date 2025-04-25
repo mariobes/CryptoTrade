@@ -34,7 +34,7 @@ public class CryptosController : ControllerBase
         }
     }
 
-    [HttpGet(Name = "GetAllCryptos")] 
+    [HttpGet]
     public ActionResult<IEnumerable<Crypto>> GetAllCryptos([FromQuery] CryptoQueryParameters dto)
     {
         try 

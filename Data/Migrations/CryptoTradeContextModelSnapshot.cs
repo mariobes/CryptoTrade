@@ -22,7 +22,7 @@ namespace CryptoTrade.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Crypto", b =>
+            modelBuilder.Entity("CryptoTrade.Models.Crypto", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -116,6 +116,257 @@ namespace CryptoTrade.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cryptos");
+                });
+
+            modelBuilder.Entity("CryptoTrade.Models.CryptoIndex", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<double?>("ChangePercentage")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sentiment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Value")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CryptoIndices");
+                });
+
+            modelBuilder.Entity("CryptoTrade.Models.CryptoTrending", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double?>("ChangePercentage")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Symbol")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CryptoTrendings");
+                });
+
+            modelBuilder.Entity("CryptoTrade.Models.Stock", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Ceo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Changes")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("ChangesPercentage")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Currency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Exchange")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExchangeShortName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Industry")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Isin")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("LastAnnualDividend")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double?>("MarketCap")
+                        .IsRequired()
+                        .HasColumnType("float");
+
+                    b.Property<double?>("MarketCapRank")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Price")
+                        .IsRequired()
+                        .HasColumnType("float");
+
+                    b.Property<string>("Sector")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Volume")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Website")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Stocks");
+                });
+
+            modelBuilder.Entity("CryptoTrade.Models.StockGainer", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double?>("ChangePercentage")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Symbol")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StockGainers");
+                });
+
+            modelBuilder.Entity("CryptoTrade.Models.StockLoser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double?>("ChangePercentage")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Symbol")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StockLosers");
+                });
+
+            modelBuilder.Entity("CryptoTrade.Models.StockMostActive", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double?>("ChangePercentage")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Symbol")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StockMostActives");
+                });
+
+            modelBuilder.Entity("CryptoTrade.Models.StockTrending", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double?>("ChangePercentage")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Symbol")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StockTrendings");
                 });
 
             modelBuilder.Entity("CryptoTrade.Models.Transaction", b =>
@@ -242,14 +493,14 @@ namespace CryptoTrade.Data.Migrations
                             Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 10000.0,
                             Currency = "USD",
-                            DNI = "ADMIN",
+                            DNI = "Admin",
                             Email = "admin@cryptotrade.com",
                             IsBanned = false,
                             Language = "ES",
                             Name = "Admin",
-                            Nationality = "ADMIN",
-                            Password = "admin12345",
-                            Phone = "0000",
+                            Nationality = "Admin",
+                            Password = "Admin12345%",
+                            Phone = "000",
                             Role = "admin",
                             Theme = "light",
                             Wallet = 0.0
@@ -257,17 +508,17 @@ namespace CryptoTrade.Data.Migrations
                         new
                         {
                             Id = 2,
-                            Birthdate = new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Birthdate = new DateTime(2001, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 400.0,
                             Currency = "USD",
-                            DNI = "23523562D",
+                            DNI = "25463652D",
                             Email = "mario@gmail.com",
                             IsBanned = false,
                             Language = "ES",
                             Name = "Mario",
-                            Nationality = "Argentina",
-                            Password = "mario12345",
-                            Phone = "4567477",
+                            Nationality = "España",
+                            Password = "Mario12345%",
+                            Phone = "567935418",
                             Role = "user",
                             Theme = "light",
                             Wallet = 750.0
@@ -275,17 +526,17 @@ namespace CryptoTrade.Data.Migrations
                         new
                         {
                             Id = 3,
-                            Birthdate = new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Birthdate = new DateTime(2003, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 300.0,
                             Currency = "USD",
-                            DNI = "23526445X",
+                            DNI = "26587463X",
                             Email = "fernando@gmail.com",
                             IsBanned = false,
                             Language = "ES",
                             Name = "Fernando",
                             Nationality = "España",
-                            Password = "fernando12345",
-                            Phone = "4745",
+                            Password = "Fernando12345%",
+                            Phone = "541298637",
                             Role = "user",
                             Theme = "light",
                             Wallet = 1650.0
@@ -293,107 +544,30 @@ namespace CryptoTrade.Data.Migrations
                         new
                         {
                             Id = 4,
-                            Birthdate = new DateTime(2004, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Birthdate = new DateTime(1998, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 200.0,
                             Currency = "USD",
-                            DNI = "52353425D",
+                            DNI = "52684659D",
                             Email = "eduardo@gmail.com",
                             IsBanned = false,
                             Language = "ES",
                             Name = "Eduardo",
                             Nationality = "España",
-                            Password = "eduardo12345",
-                            Phone = "4574548",
+                            Password = "Eduardo12345%",
+                            Phone = "658248974",
                             Role = "user",
                             Theme = "light",
                             Wallet = 1020.0
                         });
                 });
 
-            modelBuilder.Entity("Stock", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Ceo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("Changes")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("ChangesPercentage")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Currency")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Exchange")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ExchangeShortName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Industry")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Isin")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("LastAnnualDividend")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double?>("MarketCap")
-                        .IsRequired()
-                        .HasColumnType("float");
-
-                    b.Property<double?>("MarketCapRank")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("Price")
-                        .IsRequired()
-                        .HasColumnType("float");
-
-                    b.Property<string>("Sector")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Symbol")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("Volume")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Website")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Stocks");
-                });
-
             modelBuilder.Entity("CryptoTrade.Models.Transaction", b =>
                 {
-                    b.HasOne("Crypto", "Crypto")
+                    b.HasOne("CryptoTrade.Models.Crypto", "Crypto")
                         .WithMany()
                         .HasForeignKey("CryptoId");
 
-                    b.HasOne("Stock", "Stock")
+                    b.HasOne("CryptoTrade.Models.Stock", "Stock")
                         .WithMany()
                         .HasForeignKey("StockId");
 

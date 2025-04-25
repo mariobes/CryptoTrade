@@ -12,6 +12,6 @@ public class BuySellAssetDto
     public string? AssetId { get; set; }
 
     [Required]
-    [Range(10, double.MaxValue, ErrorMessage = "La cantidad mínima es 10")]
+    [Range(10, double.MaxValue, ErrorMessage = "La cantidad mínima es 1")]
     public double Amount { get; set; }
 }
