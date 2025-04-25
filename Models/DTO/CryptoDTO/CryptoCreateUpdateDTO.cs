@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace CryptoTrade.Models;
 
@@ -82,8 +81,7 @@ public class CryptoCreateUpdateDto
     [Range(double.MinValue, double.MaxValue, ErrorMessage = "El cambio porcentual desde el mínimo histórico no puede ser nulo")]
     public double? AllTimeLowChangePercentage { get; set; }
 
-    public SparklineIn7d? SparklineIn7d { get; set; }
-
-    [Required]
     public DateTime? AllTimeLowDate { get; set; }
+
+    public SparklineIn7d? SparklineIn7d { get; set; }
 }

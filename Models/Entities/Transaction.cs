@@ -28,9 +28,7 @@ public class Transaction
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public double? AssetAmount { get; set; }
     
-    public DateTime Date { get; set; } = DateTime.Now;
-
-    //public double Charge { get; set; } = 1.0;
+    public DateTime Date { get; set; } = DateTime.UtcNow.AddHours(2);
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonConverter(typeof(EnumDisplayConverter<EnumPaymentMethodOptions>))]

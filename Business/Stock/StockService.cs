@@ -26,7 +26,7 @@ public class StockService : IStockService
                 registeredStock.Volume = stock.Volume;
                 registeredStock.Changes = stock.Changes;
                 registeredStock.ChangesPercentage = GetChangesPercentage(stock.Price ?? 0, stock.Changes ?? 0);
-                registeredStock.LastUpdated = DateTime.Now.AddHours(2);
+                registeredStock.LastUpdated = DateTime.UtcNow.AddHours(2);
                 _repository.UpdateStock(registeredStock);
             }
             else
@@ -54,13 +54,16 @@ public class StockService : IStockService
                     Description = stock.Description,
                     Ceo = stock.Ceo,
                     Image = stock.Image,
-                    LastUpdated = DateTime.Now.AddHours(2)
+                    LastUpdated = DateTime.UtcNow.AddHours(2)
                 };
                 _repository.AddStock(newStock);
             }
         }
         _repository.SaveChanges();
-        await UpdateStockRankDatabase();
+        if (stocks.Count > 20)
+        {
+            await UpdateStockRankDatabase();
+        }
     }
 
     public async Task UpdateStockRankDatabase()
@@ -107,7 +110,7 @@ public class StockService : IStockService
             Description = dto.Description,
             Ceo = dto.Ceo,
             Image = dto.Image,
-            LastUpdated = DateTime.Now.AddHours(2)
+            LastUpdated = DateTime.UtcNow.AddHours(2)
         };
         _repository.AddStock(stock);
         return stock;
@@ -163,7 +166,7 @@ public class StockService : IStockService
         stock.Description = dto.Description;
         stock.Ceo = dto.Ceo;
         stock.Image = dto.Image;
-        stock.LastUpdated = DateTime.Now.AddHours(2);
+        stock.LastUpdated = DateTime.UtcNow.AddHours(2);
         _repository.UpdateStock(stock);
     }
 

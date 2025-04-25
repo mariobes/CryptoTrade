@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace CryptoTrade.Models;
 
@@ -58,7 +57,4 @@ public class StockCreateUpdateDto
 
     [Url(ErrorMessage = "Debe ser una URL válida")]
     public string? Image { get; set; }
-
-    [Required]
-    public DateTime LastUpdated { get; set; }
 }

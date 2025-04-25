@@ -33,7 +33,7 @@ public class StocksController : ControllerBase
         }
     }
 
-    [HttpGet(Name = "GetAllStocks")] 
+    [HttpGet]
     public ActionResult<IEnumerable<Stock>> GetAllStocks([FromQuery] StockQueryParameters dto)
     {
         try 

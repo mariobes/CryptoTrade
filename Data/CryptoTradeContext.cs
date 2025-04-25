@@ -18,6 +18,12 @@ namespace CryptoTrade.Data
         public DbSet<Crypto> Cryptos { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<CryptoIndex> CryptoIndices { get; set; }
+        public DbSet<CryptoTrending> CryptoTrendings { get; set; }
+        public DbSet<StockTrending> StockTrendings { get; set; }
+        public DbSet<StockGainer> StockGainers { get; set; }
+        public DbSet<StockLoser> StockLosers { get; set; }
+        public DbSet<StockMostActive> StockMostActives { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

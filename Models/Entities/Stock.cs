@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
+namespace CryptoTrade.Models;
+
 public class Stock
 {
     [Key]

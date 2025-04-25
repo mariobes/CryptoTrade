@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CryptoTrade.Business;
 using System.Text.Json;
+using CryptoTrade.Models;
 
 namespace CryptoTrade.API.Controllers;
 
@@ -89,6 +90,38 @@ public class CryptoApiController : ControllerBase
         }
     }
 
+    [HttpGet("crypto-details/{id}")]
+    public async Task<IActionResult> GetCryptoDetails(string id)
+    {
+        var client = _httpClientFactory.CreateClient();
+
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri($"https://api.coingecko.com/api/v3/coins/{id}?sparkline=true"),
+            Headers =
+            {
+                { "accept", "application/json" },
+                { "x-cg-demo-api-key", _configuration["CoinGekoApi:ApiKey"] },
+            },
+        };
+
+        try
+        {
+            using (var response = await client.SendAsync(request))
+            {
+                response.EnsureSuccessStatusCode();
+                var body = await response.Content.ReadAsStringAsync();
+                return Ok(body);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al obtener los detalles de la criptomoneda {id}. {ex.Message}");
+            return null;
+        }
+    }
+
     [HttpGet("crypto-charts/{id}")]
     public async Task<IActionResult> GetCryptoCharts(string id, [FromQuery] string days)
     {
@@ -120,36 +153,36 @@ public class CryptoApiController : ControllerBase
         }
     }
 
-    [HttpGet("cryptos-trending")]
-    public async Task<IActionResult> GetCryptosTrending()
-    {
-        var client = _httpClientFactory.CreateClient();
+    // [HttpGet("cryptos-trending")]
+    // public async Task<IActionResult> GetCryptosTrending()
+    // {
+    //     var client = _httpClientFactory.CreateClient();
 
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri("https://api.coingecko.com/api/v3/search/trending"),
-            Headers =
-            {
-                { "accept", "application/json" },
-                { "x-cg-demo-api-key", _configuration["CoinGekoApi:ApiKey"] },
-            },
-        };
+    //     var request = new HttpRequestMessage
+    //     {
+    //         Method = HttpMethod.Get,
+    //         RequestUri = new Uri("https://api.coingecko.com/api/v3/search/trending"),
+    //         Headers =
+    //         {
+    //             { "accept", "application/json" },
+    //             { "x-cg-demo-api-key", _configuration["CoinGekoApi:ApiKey"] },
+    //         },
+    //     };
 
-        try
-        {
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
-                return Ok(body);
-            }
-        }
-        catch (Exception ex)
-        {
-            return BadRequest($"Error al obtener las criptomonedas en tendencia. {ex.Message}");
-        }
-    }
+    //     try
+    //     {
+    //         using (var response = await client.SendAsync(request))
+    //         {
+    //             response.EnsureSuccessStatusCode();
+    //             var body = await response.Content.ReadAsStringAsync();
+    //             return Ok(body);
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return BadRequest($"Error al obtener las criptomonedas en tendencia. {ex.Message}");
+    //     }
+    // }
 
     [HttpGet("cryptos-gainers")]
     public async Task<IActionResult> GetCryptosGainers()
@@ -181,130 +214,130 @@ public class CryptoApiController : ControllerBase
         }
     }
 
-    [HttpGet("total-market-cap")]
-    public async Task<IActionResult> GetTotalMarketCap()
-    {
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri("https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest"),
-            Headers =
-            {
-                { "X-CMC_PRO_API_KEY", _configuration["CoinMarketCapApi:ApiKey"] },
-                { "Accept", "application/json" }
-            }
-        };
+    // [HttpGet("total-market-cap")]
+    // public async Task<IActionResult> GetTotalMarketCap()
+    // {
+    //     var request = new HttpRequestMessage
+    //     {
+    //         Method = HttpMethod.Get,
+    //         RequestUri = new Uri("https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest"),
+    //         Headers =
+    //         {
+    //             { "X-CMC_PRO_API_KEY", _configuration["CoinMarketCapApi:ApiKey"] },
+    //             { "Accept", "application/json" }
+    //         }
+    //     };
 
-        try
-        {
-            var client = _httpClientFactory.CreateClient();
-            using var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
+    //     try
+    //     {
+    //         var client = _httpClientFactory.CreateClient();
+    //         using var response = await client.SendAsync(request);
+    //         response.EnsureSuccessStatusCode();
+    //         var body = await response.Content.ReadAsStringAsync();
 
-            var data = JsonSerializer.Deserialize<JsonElement>(body);
-            var marketData = data.GetProperty("data").GetProperty("quote").GetProperty("USD");
+    //         var data = JsonSerializer.Deserialize<JsonElement>(body);
+    //         var marketData = data.GetProperty("data").GetProperty("quote").GetProperty("USD");
 
-            var totalMarketCap = marketData.GetProperty("total_market_cap").GetDecimal();
-            var marketCapChangePercentage = marketData.GetProperty("total_market_cap_yesterday_percentage_change").GetDecimal();
+    //         var totalMarketCap = marketData.GetProperty("total_market_cap").GetDecimal();
+    //         var marketCapChangePercentage = marketData.GetProperty("total_market_cap_yesterday_percentage_change").GetDecimal();
 
-            var result = new
-            {
-                TotalMarketCap = totalMarketCap,
-                MarketCapChangePercentage = marketCapChangePercentage
-            };
+    //         var result = new
+    //         {
+    //             TotalMarketCap = totalMarketCap,
+    //             MarketCapChangePercentage = marketCapChangePercentage
+    //         };
 
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest($"Error al obtener la capitalización total del mercado. {ex.Message}");
-        }
-    }
+    //         return Ok(result);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return BadRequest($"Error al obtener la capitalización total del mercado. {ex.Message}");
+    //     }
+    // }
 
-    [HttpGet("fear-greed-index")]
-    public async Task<IActionResult> GetFearGreedIndex()
-    {
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri("https://pro-api.coinmarketcap.com/v3/fear-and-greed/historical"),
-            Headers =
-            {
-                { "X-CMC_PRO_API_KEY", _configuration["CoinMarketCapApi:ApiKey"] },
-                { "Accept", "application/json" }
-            }
-        };
+    // [HttpGet("fear-greed-index")]
+    // public async Task<IActionResult> GetFearGreedIndex()
+    // {
+    //     var request = new HttpRequestMessage
+    //     {
+    //         Method = HttpMethod.Get,
+    //         RequestUri = new Uri("https://pro-api.coinmarketcap.com/v3/fear-and-greed/historical"),
+    //         Headers =
+    //         {
+    //             { "X-CMC_PRO_API_KEY", _configuration["CoinMarketCapApi:ApiKey"] },
+    //             { "Accept", "application/json" }
+    //         }
+    //     };
 
-        try
-        {
-            var client = _httpClientFactory.CreateClient();
-            using var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
+    //     try
+    //     {
+    //         var client = _httpClientFactory.CreateClient();
+    //         using var response = await client.SendAsync(request);
+    //         response.EnsureSuccessStatusCode();
+    //         var body = await response.Content.ReadAsStringAsync();
 
-            var data = JsonSerializer.Deserialize<JsonElement>(body);
-            var latestData = data.GetProperty("data")[0];
+    //         var data = JsonSerializer.Deserialize<JsonElement>(body);
+    //         var latestData = data.GetProperty("data")[0];
 
-            var result = new
-            {
-                Value = latestData.GetProperty("value").GetInt32(),
-                ValueClassification = latestData.GetProperty("value_classification").GetString(),
-            };
+    //         var result = new
+    //         {
+    //             Value = latestData.GetProperty("value").GetInt32(),
+    //             ValueClassification = latestData.GetProperty("value_classification").GetString(),
+    //         };
 
-            return Ok(result);
+    //         return Ok(result);
 
-        }
-        catch (Exception ex)
-        {
-            return BadRequest($"Error al obtener el índice de miedo y codicia. {ex.Message}");
-        }
-    }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return BadRequest($"Error al obtener el índice de miedo y codicia. {ex.Message}");
+    //     }
+    // }
 
-    [HttpGet("CMC100-index")]
-    public async Task<IActionResult> GetCMC100Index()
-    {
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri("https://pro-api.coinmarketcap.com/v3/index/cmc100-historical"),
-            Headers =
-            {
-                { "X-CMC_PRO_API_KEY", _configuration["CoinMarketCapApi:ApiKey"] },
-                { "Accept", "application/json" }
-            }
-        };
+    // [HttpGet("CMC100-index")]
+    // public async Task<IActionResult> GetCMC100Index()
+    // {
+    //     var request = new HttpRequestMessage
+    //     {
+    //         Method = HttpMethod.Get,
+    //         RequestUri = new Uri("https://pro-api.coinmarketcap.com/v3/index/cmc100-historical"),
+    //         Headers =
+    //         {
+    //             { "X-CMC_PRO_API_KEY", _configuration["CoinMarketCapApi:ApiKey"] },
+    //             { "Accept", "application/json" }
+    //         }
+    //     };
 
-        try
-        {
-            var client = _httpClientFactory.CreateClient();
-            using var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
+    //     try
+    //     {
+    //         var client = _httpClientFactory.CreateClient();
+    //         using var response = await client.SendAsync(request);
+    //         response.EnsureSuccessStatusCode();
+    //         var body = await response.Content.ReadAsStringAsync();
 
-            var data = JsonSerializer.Deserialize<JsonElement>(body);
-            var latestData = data.GetProperty("data").EnumerateArray().ToList();
+    //         var data = JsonSerializer.Deserialize<JsonElement>(body);
+    //         var latestData = data.GetProperty("data").EnumerateArray().ToList();
 
-            var mostRecent = latestData[latestData.Count - 1];
-            var secondMostRecent = latestData[latestData.Count - 2];
+    //         var mostRecent = latestData[latestData.Count - 1];
+    //         var secondMostRecent = latestData[latestData.Count - 2];
 
-            var mostRecentValue = mostRecent.GetProperty("value").GetDecimal();
-            var secondMostRecentValue = secondMostRecent.GetProperty("value").GetDecimal();
+    //         var mostRecentValue = mostRecent.GetProperty("value").GetDecimal();
+    //         var secondMostRecentValue = secondMostRecent.GetProperty("value").GetDecimal();
 
-            var percentageChange = (mostRecentValue - secondMostRecentValue) / secondMostRecentValue * 100;
+    //         var percentageChange = (mostRecentValue - secondMostRecentValue) / secondMostRecentValue * 100;
 
-            var result = new
-            {
-                Value = mostRecentValue,
-                PercentageChange = percentageChange,
-            };
+    //         var result = new
+    //         {
+    //             Value = mostRecentValue,
+    //             PercentageChange = percentageChange,
+    //         };
 
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest($"Error al obtener el índice CMC100. {ex.Message}");
-        }
-    }
+    //         return Ok(result);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return BadRequest($"Error al obtener el índice CMC100. {ex.Message}");
+    //     }
+    // }
 
 }

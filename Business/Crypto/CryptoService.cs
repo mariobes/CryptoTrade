@@ -42,7 +42,7 @@ public class CryptoService : ICryptoService
                 registeredCrypto.AllTimeLowChangePercentage = crypto.AllTimeLowChangePercentage;
                 registeredCrypto.AllTimeLowDate = crypto.AllTimeLowDate;
                 registeredCrypto.SparklineIn7d = crypto.SparklineIn7d;
-                registeredCrypto.LastUpdated = DateTime.Now.AddHours(2);
+                registeredCrypto.LastUpdated = DateTime.UtcNow.AddHours(2);
                 _repository.UpdateCrypto(registeredCrypto);
             }
             else
@@ -76,13 +76,16 @@ public class CryptoService : ICryptoService
                     AllTimeLowChangePercentage = crypto.AllTimeLowChangePercentage,
                     AllTimeLowDate = crypto.AllTimeLowDate,
                     SparklineIn7d = crypto.SparklineIn7d,
-                    LastUpdated = DateTime.Now.AddHours(2)
+                    LastUpdated = DateTime.UtcNow.AddHours(2)
                 };
                 _repository.AddCrypto(newCrypto);
             }
         }
         _repository.SaveChanges();
-        await UpdateCryptoRankDatabase();
+        if (cryptos.Count > 20)
+        {
+            await UpdateCryptoRankDatabase();
+        }
     }
 
     public async Task UpdateCryptoRankDatabase()
@@ -135,7 +138,7 @@ public class CryptoService : ICryptoService
             AllTimeLowChangePercentage = dto.AllTimeLowChangePercentage,
             AllTimeLowDate = dto.AllTimeLowDate,
             SparklineIn7d = dto.SparklineIn7d,
-            LastUpdated = DateTime.Now.AddHours(2)
+            LastUpdated = DateTime.UtcNow.AddHours(2)
         };
         _repository.AddCrypto(crypto);
         return crypto;
@@ -197,7 +200,7 @@ public class CryptoService : ICryptoService
         crypto.AllTimeLowChangePercentage = dto.AllTimeLowChangePercentage;
         crypto.AllTimeLowDate = dto.AllTimeLowDate;
         crypto.SparklineIn7d = dto.SparklineIn7d;
-        crypto.LastUpdated = DateTime.Now.AddHours(2);      
+        crypto.LastUpdated = DateTime.UtcNow.AddHours(2);   
         _repository.UpdateCrypto(crypto);
     }
 

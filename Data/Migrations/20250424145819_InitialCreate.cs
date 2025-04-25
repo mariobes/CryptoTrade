@@ -10,6 +10,23 @@ namespace CryptoTrade.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "CryptoIndices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Value = table.Column<double>(type: "float", nullable: true),
+                    ChangePercentage = table.Column<double>(type: "float", nullable: true),
+                    Sentiment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CryptoIndices", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Cryptos",
                 columns: table => new
                 {
@@ -48,6 +65,74 @@ namespace CryptoTrade.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CryptoTrendings",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Symbol = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
+                    ChangePercentage = table.Column<double>(type: "float", nullable: true),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CryptoTrendings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StockGainers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Symbol = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
+                    ChangePercentage = table.Column<double>(type: "float", nullable: true),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StockGainers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StockLosers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Symbol = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
+                    ChangePercentage = table.Column<double>(type: "float", nullable: true),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StockLosers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StockMostActives",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Symbol = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
+                    ChangePercentage = table.Column<double>(type: "float", nullable: true),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StockMostActives", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Stocks",
                 columns: table => new
                 {
@@ -77,6 +162,23 @@ namespace CryptoTrade.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Stocks", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StockTrendings",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Symbol = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
+                    ChangePercentage = table.Column<double>(type: "float", nullable: true),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StockTrendings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -149,10 +251,10 @@ namespace CryptoTrade.Data.Migrations
                 columns: new[] { "Id", "Birthdate", "Cash", "Currency", "DNI", "Email", "IsBanned", "Language", "Name", "Nationality", "Password", "Phone", "Role", "Theme", "Wallet" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 10000.0, "USD", "ADMIN", "admin@cryptotrade.com", false, "ES", "Admin", "ADMIN", "admin12345", "0000", "admin", "light", 0.0 },
-                    { 2, new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 400.0, "USD", "23523562D", "mario@gmail.com", false, "ES", "Mario", "Argentina", "mario12345", "4567477", "user", "light", 750.0 },
-                    { 3, new DateTime(2003, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 300.0, "USD", "23526445X", "fernando@gmail.com", false, "ES", "Fernando", "España", "fernando12345", "4745", "user", "light", 1650.0 },
-                    { 4, new DateTime(2004, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 200.0, "USD", "52353425D", "eduardo@gmail.com", false, "ES", "Eduardo", "España", "eduardo12345", "4574548", "user", "light", 1020.0 }
+                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 10000.0, "USD", "Admin", "admin@cryptotrade.com", false, "ES", "Admin", "Admin", "Admin12345%", "000", "admin", "light", 0.0 },
+                    { 2, new DateTime(2001, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 400.0, "USD", "25463652D", "mario@gmail.com", false, "ES", "Mario", "España", "Mario12345%", "567935418", "user", "light", 750.0 },
+                    { 3, new DateTime(2003, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), 300.0, "USD", "26587463X", "fernando@gmail.com", false, "ES", "Fernando", "España", "Fernando12345%", "541298637", "user", "light", 1650.0 },
+                    { 4, new DateTime(1998, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 200.0, "USD", "52684659D", "eduardo@gmail.com", false, "ES", "Eduardo", "España", "Eduardo12345%", "658248974", "user", "light", 1020.0 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -173,6 +275,24 @@ namespace CryptoTrade.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CryptoIndices");
+
+            migrationBuilder.DropTable(
+                name: "CryptoTrendings");
+
+            migrationBuilder.DropTable(
+                name: "StockGainers");
+
+            migrationBuilder.DropTable(
+                name: "StockLosers");
+
+            migrationBuilder.DropTable(
+                name: "StockMostActives");
+
+            migrationBuilder.DropTable(
+                name: "StockTrendings");
+
             migrationBuilder.DropTable(
                 name: "Transactions");
 
