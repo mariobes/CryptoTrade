@@ -220,46 +220,6 @@ public class TransactionService : ITransactionService
         _transactionRepository.AddTransaction(transaction);
     }
 
-    public void CryptoConverter(CryptoConverterDto dto)
-    {
-        var user = _userRepository.GetUser(dto.UserId);
-        if (user == null) 
-        {
-            throw new KeyNotFoundException($"Usuario con ID {dto.UserId} no encontrado");
-        }
-
-        var crypto = _cryptoRepository.GetCrypto(dto.CryptoId);
-        if (crypto == null)
-        {
-            throw new KeyNotFoundException($"Criptomoneda con ID {dto.CryptoId} no encontrada");
-        } 
-
-        var newCrypto = _cryptoRepository.GetCrypto(dto.NewCryptoId);
-        if (newCrypto == null)
-        {
-            throw new KeyNotFoundException($"Criptomoneda con ID {dto.NewCryptoId} no encontrada");
-        } 
-
-        var userHasCrypto = HasCrypto(dto.UserId, dto.CryptoId);
-        if (!userHasCrypto)
-        {
-            throw new Exception($"El usuario {dto.UserId} no tiene la criptomoneda {dto.CryptoId}");
-        }
-
-        var userCryptoBalance = GetCryptoBalance(dto.UserId, dto.CryptoId);
-        if (dto.Amount > userCryptoBalance)
-        {
-            throw new Exception($"No tienes suficientes fondos para realizar la venta");
-        }
-
-        //Transaction transaction = new(userId, cryptoId, $"Convertir {crypto.Name} a {newCrypto.Name}", amount, "Crypto");
-        Transaction sellTransaction = new(dto.UserId, dto.CryptoId, $"- {crypto.Name}", dto.Amount, "Crypto");
-        Transaction buyTransaction = new(dto.UserId, dto.CryptoId, $"+ {newCrypto.Name}", dto.Amount, "Crypto");
-        _userRepository.UpdateUser(user);
-        _transactionRepository.AddTransaction(sellTransaction);
-        _transactionRepository.AddTransaction(buyTransaction);
-    }
-
     public Dictionary<string, double> MyCryptos(int userId)
     {
         var user = _userRepository.GetUser(userId);

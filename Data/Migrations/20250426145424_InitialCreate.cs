@@ -199,12 +199,27 @@ namespace CryptoTrade.Data.Migrations
                     Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Theme = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsBanned = table.Column<bool>(type: "bit", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Watchlists",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    AssetId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TypeAsset = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Watchlists", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -248,13 +263,26 @@ namespace CryptoTrade.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Birthdate", "Cash", "Currency", "DNI", "Email", "IsBanned", "Language", "Name", "Nationality", "Password", "Phone", "Role", "Theme", "Wallet" },
+                columns: new[] { "Id", "Birthdate", "Cash", "CreationDate", "Currency", "DNI", "Email", "Language", "Name", "Nationality", "Password", "Phone", "Role", "Theme", "Wallet" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 10000.0, "USD", "Admin", "admin@cryptotrade.com", false, "ES", "Admin", "Admin", "Admin12345%", "000", "admin", "light", 0.0 },
-                    { 2, new DateTime(2001, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 400.0, "USD", "25463652D", "mario@gmail.com", false, "ES", "Mario", "España", "Mario12345%", "567935418", "user", "light", 750.0 },
-                    { 3, new DateTime(2003, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), 300.0, "USD", "26587463X", "fernando@gmail.com", false, "ES", "Fernando", "España", "Fernando12345%", "541298637", "user", "light", 1650.0 },
-                    { 4, new DateTime(1998, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 200.0, "USD", "52684659D", "eduardo@gmail.com", false, "ES", "Eduardo", "España", "Eduardo12345%", "658248974", "user", "light", 1020.0 }
+                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 10000.0, new DateTime(2016, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "USD", "Admin", "admin@cryptotrade.com", "ES", "Admin", "Admin", "YHrp/ExR53lRO6ouA2tT0y9QCb94jfjNBsxcGq5x798=", "000", "admin", "light", 0.0 },
+                    { 2, new DateTime(2001, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 400.0, new DateTime(2021, 7, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "USD", "25463652D", "mario@gmail.com", "ES", "Mario", "España", "JApd9lfG2wshq3agTXjgwVT/f4jQecLCYTBnBT30AqE=", "567935418", "user", "light", 750.0 },
+                    { 3, new DateTime(2003, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), 300.0, new DateTime(2022, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), "USD", "26587463X", "fernando@gmail.com", "ES", "Fernando", "España", "xf0cyil3yRNj5rC2KE+3O+wmt/rGtUapwYkq5YfkqG4=", "541298637", "user", "light", 1650.0 },
+                    { 4, new DateTime(1998, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 200.0, new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "USD", "52684659D", "eduardo@gmail.com", "ES", "Eduardo", "España", "6GGegrjO3tQMHPZBrkdANTfPC92ka20ChXH9VdvhLak=", "658248974", "user", "light", 1020.0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Watchlists",
+                columns: new[] { "Id", "AssetId", "TypeAsset", "UserId" },
+                values: new object[,]
+                {
+                    { 1, "bitcoin", "Crypto", 2 },
+                    { 2, "ethereum", "Crypto", 2 },
+                    { 3, "ripple", "Crypto", 2 },
+                    { 4, "cardano", "Crypto", 2 },
+                    { 5, "aapl", "Stock", 2 },
+                    { 6, "amzn", "Stock", 2 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -295,6 +323,9 @@ namespace CryptoTrade.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Transactions");
+
+            migrationBuilder.DropTable(
+                name: "Watchlists");
 
             migrationBuilder.DropTable(
                 name: "Cryptos");

@@ -173,28 +173,6 @@ public class TransactionsController : ControllerBase
     }
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
-    [HttpPost("crypto-converter")]
-    public IActionResult CryptoConverter(CryptoConverterDto dto)
-    {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
-            {return Forbid(); }
-
-        try 
-        {
-            _transactionService.CryptoConverter(dto);
-            return Ok("Conversión realizada correctamente.");
-        }     
-        catch (KeyNotFoundException knfex)
-        {
-            return NotFound($"No se ha encontrado la criptomoneda con ID: {dto.CryptoId}. {knfex.Message}");
-        }
-        catch (Exception ex)
-        {
-            return BadRequest($"Error al hacer la conversión del usuario con ID: {dto.UserId}. {ex.Message}");
-        }
-    }
-
-    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{userId}/cryptos")]
     public ActionResult<IEnumerable<Transaction>> GetCryptos(int userId)
     {
