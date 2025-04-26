@@ -11,7 +11,6 @@ public interface ITransactionService
     public void SellCrypto(BuySellAssetDto dto);
     public void BuyStock(BuySellAssetDto dto);
     public void SellStock(BuySellAssetDto dto);
-    public void CryptoConverter(CryptoConverterDto dto);
     public Dictionary<string, double> MyCryptos(int userId);
     public Dictionary<string, double> MyStocks(int userId);
 }

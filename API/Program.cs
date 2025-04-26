@@ -31,6 +31,8 @@ builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionEFRepository>();
 builder.Services.AddScoped<IMarketService, MarketService>();
 builder.Services.AddScoped<IMarketRepository, MarketEFRepository>();
+builder.Services.AddScoped<IWatchlistService, WatchlistService>();
+builder.Services.AddScoped<IWatchlistRepository, WatchlistEFRepository>();
 
 
 var connectionString = builder.Configuration.GetConnectionString("ServerDB_dockernet");

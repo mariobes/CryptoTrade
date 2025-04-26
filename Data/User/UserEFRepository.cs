@@ -42,7 +42,8 @@ namespace CryptoTrade.Data
             SaveChanges();
         }
 
-        public void DeleteUser(int userId) {
+        public void DeleteUser(int userId) 
+        {
             var user = GetUser(userId);
             _context.Users.Remove(user);
             SaveChanges();

@@ -24,15 +24,25 @@ namespace CryptoTrade.Data
         public DbSet<StockGainer> StockGainers { get; set; }
         public DbSet<StockLoser> StockLosers { get; set; }
         public DbSet<StockMostActive> StockMostActives { get; set; }
+        public DbSet<Watchlist> Watchlists { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, Name = "Admin", Birthdate = new DateTime(0001, 01, 01), Email = "admin@cryptotrade.com", Password = "Admin12345%", Phone = "000", DNI = "Admin", Nationality = "Admin", Cash = 10000, Wallet = 0, Role = Roles.Admin},
-                new User { Id = 2, Name = "Mario", Birthdate = new DateTime(2001, 09, 17), Email = "mario@gmail.com", Password = "Mario12345%", Phone = "567935418", DNI = "25463652D", Nationality = "España", Cash = 400, Wallet = 750 },
-                new User { Id = 3, Name = "Fernando", Birthdate = new DateTime(2003, 01, 28), Email = "fernando@gmail.com", Password = "Fernando12345%", Phone = "541298637", DNI = "26587463X", Nationality = "España", Cash = 300, Wallet = 1650 },
-                new User { Id = 4, Name = "Eduardo", Birthdate = new DateTime(1998, 11, 04), Email = "eduardo@gmail.com", Password = "Eduardo12345%", Phone = "658248974", DNI = "52684659D", Nationality = "España", Cash = 200, Wallet = 1020 }
+                new User { Id = 1, Name = "Admin", Birthdate = new DateTime(0001, 01, 01), Email = "admin@cryptotrade.com", Password = "YHrp/ExR53lRO6ouA2tT0y9QCb94jfjNBsxcGq5x798=", Phone = "000", DNI = "Admin", Nationality = "Admin", Cash = 10000, Wallet = 0, CreationDate = new DateTime(2016, 01, 01), Role = Roles.Admin},
+                new User { Id = 2, Name = "Mario", Birthdate = new DateTime(2001, 09, 17), Email = "mario@gmail.com", Password = "JApd9lfG2wshq3agTXjgwVT/f4jQecLCYTBnBT30AqE=", Phone = "567935418", DNI = "25463652D", Nationality = "España", Cash = 400, Wallet = 750, CreationDate = new DateTime(2021, 07, 02) },
+                new User { Id = 3, Name = "Fernando", Birthdate = new DateTime(2003, 01, 28), Email = "fernando@gmail.com", Password = "xf0cyil3yRNj5rC2KE+3O+wmt/rGtUapwYkq5YfkqG4=", Phone = "541298637", DNI = "26587463X", Nationality = "España", Cash = 300, Wallet = 1650, CreationDate = new DateTime(2022, 11, 22) },
+                new User { Id = 4, Name = "Eduardo", Birthdate = new DateTime(1998, 11, 04), Email = "eduardo@gmail.com", Password = "6GGegrjO3tQMHPZBrkdANTfPC92ka20ChXH9VdvhLak=", Phone = "658248974", DNI = "52684659D", Nationality = "España", Cash = 200, Wallet = 1020, CreationDate = new DateTime(2024, 01, 15) }
+            );
+
+            modelBuilder.Entity<Watchlist>().HasData(
+                new Watchlist { Id = 1, UserId = 2, AssetId = "bitcoin", TypeAsset = "Crypto" },
+                new Watchlist { Id = 2, UserId = 2, AssetId = "ethereum", TypeAsset = "Crypto" },
+                new Watchlist { Id = 3, UserId = 2, AssetId = "ripple", TypeAsset = "Crypto" },
+                new Watchlist { Id = 4, UserId = 2, AssetId = "cardano", TypeAsset = "Crypto" },
+                new Watchlist { Id = 5, UserId = 2, AssetId = "aapl", TypeAsset = "Stock" },
+                new Watchlist { Id = 6, UserId = 2, AssetId = "amzn", TypeAsset = "Stock" }
             );
 
             // modelBuilder.Entity<Transaction>().HasData(

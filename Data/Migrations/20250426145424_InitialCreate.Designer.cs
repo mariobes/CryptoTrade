@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CryptoTrade.Data.Migrations
 {
     [DbContext(typeof(CryptoTradeContext))]
-    [Migration("20250424145819_InitialCreate")]
+    [Migration("20250426145424_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -438,6 +438,9 @@ namespace CryptoTrade.Data.Migrations
                     b.Property<double>("Cash")
                         .HasColumnType("float");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Currency")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -449,9 +452,6 @@ namespace CryptoTrade.Data.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsBanned")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Language")
                         .IsRequired()
@@ -494,14 +494,14 @@ namespace CryptoTrade.Data.Migrations
                             Id = 1,
                             Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 10000.0,
+                            CreationDate = new DateTime(2016, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Currency = "USD",
                             DNI = "Admin",
                             Email = "admin@cryptotrade.com",
-                            IsBanned = false,
                             Language = "ES",
                             Name = "Admin",
                             Nationality = "Admin",
-                            Password = "Admin12345%",
+                            Password = "YHrp/ExR53lRO6ouA2tT0y9QCb94jfjNBsxcGq5x798=",
                             Phone = "000",
                             Role = "admin",
                             Theme = "light",
@@ -512,14 +512,14 @@ namespace CryptoTrade.Data.Migrations
                             Id = 2,
                             Birthdate = new DateTime(2001, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 400.0,
+                            CreationDate = new DateTime(2021, 7, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Currency = "USD",
                             DNI = "25463652D",
                             Email = "mario@gmail.com",
-                            IsBanned = false,
                             Language = "ES",
                             Name = "Mario",
                             Nationality = "España",
-                            Password = "Mario12345%",
+                            Password = "JApd9lfG2wshq3agTXjgwVT/f4jQecLCYTBnBT30AqE=",
                             Phone = "567935418",
                             Role = "user",
                             Theme = "light",
@@ -530,14 +530,14 @@ namespace CryptoTrade.Data.Migrations
                             Id = 3,
                             Birthdate = new DateTime(2003, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 300.0,
+                            CreationDate = new DateTime(2022, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Currency = "USD",
                             DNI = "26587463X",
                             Email = "fernando@gmail.com",
-                            IsBanned = false,
                             Language = "ES",
                             Name = "Fernando",
                             Nationality = "España",
-                            Password = "Fernando12345%",
+                            Password = "xf0cyil3yRNj5rC2KE+3O+wmt/rGtUapwYkq5YfkqG4=",
                             Phone = "541298637",
                             Role = "user",
                             Theme = "light",
@@ -548,18 +548,86 @@ namespace CryptoTrade.Data.Migrations
                             Id = 4,
                             Birthdate = new DateTime(1998, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 200.0,
+                            CreationDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Currency = "USD",
                             DNI = "52684659D",
                             Email = "eduardo@gmail.com",
-                            IsBanned = false,
                             Language = "ES",
                             Name = "Eduardo",
                             Nationality = "España",
-                            Password = "Eduardo12345%",
+                            Password = "6GGegrjO3tQMHPZBrkdANTfPC92ka20ChXH9VdvhLak=",
                             Phone = "658248974",
                             Role = "user",
                             Theme = "light",
                             Wallet = 1020.0
+                        });
+                });
+
+            modelBuilder.Entity("CryptoTrade.Models.Watchlist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AssetId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TypeAsset")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Watchlists");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AssetId = "bitcoin",
+                            TypeAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AssetId = "ethereum",
+                            TypeAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AssetId = "ripple",
+                            TypeAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AssetId = "cardano",
+                            TypeAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AssetId = "aapl",
+                            TypeAsset = "Stock",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AssetId = "amzn",
+                            TypeAsset = "Stock",
+                            UserId = 2
                         });
                 });
 

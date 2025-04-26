@@ -41,7 +41,8 @@ public class User
 
     public string Theme { get; set; } = "light";
 
-    public bool IsBanned { get; set; } = false;
+    [Required]
+    public DateTime CreationDate { get; set; } = DateTime.UtcNow.AddHours(2);
 
     [JsonIgnore]
     public List<Transaction> Transactions { get; set; } = new List<Transaction>();

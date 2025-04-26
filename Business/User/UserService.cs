@@ -6,16 +6,16 @@ namespace CryptoTrade.Business;
 
 public class UserService : IUserService
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUserRepository _repository;
 
-    public UserService(IUserRepository userRepository)
+    public UserService(IUserRepository repository)
     {
-        _userRepository = userRepository;
+        _repository = repository;
     }
 
     public User RegisterUser(UserCreateDto dto)
     {
-        var registeredUser = _userRepository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase));
+        var registeredUser = _repository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase));
         if (registeredUser != null)
         {
             throw new Exception("El correo electrónico ya está registrado.");
@@ -31,18 +31,18 @@ public class UserService : IUserService
             DNI = dto.DNI,
             Nationality = dto.Nationality
         };
-        _userRepository.AddUser(user);
+        _repository.AddUser(user);
         return user;
     }
 
     public IEnumerable<User> GetAllUsers()
     {
-        return _userRepository.GetAllUsers();
+        return _repository.GetAllUsers();
     }
 
     public User GetUserById(int userId)
     {
-        var user = _userRepository.GetUser(userId);
+        var user = _repository.GetUser(userId);
         if (user == null)
         {
             throw new KeyNotFoundException($"Usuario con ID {userId} no encontrado");
@@ -52,7 +52,7 @@ public class UserService : IUserService
 
     public User GetUserByEmail(string userEmail)
     {
-        var user = _userRepository.GetUserByEmail(userEmail);
+        var user = _repository.GetUserByEmail(userEmail);
         if (user == null)
         {
             throw new KeyNotFoundException($"Usuario con email {userEmail} no encontrado");
@@ -77,14 +77,14 @@ public class UserService : IUserService
         if (language != null) user.Language = language;
         if (currency != null) user.Currency = currency;
         if (theme != null) user.Theme = theme;
-        _userRepository.UpdateUser(user);
+        _repository.UpdateUser(user);
     }
 
     public void UpdateUser(int userId, UserUpdateDto dto)
     {
         var user = GetUserById(userId);
 
-        var registeredUser = _userRepository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase));
+        var registeredUser = _repository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase));
         if (registeredUser != null)
         {
             throw new Exception("El correo electrónico ya está registrado.");
@@ -93,13 +93,13 @@ public class UserService : IUserService
         user.Email = dto.Email;
         user.Password = dto.Password;
         user.Phone = dto.Phone;
-        _userRepository.UpdateUser(user);
+        _repository.UpdateUser(user);
     }
 
     public void DeleteUser(int userId)
     {
         GetUserById(userId);
-        _userRepository.DeleteUser(userId);
+        _repository.DeleteUser(userId);
     }
     
 }
