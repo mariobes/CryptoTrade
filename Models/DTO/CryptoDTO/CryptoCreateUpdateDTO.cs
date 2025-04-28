@@ -9,7 +9,7 @@ public class CryptoCreateUpdateDto
 
     [Required]
     [StringLength(50, ErrorMessage = "El nombre debe tener menos de 50 caracteres")]
-    [RegularExpression(@"^[a-zA-Z0-9 ]+$", ErrorMessage = "El nombre solo puede contener letras, números y espacios.")]
+    [RegularExpression(@"^[a-zA-Z0-9 ]+$", ErrorMessage = "El nombre solo puede contener letras, números y espacios")]
     public string? Name { get; set; }
 
     [Required]

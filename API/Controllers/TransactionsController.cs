@@ -174,14 +174,14 @@ public class TransactionsController : ControllerBase
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{userId}/cryptos")]
-    public ActionResult<IEnumerable<Transaction>> GetCryptos(int userId)
+    public ActionResult<IEnumerable<UserAssetsSummaryDto>> GetCryptos(int userId, [FromQuery] string? cryptoId = null)
     {
         if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
             {return Forbid(); }
 
         try 
         {
-            var userCryptos = _transactionService.MyCryptos(userId);
+            var userCryptos = _transactionService.MyCryptos(userId, cryptoId);
             return Ok(userCryptos);
         }     
         catch (KeyNotFoundException knfex)
@@ -196,14 +196,14 @@ public class TransactionsController : ControllerBase
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
     [HttpGet("{userId}/stocks")]
-    public ActionResult<IEnumerable<Transaction>> GetStocks(int userId)
+    public ActionResult<IEnumerable<Transaction>> GetStocks(int userId, [FromQuery] string? stockId = null)
     {
         if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
             {return Forbid(); }
 
         try 
         {
-            var userStocks = _transactionService.MyStocks(userId);
+            var userStocks = _transactionService.MyStocks(userId, stockId);
             return Ok(userStocks);
         }     
         catch (KeyNotFoundException knfex)

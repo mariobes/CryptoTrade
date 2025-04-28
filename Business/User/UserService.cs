@@ -60,26 +60,6 @@ public class UserService : IUserService
         return user;
     }
 
-    public UserPreferencesDto GetUserPreferences(int userId)
-    {
-        var user = GetUserById(userId);
-        return new UserPreferencesDto
-        {
-            Language = user.Language,
-            Currency = user.Currency,
-            Theme = user.Theme
-        };
-    }
-
-    public void UpdateUserPreferences(int userId, string? language = null, string? currency = null, string? theme = null)
-    {
-        var user = GetUserById(userId);
-        if (language != null) user.Language = language;
-        if (currency != null) user.Currency = currency;
-        if (theme != null) user.Theme = theme;
-        _repository.UpdateUser(user);
-    }
-
     public void UpdateUser(int userId, UserUpdateDto dto)
     {
         var user = GetUserById(userId);
