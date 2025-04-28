@@ -436,13 +436,6 @@ namespace CryptoTrade.Data.Migrations
                     b.Property<double>("Cash")
                         .HasColumnType("float");
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("DNI")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -451,9 +444,8 @@ namespace CryptoTrade.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Language")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -471,11 +463,10 @@ namespace CryptoTrade.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("Profit")
+                        .HasColumnType("float");
 
-                    b.Property<string>("Theme")
+                    b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -492,17 +483,15 @@ namespace CryptoTrade.Data.Migrations
                             Id = 1,
                             Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 10000.0,
-                            CreationDate = new DateTime(2016, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Currency = "USD",
                             DNI = "Admin",
                             Email = "admin@cryptotrade.com",
-                            Language = "ES",
+                            LastUpdated = new DateTime(2016, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Admin",
                             Nationality = "Admin",
                             Password = "YHrp/ExR53lRO6ouA2tT0y9QCb94jfjNBsxcGq5x798=",
                             Phone = "000",
+                            Profit = 0.0,
                             Role = "admin",
-                            Theme = "light",
                             Wallet = 0.0
                         },
                         new
@@ -510,17 +499,15 @@ namespace CryptoTrade.Data.Migrations
                             Id = 2,
                             Birthdate = new DateTime(2001, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 400.0,
-                            CreationDate = new DateTime(2021, 7, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Currency = "USD",
                             DNI = "25463652D",
                             Email = "mario@gmail.com",
-                            Language = "ES",
+                            LastUpdated = new DateTime(2021, 7, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Mario",
                             Nationality = "España",
                             Password = "JApd9lfG2wshq3agTXjgwVT/f4jQecLCYTBnBT30AqE=",
                             Phone = "567935418",
+                            Profit = 0.0,
                             Role = "user",
-                            Theme = "light",
                             Wallet = 750.0
                         },
                         new
@@ -528,17 +515,15 @@ namespace CryptoTrade.Data.Migrations
                             Id = 3,
                             Birthdate = new DateTime(2003, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 300.0,
-                            CreationDate = new DateTime(2022, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Currency = "USD",
                             DNI = "26587463X",
                             Email = "fernando@gmail.com",
-                            Language = "ES",
+                            LastUpdated = new DateTime(2022, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Fernando",
                             Nationality = "España",
                             Password = "xf0cyil3yRNj5rC2KE+3O+wmt/rGtUapwYkq5YfkqG4=",
                             Phone = "541298637",
+                            Profit = 0.0,
                             Role = "user",
-                            Theme = "light",
                             Wallet = 1650.0
                         },
                         new
@@ -546,17 +531,15 @@ namespace CryptoTrade.Data.Migrations
                             Id = 4,
                             Birthdate = new DateTime(1998, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 200.0,
-                            CreationDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Currency = "USD",
                             DNI = "52684659D",
                             Email = "eduardo@gmail.com",
-                            Language = "ES",
+                            LastUpdated = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Eduardo",
                             Nationality = "España",
                             Password = "6GGegrjO3tQMHPZBrkdANTfPC92ka20ChXH9VdvhLak=",
                             Phone = "658248974",
+                            Profit = 0.0,
                             Role = "user",
-                            Theme = "light",
                             Wallet = 1020.0
                         });
                 });

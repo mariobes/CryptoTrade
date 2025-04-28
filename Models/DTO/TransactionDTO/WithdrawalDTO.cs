@@ -9,6 +9,6 @@ public class WithdrawalDto
     public int UserId { get; set; }
 
     [Required]
-    [Range(10, double.MaxValue, ErrorMessage = "El saldo inicial debe ser mayor que 10")]
+    [Range(10, double.MaxValue, ErrorMessage = "La cantidad mínima es 10")]
     public double Amount { get; set; }
 }

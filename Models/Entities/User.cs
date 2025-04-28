@@ -34,15 +34,11 @@ public class User
     public double Cash { get; set; } = 0;
 
     public double Wallet { get; set; } = 0;
-
-    public string Language { get; set; } = "ES";
-
-    public string Currency { get; set; } = "USD";
-
-    public string Theme { get; set; } = "light";
+    
+    public double Profit { get; set; } = 0;
 
     [Required]
-    public DateTime CreationDate { get; set; } = DateTime.UtcNow.AddHours(2);
+    public DateTime LastUpdated { get; set; } = DateTime.UtcNow.AddHours(2);
 
     [JsonIgnore]
     public List<Transaction> Transactions { get; set; } = new List<Transaction>();
