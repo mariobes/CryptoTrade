@@ -197,6 +197,7 @@ namespace CryptoTrade.Data.Migrations
                     Cash = table.Column<double>(type: "float", nullable: false),
                     Wallet = table.Column<double>(type: "float", nullable: false),
                     Profit = table.Column<double>(type: "float", nullable: false),
+                    LastBalance = table.Column<double>(type: "float", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -261,13 +262,13 @@ namespace CryptoTrade.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Birthdate", "Cash", "DNI", "Email", "LastUpdated", "Name", "Nationality", "Password", "Phone", "Profit", "Role", "Wallet" },
+                columns: new[] { "Id", "Birthdate", "Cash", "DNI", "Email", "LastBalance", "LastUpdated", "Name", "Nationality", "Password", "Phone", "Profit", "Role", "Wallet" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 10000.0, "Admin", "admin@cryptotrade.com", new DateTime(2016, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", "Admin", "YHrp/ExR53lRO6ouA2tT0y9QCb94jfjNBsxcGq5x798=", "000", 0.0, "admin", 0.0 },
-                    { 2, new DateTime(2001, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 400.0, "25463652D", "mario@gmail.com", new DateTime(2021, 7, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Mario", "España", "JApd9lfG2wshq3agTXjgwVT/f4jQecLCYTBnBT30AqE=", "567935418", 0.0, "user", 750.0 },
-                    { 3, new DateTime(2003, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), 300.0, "26587463X", "fernando@gmail.com", new DateTime(2022, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), "Fernando", "España", "xf0cyil3yRNj5rC2KE+3O+wmt/rGtUapwYkq5YfkqG4=", "541298637", 0.0, "user", 1650.0 },
-                    { 4, new DateTime(1998, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 200.0, "52684659D", "eduardo@gmail.com", new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Eduardo", "España", "6GGegrjO3tQMHPZBrkdANTfPC92ka20ChXH9VdvhLak=", "658248974", 0.0, "user", 1020.0 }
+                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0.0, "Admin", "admin@cryptotrade.com", 0.0, new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8559), "Admin", "Admin", "YHrp/ExR53lRO6ouA2tT0y9QCb94jfjNBsxcGq5x798=", "000", 0.0, "admin", 0.0 },
+                    { 2, new DateTime(2001, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 384.35000000000002, "25463652D", "mario@gmail.com", 0.0, new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8564), "Mario", "España", "JApd9lfG2wshq3agTXjgwVT/f4jQecLCYTBnBT30AqE=", "567935418", 0.0, "user", 4615.6499999999996 },
+                    { 3, new DateTime(2003, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), 0.0, "26587463X", "fernando@gmail.com", 0.0, new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8568), "Fernando", "España", "xf0cyil3yRNj5rC2KE+3O+wmt/rGtUapwYkq5YfkqG4=", "541298637", 0.0, "user", 0.0 },
+                    { 4, new DateTime(1998, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 0.0, "52684659D", "eduardo@gmail.com", 0.0, new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8569), "Eduardo", "España", "6GGegrjO3tQMHPZBrkdANTfPC92ka20ChXH9VdvhLak=", "658248974", 0.0, "user", 0.0 }
                 });
 
             migrationBuilder.InsertData(
@@ -281,6 +282,33 @@ namespace CryptoTrade.Data.Migrations
                     { 4, "cardano", "Crypto", 2 },
                     { 5, "aapl", "Stock", 2 },
                     { 6, "amzn", "Stock", 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Transactions",
+                columns: new[] { "Id", "Amount", "AssetAmount", "AssetId", "Concept", "CryptoId", "Date", "PaymentMethod", "PurchasePrice", "StockId", "TypeOfAsset", "UserId" },
+                values: new object[,]
+                {
+                    { 1, 5000.0, null, null, "+ Deposit", null, new DateTime(2024, 1, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null, null, null, 2 },
+                    { 2, 109.44, 0.0048780000000000004, "bitcoin", "+ Bitcoin", null, new DateTime(2024, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 22436.130000000001, null, "Crypto", 2 },
+                    { 3, 218.88999999999999, 0.0076920000000000001, "bitcoin", "+ Bitcoin", null, new DateTime(2024, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 28455.57, null, "Crypto", 2 },
+                    { 4, 54.719999999999999, 0.001196, "bitcoin", "+ Bitcoin", null, new DateTime(2024, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 45749.959999999999, null, "Crypto", 2 },
+                    { 5, 54.719999999999999, 0.001276, "bitcoin", "+ Bitcoin", null, new DateTime(2024, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 42904.269999999997, null, "Crypto", 2 },
+                    { 6, 109.45999999999999, 0.0024940000000000001, "bitcoin", "+ Bitcoin", null, new DateTime(2024, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 43891.480000000003, null, "Crypto", 2 },
+                    { 7, 654.37, 7331.1300000000001, "hedera-hashgraph", "+ Hedera", null, new DateTime(2024, 2, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 0.089260000000000006, null, "Crypto", 2 },
+                    { 8, 529.36000000000001, 1172.51, "cardano", "+ Cardano", null, new DateTime(2024, 2, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 0.45140000000000002, null, "Crypto", 2 },
+                    { 9, 322.91000000000003, 534.22000000000003, "ripple", "+ XRP", null, new DateTime(2024, 2, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 0.60450000000000004, null, "Crypto", 2 },
+                    { 10, 203.19999999999999, 263.00999999999999, "ondo-finance", "+ Ondo", null, new DateTime(2024, 5, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 0.77259999999999995, null, "Crypto", 2 },
+                    { 11, 507.43000000000001, 0.2175, "ethereum", "+ Ethereum", null, new DateTime(2024, 8, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 2332.9200000000001, null, "Crypto", 2 },
+                    { 12, 229.09, 35.700000000000003, "polkadot", "+ Polkadot", null, new DateTime(2024, 8, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 6.4169999999999998, null, "Crypto", 2 },
+                    { 13, 195.47, 30.460000000000001, "polkadot", "+ Polkadot", null, new DateTime(2024, 8, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 6.4169999999999998, null, "Crypto", 2 },
+                    { 14, 157.43000000000001, 23400000.0, "pepe", "+ Pepe", null, new DateTime(2024, 8, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 6.72E-06, null, "Crypto", 2 },
+                    { 15, 200.00999999999999, 25.899999999999999, "near", "+ NEAR Protocol", null, new DateTime(2024, 12, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 7.7210999999999999, null, "Crypto", 2 },
+                    { 16, 309.94, 62.939999999999998, "near", "+ NEAR Protocol", null, new DateTime(2025, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 4.9240000000000004, null, "Crypto", 2 },
+                    { 17, 309.31999999999999, 44.939999999999998, "render-token", "+ Render", null, new DateTime(2025, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 6.883, null, "Crypto", 2 },
+                    { 18, 99.890000000000001, 23.989999999999998, "render-token", "+ Render", null, new DateTime(2025, 2, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 4.1639999999999997, null, "Crypto", 2 },
+                    { 19, 100.0, 0.3125, "msft", "+ Microsoft Corporation", null, new DateTime(2025, 4, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 320.0, null, "Stock", 2 },
+                    { 20, 250.0, 2.0830000000000002, "nvda", "+ NVIDIA Corporation", null, new DateTime(2025, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 120.0, null, "Stock", 2 }
                 });
 
             migrationBuilder.CreateIndex(

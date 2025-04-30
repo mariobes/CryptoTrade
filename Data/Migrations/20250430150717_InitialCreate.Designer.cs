@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CryptoTrade.Data.Migrations
 {
     [DbContext(typeof(CryptoTradeContext))]
-    [Migration("20250428082943_InitialCreate")]
+    [Migration("20250430150717_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -422,6 +422,245 @@ namespace CryptoTrade.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Transactions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Amount = 5000.0,
+                            Concept = "+ Deposit",
+                            Date = new DateTime(2024, 1, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PaymentMethod = 1,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Amount = 109.44,
+                            AssetAmount = 0.0048780000000000004,
+                            AssetId = "bitcoin",
+                            Concept = "+ Bitcoin",
+                            Date = new DateTime(2024, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 22436.130000000001,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Amount = 218.88999999999999,
+                            AssetAmount = 0.0076920000000000001,
+                            AssetId = "bitcoin",
+                            Concept = "+ Bitcoin",
+                            Date = new DateTime(2024, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 28455.57,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Amount = 54.719999999999999,
+                            AssetAmount = 0.001196,
+                            AssetId = "bitcoin",
+                            Concept = "+ Bitcoin",
+                            Date = new DateTime(2024, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 45749.959999999999,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Amount = 54.719999999999999,
+                            AssetAmount = 0.001276,
+                            AssetId = "bitcoin",
+                            Concept = "+ Bitcoin",
+                            Date = new DateTime(2024, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 42904.269999999997,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Amount = 109.45999999999999,
+                            AssetAmount = 0.0024940000000000001,
+                            AssetId = "bitcoin",
+                            Concept = "+ Bitcoin",
+                            Date = new DateTime(2024, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 43891.480000000003,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Amount = 654.37,
+                            AssetAmount = 7331.1300000000001,
+                            AssetId = "hedera-hashgraph",
+                            Concept = "+ Hedera",
+                            Date = new DateTime(2024, 2, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 0.089260000000000006,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Amount = 529.36000000000001,
+                            AssetAmount = 1172.51,
+                            AssetId = "cardano",
+                            Concept = "+ Cardano",
+                            Date = new DateTime(2024, 2, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 0.45140000000000002,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Amount = 322.91000000000003,
+                            AssetAmount = 534.22000000000003,
+                            AssetId = "ripple",
+                            Concept = "+ XRP",
+                            Date = new DateTime(2024, 2, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 0.60450000000000004,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Amount = 203.19999999999999,
+                            AssetAmount = 263.00999999999999,
+                            AssetId = "ondo-finance",
+                            Concept = "+ Ondo",
+                            Date = new DateTime(2024, 5, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 0.77259999999999995,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Amount = 507.43000000000001,
+                            AssetAmount = 0.2175,
+                            AssetId = "ethereum",
+                            Concept = "+ Ethereum",
+                            Date = new DateTime(2024, 8, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 2332.9200000000001,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Amount = 229.09,
+                            AssetAmount = 35.700000000000003,
+                            AssetId = "polkadot",
+                            Concept = "+ Polkadot",
+                            Date = new DateTime(2024, 8, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 6.4169999999999998,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Amount = 195.47,
+                            AssetAmount = 30.460000000000001,
+                            AssetId = "polkadot",
+                            Concept = "+ Polkadot",
+                            Date = new DateTime(2024, 8, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 6.4169999999999998,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Amount = 157.43000000000001,
+                            AssetAmount = 23400000.0,
+                            AssetId = "pepe",
+                            Concept = "+ Pepe",
+                            Date = new DateTime(2024, 8, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 6.72E-06,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Amount = 200.00999999999999,
+                            AssetAmount = 25.899999999999999,
+                            AssetId = "near",
+                            Concept = "+ NEAR Protocol",
+                            Date = new DateTime(2024, 12, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 7.7210999999999999,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Amount = 309.94,
+                            AssetAmount = 62.939999999999998,
+                            AssetId = "near",
+                            Concept = "+ NEAR Protocol",
+                            Date = new DateTime(2025, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 4.9240000000000004,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Amount = 309.31999999999999,
+                            AssetAmount = 44.939999999999998,
+                            AssetId = "render-token",
+                            Concept = "+ Render",
+                            Date = new DateTime(2025, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 6.883,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Amount = 99.890000000000001,
+                            AssetAmount = 23.989999999999998,
+                            AssetId = "render-token",
+                            Concept = "+ Render",
+                            Date = new DateTime(2025, 2, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 4.1639999999999997,
+                            TypeOfAsset = "Crypto",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Amount = 100.0,
+                            AssetAmount = 0.3125,
+                            AssetId = "msft",
+                            Concept = "+ Microsoft Corporation",
+                            Date = new DateTime(2025, 4, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 320.0,
+                            TypeOfAsset = "Stock",
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Amount = 250.0,
+                            AssetAmount = 2.0830000000000002,
+                            AssetId = "nvda",
+                            Concept = "+ NVIDIA Corporation",
+                            Date = new DateTime(2025, 4, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PurchasePrice = 120.0,
+                            TypeOfAsset = "Stock",
+                            UserId = 2
+                        });
                 });
 
             modelBuilder.Entity("CryptoTrade.Models.User", b =>
@@ -445,6 +684,9 @@ namespace CryptoTrade.Data.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("LastBalance")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
@@ -484,10 +726,11 @@ namespace CryptoTrade.Data.Migrations
                         {
                             Id = 1,
                             Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Cash = 10000.0,
+                            Cash = 0.0,
                             DNI = "Admin",
                             Email = "admin@cryptotrade.com",
-                            LastUpdated = new DateTime(2016, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastBalance = 0.0,
+                            LastUpdated = new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8559),
                             Name = "Admin",
                             Nationality = "Admin",
                             Password = "YHrp/ExR53lRO6ouA2tT0y9QCb94jfjNBsxcGq5x798=",
@@ -500,49 +743,52 @@ namespace CryptoTrade.Data.Migrations
                         {
                             Id = 2,
                             Birthdate = new DateTime(2001, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Cash = 400.0,
+                            Cash = 384.35000000000002,
                             DNI = "25463652D",
                             Email = "mario@gmail.com",
-                            LastUpdated = new DateTime(2021, 7, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastBalance = 0.0,
+                            LastUpdated = new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8564),
                             Name = "Mario",
                             Nationality = "España",
                             Password = "JApd9lfG2wshq3agTXjgwVT/f4jQecLCYTBnBT30AqE=",
                             Phone = "567935418",
                             Profit = 0.0,
                             Role = "user",
-                            Wallet = 750.0
+                            Wallet = 4615.6499999999996
                         },
                         new
                         {
                             Id = 3,
                             Birthdate = new DateTime(2003, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Cash = 300.0,
+                            Cash = 0.0,
                             DNI = "26587463X",
                             Email = "fernando@gmail.com",
-                            LastUpdated = new DateTime(2022, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastBalance = 0.0,
+                            LastUpdated = new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8568),
                             Name = "Fernando",
                             Nationality = "España",
                             Password = "xf0cyil3yRNj5rC2KE+3O+wmt/rGtUapwYkq5YfkqG4=",
                             Phone = "541298637",
                             Profit = 0.0,
                             Role = "user",
-                            Wallet = 1650.0
+                            Wallet = 0.0
                         },
                         new
                         {
                             Id = 4,
                             Birthdate = new DateTime(1998, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Cash = 200.0,
+                            Cash = 0.0,
                             DNI = "52684659D",
                             Email = "eduardo@gmail.com",
-                            LastUpdated = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastBalance = 0.0,
+                            LastUpdated = new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8569),
                             Name = "Eduardo",
                             Nationality = "España",
                             Password = "6GGegrjO3tQMHPZBrkdANTfPC92ka20ChXH9VdvhLak=",
                             Phone = "658248974",
                             Profit = 0.0,
                             Role = "user",
-                            Wallet = 1020.0
+                            Wallet = 0.0
                         });
                 });
 

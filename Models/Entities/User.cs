@@ -37,6 +37,8 @@ public class User
     
     public double Profit { get; set; } = 0;
 
+    public double LastBalance { get; set; } = 0;
+
     [Required]
     public DateTime LastUpdated { get; set; } = DateTime.UtcNow.AddHours(2);
 
