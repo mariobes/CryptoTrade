@@ -67,7 +67,7 @@ public class TransactionService : ITransactionService
             UserId = dto.UserId,
             Concept = "- Withdrawal",
             Amount = dto.Amount,
-            PaymentMethod = EnumPaymentMethodOptions.TransferenciaBancaria
+            PaymentMethod = EnumPaymentMethodOptions.BankTransfer
         };
         user.Cash -= dto.Amount;
         _userRepository.UpdateUser(user);
@@ -265,7 +265,7 @@ public class TransactionService : ITransactionService
             userTransactions = userTransactions.Where(t => t.AssetId == cryptoId);
         }
                 
-        var cryptos = _cryptoRepository.GetAllCryptos().ToDictionary(c => c.Id, c => new { c.Name, c.Price });
+        var cryptos = _cryptoRepository.GetAllCryptos().ToDictionary(c => c.Id, c => new { c.Name, c.Price, c.Symbol, c.Image, c.PriceChangePercentage24h });
 
         var grouped = userTransactions.GroupBy(t => t.AssetId);
 
@@ -329,7 +329,12 @@ public class TransactionService : ITransactionService
                 Balance = balance,
                 BalancePercentage = totalInvestedAmount != 0 ? balance / totalInvestedAmount * 100 : 0,
                 Total = total,
-                WalletPercentage = 0
+                WalletPercentage = 0,
+                TypeOfAsset = "Crypto",
+                Symbol = cryptos.ContainsKey(assetId) ? cryptos[assetId].Symbol : string.Empty,
+                Image = cryptos.ContainsKey(assetId) ? cryptos[assetId].Image : string.Empty,
+                Price = currentPrice,
+                ChangesPercentage24h = cryptos.ContainsKey(assetId) ? cryptos[assetId].PriceChangePercentage24h : 0,
             });
         }
 
@@ -337,6 +342,7 @@ public class TransactionService : ITransactionService
         {
             if (user.LastUpdated.Date != DateTime.UtcNow.AddHours(2).Date)
             {
+                user.LastBalance = user.Wallet + user.Profit;
                 var newProfit = totalBalance - user.Profit;
                 user.Profit = Math.Round(user.Profit + newProfit, 2);
                 user.LastUpdated = DateTime.UtcNow.AddHours(2);
@@ -351,7 +357,7 @@ public class TransactionService : ITransactionService
             crypto.WalletPercentage = walletBase != 0 ? crypto.Total / walletBase * 100 : 0;
         }
 
-        return result;
+        return result.OrderByDescending(c => c.Total);
     }
 
     public IEnumerable<UserAssetsSummaryDto> MyStocks(int userId, string? stockId = null)
@@ -371,7 +377,7 @@ public class TransactionService : ITransactionService
         }
 
         // Obtener todos los stocks y sus precios
-        var stocks = _stockRepository.GetAllStocks().ToDictionary(s => s.Id, s => new { s.Name, s.Price });
+        var stocks = _stockRepository.GetAllStocks().ToDictionary(s => s.Id, s => new { s.Name, s.Price, s.Symbol, s.Image, s.ChangesPercentage });
 
         // Agrupar las transacciones por AssetId
         var grouped = userTransactions.GroupBy(t => t.AssetId);
@@ -441,13 +447,18 @@ public class TransactionService : ITransactionService
                 Balance = balance,
                 BalancePercentage = totalInvestedAmount != 0 ? balance / totalInvestedAmount * 100 : 0,
                 Total = total,
-                WalletPercentage = 0
+                WalletPercentage = 0,
+                TypeOfAsset = "Stock",
+                Symbol = stocks.ContainsKey(assetId) ? stocks[assetId].Symbol : string.Empty,
+                Image = stocks.ContainsKey(assetId) ? stocks[assetId].Image : string.Empty,
+                Price = currentPrice,
+                ChangesPercentage24h = stocks.ContainsKey(assetId) ? stocks[assetId].ChangesPercentage : 0,
             });
         }
 
         if (string.IsNullOrEmpty(stockId))
         {
-            if (user.LastUpdated.Date != DateTime.UtcNow.AddHours(2))
+            if (user.LastUpdated.Date != DateTime.UtcNow.AddHours(2).Date)
             {
                 var newProfit = totalBalance - user.Profit;
                 user.Profit = Math.Round(user.Profit + newProfit, 2);
@@ -463,12 +474,14 @@ public class TransactionService : ITransactionService
             crypto.WalletPercentage = walletBase != 0 ? crypto.Total / walletBase * 100 : 0;
         }
 
-        return result;
+        return result.OrderByDescending(s => s.Total);
     }
 
     public double GetCryptoBalance(int userId, string cryptoId)
     {
-        var userTransactions = _transactionRepository.GetAllTransactions(userId);
+        var userTransactions = _transactionRepository.GetAllTransactions(userId)
+                                                     .Where(t => !string.IsNullOrEmpty(t.AssetId))
+                                                     .ToList();
 
         double assetBalance = 0;
 
@@ -491,7 +504,9 @@ public class TransactionService : ITransactionService
 
     public double GetStockBalance(int userId, string stockId)
     {
-        var userTransactions = _transactionRepository.GetAllTransactions(userId);
+        var userTransactions = _transactionRepository.GetAllTransactions(userId)
+                                                     .Where(t => !string.IsNullOrEmpty(t.AssetId))
+                                                     .ToList();
 
         double assetBalance = 0;
 

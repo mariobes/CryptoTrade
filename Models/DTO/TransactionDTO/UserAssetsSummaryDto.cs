@@ -12,6 +12,11 @@ public class UserAssetsSummaryDto
     public double BalancePercentage { get; set; }
     public double Total { get; set; }
     public double WalletPercentage { get; set; }
+    public string? TypeOfAsset { get; set; }
+    public string? Symbol { get; set; }
+    public string? Image { get; set; }
+    public double Price { get; set; }
+    public double? ChangesPercentage24h { get; set; }
 }
 
 
