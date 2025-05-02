@@ -30,10 +30,10 @@ namespace CryptoTrade.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, Name = "Admin", Birthdate = new DateTime(0001, 01, 01), Email = "admin@cryptotrade.com", Password = "YHrp/ExR53lRO6ouA2tT0y9QCb94jfjNBsxcGq5x798=", Phone = "000", DNI = "Admin", Nationality = "Admin", Role = Roles.Admin},
-                new User { Id = 2, Name = "Mario", Birthdate = new DateTime(2001, 09, 17), Email = "mario@gmail.com", Password = "JApd9lfG2wshq3agTXjgwVT/f4jQecLCYTBnBT30AqE=", Phone = "567935418", DNI = "25463652D", Nationality = "España", Cash = 384.35, Wallet = 4615.65 },
-                new User { Id = 3, Name = "Fernando", Birthdate = new DateTime(2003, 01, 28), Email = "fernando@gmail.com", Password = "xf0cyil3yRNj5rC2KE+3O+wmt/rGtUapwYkq5YfkqG4=", Phone = "541298637", DNI = "26587463X", Nationality = "España" },
-                new User { Id = 4, Name = "Eduardo", Birthdate = new DateTime(1998, 11, 04), Email = "eduardo@gmail.com", Password = "6GGegrjO3tQMHPZBrkdANTfPC92ka20ChXH9VdvhLak=", Phone = "658248974", DNI = "52684659D", Nationality = "España" }
+                new User { Id = 1, Name = "Admin", Birthdate = new DateTime(0001, 01, 01), Email = "admin@cryptotrade.com", Password = "YHrp/ExR53lRO6ouA2tT0y9QCb94jfjNBsxcGq5x798=", Phone = "000", DNI = "Admin", Nationality = "Admin", CreationDate = new DateTime(2016, 01, 01), Role = Roles.Admin},
+                new User { Id = 2, Name = "Mario", Birthdate = new DateTime(2001, 09, 17), Email = "mario@gmail.com", Password = "JApd9lfG2wshq3agTXjgwVT/f4jQecLCYTBnBT30AqE=", Phone = "567935418", DNI = "25463652D", Nationality = "España", Cash = 384.35, Wallet = 4615.65, CreationDate = new DateTime(2022, 07, 02) },
+                new User { Id = 3, Name = "Fernando", Birthdate = new DateTime(2003, 01, 28), Email = "fernando@gmail.com", Password = "xf0cyil3yRNj5rC2KE+3O+wmt/rGtUapwYkq5YfkqG4=", Phone = "541298637", DNI = "26587463X", Nationality = "España", CreationDate = new DateTime(2023, 11, 12) },
+                new User { Id = 4, Name = "Eduardo", Birthdate = new DateTime(1998, 11, 04), Email = "eduardo@gmail.com", Password = "6GGegrjO3tQMHPZBrkdANTfPC92ka20ChXH9VdvhLak=", Phone = "658248974", DNI = "52684659D", Nationality = "España", CreationDate = new DateTime(2024, 01, 18) }
             );
 
             modelBuilder.Entity<Watchlist>().HasData(

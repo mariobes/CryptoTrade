@@ -2,10 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 public enum EnumPaymentMethodOptions
 {
-    [Display(Name = "Transferencia bancaria")]
+    [Display(Name = "Bank transfer")]
     BankTransfer = 0,
 
-    [Display(Name = "Tarjeta de crédito")]
+    [Display(Name = "Credit card")]
     CreditCard = 1,
 
     [Display(Name = "Google Pay")]
