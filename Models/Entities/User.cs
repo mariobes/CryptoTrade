@@ -39,6 +39,8 @@ public class User
 
     public double LastBalance { get; set; } = 0;
 
+    public DateTime CreationDate { get; set; } = DateTime.UtcNow.AddHours(2);
+
     [Required]
     public DateTime LastUpdated { get; set; } = DateTime.UtcNow.AddHours(2);
 
