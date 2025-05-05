@@ -264,6 +264,8 @@ public class TransactionService : ITransactionService
         {
             userTransactions = userTransactions.Where(t => t.AssetId == cryptoId);
         }
+
+        var firstCrypto = _cryptoRepository.GetAllCryptos().OrderByDescending(c => c.MarketCap).FirstOrDefault();
                 
         var cryptos = _cryptoRepository.GetAllCryptos().ToDictionary(c => c.Id, c => new { c.Name, c.Price, c.Symbol, c.Image, c.PriceChangePercentage24h });
 
@@ -296,8 +298,10 @@ public class TransactionService : ITransactionService
 
             double totalAssetAmount = 0;
             double totalInvestedAmount = 0;
+            double avgPurchasePrice = 0;
+            double realizedProfit = 0;
 
-            foreach (var transaction in group)
+            foreach (var transaction in group.OrderBy(t => t.Date))
             {
                 var assetAmount = transaction.AssetAmount ?? 0;
                 var amount = transaction.Amount;
@@ -306,18 +310,26 @@ public class TransactionService : ITransactionService
                 {
                     totalAssetAmount += assetAmount;
                     totalInvestedAmount += amount;
+                    avgPurchasePrice = totalAssetAmount != 0 ? totalInvestedAmount / totalAssetAmount : 0;
                 }
                 else if (transaction.Concept.StartsWith("-"))
                 {
+                    // Calculamos cuánto costó originalmente ese assetAmount
+                    double costBasis = assetAmount * avgPurchasePrice;
+                    // Calculamos ganancia (o pérdida) realizada
+                    double gain = amount - costBasis;
+                    realizedProfit += gain;
+
                     totalAssetAmount -= assetAmount;
-                    totalInvestedAmount -= amount;
+                    totalInvestedAmount -= costBasis;
                 }
             }
 
-            double balance = totalAssetAmount * currentPrice - totalInvestedAmount;
-            double total = balance + totalInvestedAmount;
+            double unrealizedBalance = totalAssetAmount * currentPrice - totalInvestedAmount;
+            double totalBalanceWithRealized = unrealizedBalance + realizedProfit;
+            double total = totalInvestedAmount + unrealizedBalance;
 
-            totalBalance += balance;
+            totalBalance += totalBalanceWithRealized;
 
             result.Add(new UserAssetsSummaryDto
             {
@@ -325,9 +337,9 @@ public class TransactionService : ITransactionService
                 Name = cryptoName,
                 TotalInvestedAmount = totalInvestedAmount,
                 TotalAssetAmount = totalAssetAmount,
-                AveragePurchasePrice = totalAssetAmount != 0 ? totalInvestedAmount / totalAssetAmount : 0,
-                Balance = balance,
-                BalancePercentage = totalInvestedAmount != 0 ? balance / totalInvestedAmount * 100 : 0,
+                AveragePurchasePrice = avgPurchasePrice,
+                Balance = totalBalanceWithRealized,
+                BalancePercentage = (totalAssetAmount > 0 && avgPurchasePrice > 0) ? unrealizedBalance / (totalAssetAmount * avgPurchasePrice) * 100 : 0,
                 Total = total,
                 WalletPercentage = 0,
                 TypeOfAsset = "Crypto",
@@ -340,7 +352,9 @@ public class TransactionService : ITransactionService
 
         if (string.IsNullOrEmpty(cryptoId))
         {
-            if (user.LastUpdated.Date != DateTime.UtcNow.AddHours(2).Date)
+            var nowDate = DateTime.UtcNow.AddHours(2).Date;
+
+            if (user.LastUpdated.Date != nowDate && firstCrypto?.LastUpdated.Date == nowDate)
             {
                 user.LastBalance = user.Wallet + user.Profit;
                 var newProfit = totalBalance - user.Profit;
@@ -376,6 +390,8 @@ public class TransactionService : ITransactionService
             userTransactions = userTransactions.Where(t => t.AssetId == stockId);
         }
 
+        var firstStock = _stockRepository.GetAllStocks().OrderByDescending(s => s.MarketCap).FirstOrDefault();
+
         // Obtener todos los stocks y sus precios
         var stocks = _stockRepository.GetAllStocks().ToDictionary(s => s.Id, s => new { s.Name, s.Price, s.Symbol, s.Image, s.ChangesPercentage });
 
@@ -407,15 +423,15 @@ public class TransactionService : ITransactionService
         {
             var assetId = group.Key;
             var stockName = stocks.ContainsKey(assetId) ? stocks[assetId].Name : "Unknown";
-
-            // Aquí, aseguramos que currentPrice sea un double, usando el operador ?? para asignar 0 si es null
             double currentPrice = stocks.ContainsKey(assetId) ? stocks[assetId].Price ?? 0 : 0;
 
             double totalAssetAmount = 0;
             double totalInvestedAmount = 0;
+            double avgPurchasePrice = 0;
+            double realizedProfit = 0;
 
             // Calcular la cantidad de stock y la inversión
-            foreach (var transaction in group)
+            foreach (var transaction in group.OrderBy(t => t.Date))
             {
                 var assetAmount = transaction.AssetAmount ?? 0;
                 var amount = transaction.Amount;
@@ -424,18 +440,24 @@ public class TransactionService : ITransactionService
                 {
                     totalAssetAmount += assetAmount;
                     totalInvestedAmount += amount;
+                    avgPurchasePrice = totalAssetAmount != 0 ? totalInvestedAmount / totalAssetAmount : 0;
                 }
                 else if (transaction.Concept.StartsWith("-"))
                 {
+                    double costBasis = assetAmount * avgPurchasePrice;
+                    double gain = amount - costBasis;
+                    realizedProfit += gain;
+
                     totalAssetAmount -= assetAmount;
-                    totalInvestedAmount -= amount;
+                    totalInvestedAmount -= costBasis;
                 }
             }
 
-            double balance = totalAssetAmount * currentPrice - totalInvestedAmount;
-            double total = balance + totalInvestedAmount;
+            double unrealizedBalance = totalAssetAmount * currentPrice - totalInvestedAmount;
+            double totalBalanceWithRealized = unrealizedBalance + realizedProfit;
+            double total = totalInvestedAmount + unrealizedBalance;
 
-            totalBalance += balance;
+            totalBalance += totalBalanceWithRealized;
 
             result.Add(new UserAssetsSummaryDto
             {
@@ -443,9 +465,9 @@ public class TransactionService : ITransactionService
                 Name = stockName,
                 TotalInvestedAmount = totalInvestedAmount,
                 TotalAssetAmount = totalAssetAmount,
-                AveragePurchasePrice = totalAssetAmount != 0 ? totalInvestedAmount / totalAssetAmount : 0,
-                Balance = balance,
-                BalancePercentage = totalInvestedAmount != 0 ? balance / totalInvestedAmount * 100 : 0,
+                AveragePurchasePrice = avgPurchasePrice,
+                Balance = totalBalanceWithRealized,
+                BalancePercentage = (totalAssetAmount > 0 && avgPurchasePrice > 0) ? unrealizedBalance / (totalAssetAmount * avgPurchasePrice) * 100 : 0,
                 Total = total,
                 WalletPercentage = 0,
                 TypeOfAsset = "Stock",
@@ -458,8 +480,11 @@ public class TransactionService : ITransactionService
 
         if (string.IsNullOrEmpty(stockId))
         {
-            if (user.LastUpdated.Date != DateTime.UtcNow.AddHours(2).Date)
+            var nowDate = DateTime.UtcNow.AddHours(2).Date;
+
+            if (user.LastUpdated.Date != nowDate && firstStock?.LastUpdated.Date == nowDate)
             {
+                user.LastBalance = user.Wallet + user.Profit;
                 var newProfit = totalBalance - user.Profit;
                 user.Profit = Math.Round(user.Profit + newProfit, 2);
                 user.LastUpdated = DateTime.UtcNow.AddHours(2);
@@ -469,9 +494,9 @@ public class TransactionService : ITransactionService
 
         double walletBase = user.Wallet + user.Profit;
 
-        foreach (var crypto in result)
+        foreach (var stock in result)
         {
-            crypto.WalletPercentage = walletBase != 0 ? crypto.Total / walletBase * 100 : 0;
+            stock.WalletPercentage = walletBase != 0 ? stock.Total / walletBase * 100 : 0;
         }
 
         return result.OrderByDescending(s => s.Total);

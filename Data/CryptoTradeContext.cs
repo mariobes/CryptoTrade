@@ -73,7 +73,7 @@ namespace CryptoTrade.Data
                 entity.Property(e => e.SparklineIn7d)
                     .HasConversion(
                         v => v != null && v.Price != null && v.Price.Any()
-                            ? string.Join(",", v.Price.Select(price => price.ToString("0.0000", CultureInfo.InvariantCulture)))  // Ahora con 4 decimales
+                            ? string.Join(",", v.Price.Select(price => price.ToString("0.000000000000", CultureInfo.InvariantCulture)))
                             : string.Empty,
                         v => 
                             new SparklineIn7d

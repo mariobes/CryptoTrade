@@ -4,11 +4,11 @@ namespace CryptoTrade.Models;
 
 public class UserLoginDto
 {
-    [Required]
-    [EmailAddress(ErrorMessage = "El correo electrónico no es válido")]
-    public string? Email { get; set; }
+    [Required(ErrorMessage = "Debes introducir un correo electrónico o un número de teléfono")]
+    public string? EmailOrPhone { get; set; }
     
     [Required]
-    [MinLength(8, ErrorMessage = "La contraseña debe tener al menos 8 carácteres")]
+    [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?\""{}|<>])[A-Za-z\d!@#$%^&*(),.?\""{}|<>]{8,}$", 
+        ErrorMessage = "La contraseña debe tener al menos 8 caracteres, 1 letra mayúscula, 1 número y 1 carácter especial")]
     public string? Password { get; set; }
 }

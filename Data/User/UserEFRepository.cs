@@ -30,9 +30,9 @@ namespace CryptoTrade.Data
             return user;
         }
 
-        public User GetUserByEmail(string userEmail)
+        public User GetUserByEmailOrPhone(string emailOrPhone)
         {
-            var user = _context.Users.FirstOrDefault(user => user.Email == userEmail);
+            var user = _context.Users.FirstOrDefault(user => user.Email == emailOrPhone || user.Phone == emailOrPhone);
             return user;
         }
 

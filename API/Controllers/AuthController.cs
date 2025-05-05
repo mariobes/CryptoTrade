@@ -22,7 +22,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            var user = _authService.CheckLogin(dto.Email, dto.Password);
+            var user = _authService.CheckLogin(dto.EmailOrPhone, dto.Password);
             if (user != null)
             {
                 var token = _authService.GenerateJwtToken(user);
