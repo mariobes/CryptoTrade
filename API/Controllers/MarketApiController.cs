@@ -504,16 +504,6 @@ public class MarketApiController : ControllerBase
         return (newStocksMarket, newStocks);
     }
 
-    // private double GetDoubleOrDefault(JsonElement element, string propertyName)
-    // {
-    //     if (element.TryGetProperty(propertyName, out var property) && property.ValueKind == JsonValueKind.String)
-    //     {
-    //         double.TryParse(property.GetString(), NumberStyles.Any, CultureInfo.InvariantCulture, out double value);
-    //         return value;
-    //     }
-    //     return 0;
-    // }
-
     private double GetDoubleOrDefault(JsonElement element, string propertyName)
     {
         if (element.TryGetProperty(propertyName, out var property))
@@ -537,15 +527,6 @@ public class MarketApiController : ControllerBase
         }
         return 0;  // Si no encontramos la propiedad o no es válida, devolvemos 0
     }
-
-    // private double GetDoubleOrDefault(JsonElement element, string propertyName)
-    // {
-    //     if (element.TryGetProperty(propertyName, out var property) && property.ValueKind != JsonValueKind.Null)
-    //     {
-    //         return property.GetDouble();
-    //     }
-    //     return 0;
-    // }
 
 
     [HttpGet("crypto-details/{id}")]

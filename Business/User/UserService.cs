@@ -15,10 +15,16 @@ public class UserService : IUserService
 
     public User RegisterUser(UserCreateDto dto)
     {
-        var registeredUser = _repository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase));
-        if (registeredUser != null)
+        var registeredUserEmail = _repository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase));
+        if (registeredUserEmail != null)
         {
             throw new Exception("El correo electrónico ya está registrado.");
+        }
+
+        var registeredUserPhone = _repository.GetAllUsers().FirstOrDefault(u => u.Phone.Equals(dto.Phone, StringComparison.OrdinalIgnoreCase));
+        if (registeredUserPhone != null)
+        {
+            throw new Exception("El teléfono ya está registrado.");
         }
 
         User user = new User
@@ -50,12 +56,12 @@ public class UserService : IUserService
         return user;
     }
 
-    public User GetUserByEmail(string userEmail)
+    public User GetUserByEmailOrPhone(string emailOrPhone)
     {
-        var user = _repository.GetUserByEmail(userEmail);
+        var user = _repository.GetUserByEmailOrPhone(emailOrPhone);
         if (user == null)
         {
-            throw new KeyNotFoundException($"Usuario con email {userEmail} no encontrado");
+            throw new KeyNotFoundException($"Usuario con email o teléfono {emailOrPhone} no encontrado");
         }
         return user;
     }
@@ -64,10 +70,16 @@ public class UserService : IUserService
     {
         var user = GetUserById(userId);
 
-        var registeredUser = _repository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase));
-        if (registeredUser != null)
+        var registeredUserEmail = _repository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase));
+        if (registeredUserEmail != null)
         {
             throw new Exception("El correo electrónico ya está registrado.");
+        }
+
+        var registeredUserPhone = _repository.GetAllUsers().FirstOrDefault(u => u.Phone.Equals(dto.Phone, StringComparison.OrdinalIgnoreCase));
+        if (registeredUserPhone != null)
+        {
+            throw new Exception("El teléfono ya está registrado.");
         }
 
         user.Email = dto.Email;

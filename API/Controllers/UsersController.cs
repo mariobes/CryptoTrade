@@ -56,24 +56,24 @@ public class UsersController : ControllerBase
     }
 
     [Authorize(Roles = Roles.Admin + "," +  Roles.User)]
-    [HttpGet("by-email")]
-    public IActionResult GetUserByEmail(string userEmail)
+    [HttpGet("by-email-phone")]
+    public IActionResult GetUserByEmailOrPhone(string emailOrPhone)
     {
-        if (!_authService.HasAccessToResource(null, userEmail, HttpContext.User)) 
+        if (!_authService.HasAccessToResource(null, emailOrPhone, HttpContext.User)) 
             {return Forbid(); }
 
         try
         {
-            var user = _userService.GetUserByEmail(userEmail);
+            var user = _userService.GetUserByEmailOrPhone(emailOrPhone);
             return Ok(user);
         }
         catch (KeyNotFoundException knfex)
         {
-            return NotFound($"No se ha encontrado el usuario con email: {userEmail}. {knfex.Message}");
+            return NotFound($"No se ha encontrado el usuario con email o teléfono: {emailOrPhone}. {knfex.Message}");
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error al obtener el usuario con email: {userEmail}. {ex.Message}");
+            return BadRequest($"Error al obtener el usuario con email o teléfono: {emailOrPhone}. {ex.Message}");
         }
     }
 

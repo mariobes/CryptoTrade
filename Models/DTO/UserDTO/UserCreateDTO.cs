@@ -21,11 +21,11 @@ public class UserCreateDto
     public string? Password { get; set; }
 
     [Required]
-    [Phone(ErrorMessage = "El número de teléfono no es válido")]
+    [RegularExpression(@"^\+?[0-9\s\-().]{7,20}$", ErrorMessage = "El número de teléfono no es válido")]
     public string? Phone { get; set; }
 
     [Required]
-    [RegularExpression(@"^\d{8}[A-Za-z]$", ErrorMessage = "El DNI no es válido")]
+    [RegularExpression(@"^[\w\s\-\/\.]{4,30}$", ErrorMessage = "El documento de identidad no es válido")]
     public string? DNI { get; set; }
 
     [Required]

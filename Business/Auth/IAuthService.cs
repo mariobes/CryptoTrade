@@ -5,8 +5,8 @@ namespace CryptoTrade.Business
 {
     public interface IAuthService
     {
-        User CheckLogin(string email, string password);
+        User CheckLogin(string emailOrPhone, string password);
         public string GenerateJwtToken(User user);
-        public bool HasAccessToResource(int? requestedUserID, string requestedUserEmail, ClaimsPrincipal user);
+        public bool HasAccessToResource(int? requestedUserID, string requestedUserEmailOrPhone, ClaimsPrincipal user);
     }
 }

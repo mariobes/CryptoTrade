@@ -20,44 +20,44 @@ public class StockApiController : ControllerBase
         _configuration = configuration;
     }
 
-    [HttpGet("coins")]
-    public async Task<IActionResult> Coins()
-    {
-        var client = _httpClientFactory.CreateClient();
-        var apiKey = _configuration["FMPApi:ApiKey"];
+    // [HttpGet("coins")]
+    // public async Task<IActionResult> Coins()
+    // {
+    //     var client = _httpClientFactory.CreateClient();
+    //     var apiKey = _configuration["FMPApi:ApiKey"];
 
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/stock-screener?limit=100&apikey={apiKey}"),
-            Headers =
-            {
-                { "accept", "application/json" }
-            },
-        };
+    //     var request = new HttpRequestMessage
+    //     {
+    //         Method = HttpMethod.Get,
+    //         RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/stock-screener?limit=100&apikey={apiKey}"),
+    //         Headers =
+    //         {
+    //             { "accept", "application/json" }
+    //         },
+    //     };
 
-        try
-        {
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
+    //     try
+    //     {
+    //         using (var response = await client.SendAsync(request))
+    //         {
+    //             response.EnsureSuccessStatusCode();
+    //             var body = await response.Content.ReadAsStringAsync();
 
-                var stocks = JsonSerializer.Deserialize<List<StockApiDto>>(body);
+    //             var stocks = JsonSerializer.Deserialize<List<StockApiDto>>(body);
 
-                var validStocks = stocks?
-                    .Where(s => s.Price != null && s.IsEtf == false && s.IsFund == false && s.IsActivelyTrading == true)
-                    .OrderByDescending(s => s.MarketCap)
-                    .ToList();
+    //             var validStocks = stocks?
+    //                 .Where(s => s.Price != null && s.IsEtf == false && s.IsFund == false && s.IsActivelyTrading == true)
+    //                 .OrderByDescending(s => s.MarketCap)
+    //                 .ToList();
 
-                return Ok(validStocks);
-            }
-        }
-        catch (Exception ex)
-        {
-            return BadRequest($"Error al obtener las acciones de Financial Modeling Prep API. {ex.Message}");
-        }
-    }
+    //             return Ok(validStocks);
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return BadRequest($"Error al obtener las acciones de Financial Modeling Prep API. {ex.Message}");
+    //     }
+    // }
 
     [HttpGet("stocks")]
     public async Task<IActionResult> GetStocksApi()
@@ -178,129 +178,5 @@ public class StockApiController : ControllerBase
             return BadRequest($"Error al obtener las gráficas de la acción {symbol}. {ex.Message}");
         }
     }
-
-    // [HttpGet("stocks-trending")]
-    // public async Task<IActionResult> GetStocksTrending()
-    // {
-    //     var client = _httpClientFactory.CreateClient();
-    //     var apiKey = _configuration["FMPApi:ApiKey"];
-
-    //     var request = new HttpRequestMessage
-    //     {
-    //         Method = HttpMethod.Get,
-    //         RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/actives?apikey={apiKey}"),
-    //         Headers =
-    //         {
-    //             { "accept", "application/json" }
-    //         },
-    //     };
-
-    //     try
-    //     {
-    //         using (var response = await client.SendAsync(request))
-    //         {
-    //             response.EnsureSuccessStatusCode();
-    //             var body = await response.Content.ReadAsStringAsync();
-    //             return Ok(body);
-    //         }
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         return BadRequest($"Error al obtener las acciones en tendencia. {ex.Message}");
-    //     }
-    // }
-
-    // [HttpGet("stocks-gainers")]
-    // public async Task<IActionResult> GetStocksGainers()
-    // {
-    //     var client = _httpClientFactory.CreateClient();
-    //     var apiKey = _configuration["FMPApi:ApiKey"];
-
-    //     var request = new HttpRequestMessage
-    //     {
-    //         Method = HttpMethod.Get,
-    //         RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/stock/gainers?apikey={apiKey}"),
-    //         Headers =
-    //         {
-    //             { "accept", "application/json" }
-    //         },
-    //     };
-
-    //     try
-    //     {
-    //         using (var response = await client.SendAsync(request))
-    //         {
-    //             response.EnsureSuccessStatusCode();
-    //             var body = await response.Content.ReadAsStringAsync();
-    //             return Ok(body);
-    //         }
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         return BadRequest($"Error al obtener las acciones más ganadoras. {ex.Message}");
-    //     }
-    // }
-
-    // [HttpGet("stocks-losers")]
-    // public async Task<IActionResult> GetStocksLosers()
-    // {
-    //     var client = _httpClientFactory.CreateClient();
-    //     var apiKey = _configuration["FMPApi:ApiKey"];
-
-    //     var request = new HttpRequestMessage
-    //     {
-    //         Method = HttpMethod.Get,
-    //         RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/stock/losers?apikey={apiKey}"),
-    //         Headers =
-    //         {
-    //             { "accept", "application/json" }
-    //         },
-    //     };
-
-    //     try
-    //     {
-    //         using (var response = await client.SendAsync(request))
-    //         {
-    //             response.EnsureSuccessStatusCode();
-    //             var body = await response.Content.ReadAsStringAsync();
-    //             return Ok(body);
-    //         }
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         return BadRequest($"Error al obtener las acciones más perdedoras. {ex.Message}");
-    //     }
-    // }
-
-    // [HttpGet("stocks-most-actives")]
-    // public async Task<IActionResult> GetStocksMostActives()
-    // {
-    //     var client = _httpClientFactory.CreateClient();
-    //     var apiKey = _configuration["FMPApi:ApiKey"];
-
-    //     var request = new HttpRequestMessage
-    //     {
-    //         Method = HttpMethod.Get,
-    //         RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/actives?apikey={apiKey}"),
-    //         Headers =
-    //         {
-    //             { "accept", "application/json" }
-    //         },
-    //     };
-
-    //     try
-    //     {
-    //         using (var response = await client.SendAsync(request))
-    //         {
-    //             response.EnsureSuccessStatusCode();
-    //             var body = await response.Content.ReadAsStringAsync();
-    //             return Ok(body);
-    //         }
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         return BadRequest($"Error al obtener las acciones más activas. {ex.Message}");
-    //     }
-    // }
 
 }

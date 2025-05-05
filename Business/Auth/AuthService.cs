@@ -20,17 +20,25 @@ namespace CryptoTrade.Business
             _configuration = configuration;
         }
 
-        public User CheckLogin(string email, string pasword)
+        public User CheckLogin(string emailOrPhone, string password)
         {
             User user = null;
+
             foreach (var userLogin in _repository.GetAllUsers())
             {
-                if (userLogin.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
-                    PasswordHasher.Verify(pasword, userLogin.Password))
+                if (userLogin.Email.Equals(emailOrPhone, StringComparison.OrdinalIgnoreCase) &&
+                    PasswordHasher.Verify(password, userLogin.Password))
+                {
+                    user = userLogin;
+                }
+
+                if (userLogin.Phone.Equals(emailOrPhone) &&
+                    PasswordHasher.Verify(password, userLogin.Password))
                 {
                     user = userLogin;
                 }
             }
+
             return user;
         }
 
@@ -40,22 +48,29 @@ namespace CryptoTrade.Business
             var secretKey = _configuration["JWT:SecretKey"]; 
             var key = Encoding.ASCII.GetBytes(secretKey); 
 
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, user.Role)
+            };
+
+            if (!string.IsNullOrEmpty(user.Email))
+                claims.Add(new Claim(ClaimTypes.Email, user.Email));
+
+            if (!string.IsNullOrEmpty(user.Phone))
+                claims.Add(new Claim(ClaimTypes.MobilePhone, user.Phone));
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-            Subject = new ClaimsIdentity(new Claim[]
-            {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Role, user.Role),
-                    new Claim(ClaimTypes.Email, user.Email)
-            }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddDays(30),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature) 
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
 
-        public bool HasAccessToResource(int? requestedUserID, string requestedUserEmail, ClaimsPrincipal user) 
+        public bool HasAccessToResource(int? requestedUserID, string requestedUserEmailOrPhone, ClaimsPrincipal user) 
         {
             if (requestedUserID.HasValue)
             {
@@ -72,20 +87,18 @@ namespace CryptoTrade.Business
                 var hasAccess = isOwnResource || isAdmin;
                 return hasAccess;
             }
-            else if (!string.IsNullOrEmpty(requestedUserEmail))
+            else if (!string.IsNullOrEmpty(requestedUserEmailOrPhone))
             {
                 var emailClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
-                if (emailClaim is null) 
-                { 
-                    return false; 
-                }
-                var isOwnResource = emailClaim.Value.Equals(requestedUserEmail, StringComparison.OrdinalIgnoreCase);
+                var phoneClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.MobilePhone);
+
+                var isOwnResource = (emailClaim?.Value.Equals(requestedUserEmailOrPhone, StringComparison.OrdinalIgnoreCase) ?? false)
+                    || (phoneClaim?.Value.Equals(requestedUserEmailOrPhone, StringComparison.OrdinalIgnoreCase) ?? false);
 
                 var roleClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
                 var isAdmin = roleClaim != null && roleClaim.Value == Roles.Admin;
 
-                var hasAccess = isOwnResource || isAdmin;
-                return hasAccess;
+                return isOwnResource || isAdmin;
             }
             return false;
         }
