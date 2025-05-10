@@ -11,6 +11,5 @@ public interface ITransactionService
     public void SellCrypto(BuySellAssetDto dto);
     public void BuyStock(BuySellAssetDto dto);
     public void SellStock(BuySellAssetDto dto);
-    public IEnumerable<UserAssetsSummaryDto> MyCryptos(int userId, string? cryptoId = null);
-    public IEnumerable<UserAssetsSummaryDto> MyStocks(int userId, string? stockId = null);
+    public IEnumerable<UserAssetsSummaryDto> MyAssets(int userId, string? typeAsset = null, string? assetId = null);
 }

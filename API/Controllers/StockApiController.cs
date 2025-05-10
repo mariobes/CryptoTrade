@@ -170,7 +170,32 @@ public class StockApiController : ControllerBase
             {
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
-                return Ok(body);
+
+                var data = JsonSerializer.Deserialize<List<StockChartDto>>(body, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                var prices = new List<List<object>>();
+                var volumes = new List<List<object>>();
+
+                foreach (var item in data)
+                {
+                    if (DateTime.TryParse(item.Date, out var dateTime))
+                    {
+                        var timestamp = new DateTimeOffset(dateTime).ToUnixTimeMilliseconds();
+                        prices.Add(new List<object> { timestamp, item.Price });
+                        volumes.Add(new List<object> { timestamp, item.Volume });
+                    }
+                }
+
+                var result = new
+                {
+                    prices,
+                    volumes
+                };
+
+                return Ok(result);
             }
         }
         catch (Exception ex)

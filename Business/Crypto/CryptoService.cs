@@ -16,7 +16,7 @@ public class CryptoService : ICryptoService
     {
         foreach (var crypto in cryptos)
         {
-            var registeredCrypto = _repository.GetAllCryptos().FirstOrDefault(c => c.Name.Equals(crypto.Name, StringComparison.OrdinalIgnoreCase));
+            var registeredCrypto = _repository.GetCrypto(crypto.Id);
             if (registeredCrypto != null)
             {
                 registeredCrypto.Price = crypto.Price;
