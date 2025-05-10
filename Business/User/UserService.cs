@@ -70,21 +70,35 @@ public class UserService : IUserService
     {
         var user = GetUserById(userId);
 
-        var registeredUserEmail = _repository.GetAllUsers().FirstOrDefault(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase));
-        if (registeredUserEmail != null)
+        if (!string.IsNullOrWhiteSpace(dto.Email) && !dto.Email.Equals(user.Email, StringComparison.OrdinalIgnoreCase))
         {
-            throw new Exception("El correo electrónico ya está registrado.");
+            var registeredUserEmail = _repository.GetAllUsers()
+                .FirstOrDefault(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase));
+            if (registeredUserEmail != null)
+            {
+                throw new Exception("El correo electrónico ya está registrado.");
+            }
+
+            user.Email = dto.Email;
         }
 
-        var registeredUserPhone = _repository.GetAllUsers().FirstOrDefault(u => u.Phone.Equals(dto.Phone, StringComparison.OrdinalIgnoreCase));
-        if (registeredUserPhone != null)
+        if (!string.IsNullOrWhiteSpace(dto.Phone) && !dto.Phone.Equals(user.Phone, StringComparison.OrdinalIgnoreCase))
         {
-            throw new Exception("El teléfono ya está registrado.");
+            var registeredUserPhone = _repository.GetAllUsers()
+                .FirstOrDefault(u => u.Phone.Equals(dto.Phone, StringComparison.OrdinalIgnoreCase));
+            if (registeredUserPhone != null)
+            {
+                throw new Exception("El teléfono ya está registrado.");
+            }
+
+            user.Phone = dto.Phone;
         }
 
-        user.Email = dto.Email;
-        user.Password = dto.Password;
-        user.Phone = dto.Phone;
+        if (!string.IsNullOrWhiteSpace(dto.Password))
+        {
+            user.Password = PasswordHasher.Hash(dto.Password);
+        }
+
         _repository.UpdateUser(user);
     }
 

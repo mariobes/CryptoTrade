@@ -156,6 +156,7 @@ public class TransactionService : ITransactionService
             AssetAmount = assetAmount,
             TypeOfAsset = "Crypto"
         };
+        
         user.Cash += amount;
         user.Wallet -= amount;
         _userRepository.UpdateUser(user);
@@ -199,6 +200,7 @@ public class TransactionService : ITransactionService
             AssetAmount = assetAmount,
             TypeOfAsset = "Stock"
         };
+
         user.Cash -= amount;
         user.Wallet += amount;
         _userRepository.UpdateUser(user);
@@ -243,13 +245,14 @@ public class TransactionService : ITransactionService
             AssetAmount = assetAmount,
             TypeOfAsset = "Stock"
         };
+
         user.Cash += amount;
         user.Wallet -= amount;
         _userRepository.UpdateUser(user);
         _transactionRepository.AddTransaction(transaction);
     }
 
-    public IEnumerable<UserAssetsSummaryDto> MyCryptos(int userId, string? cryptoId = null)
+    public IEnumerable<UserAssetsSummaryDto> MyAssets(int userId, string? assetType = null, string? assetId = null)
     {
         var user = _userRepository.GetUser(userId);
         if (user == null)
@@ -257,180 +260,53 @@ public class TransactionService : ITransactionService
             throw new KeyNotFoundException($"Usuario con ID {userId} no encontrado");
         }
 
-        var userTransactions = _transactionRepository.GetAllTransactions(userId)
-                                                     .Where(t => t.TypeOfAsset == "Crypto" && t.AssetId != null);
+        var transactions = _transactionRepository.GetAllTransactions(userId)
+            .Where(t => t.AssetId != null && (assetType == null || t.TypeOfAsset == assetType));
 
-        if (!string.IsNullOrEmpty(cryptoId))
+        if (!string.IsNullOrEmpty(assetId))
         {
-            userTransactions = userTransactions.Where(t => t.AssetId == cryptoId);
+            transactions = transactions.Where(t => t.AssetId == assetId);
         }
 
-        var firstCrypto = _cryptoRepository.GetAllCryptos().OrderByDescending(c => c.MarketCap).FirstOrDefault();
-                
-        var cryptos = _cryptoRepository.GetAllCryptos().ToDictionary(c => c.Id, c => new { c.Name, c.Price, c.Symbol, c.Image, c.PriceChangePercentage24h });
+        var cryptoDict = _cryptoRepository.GetAllCryptos().ToDictionary(c => c.Id, c => new
+        {
+            c.Name,
+            Price = c.Price ?? 0,
+            c.Symbol,
+            c.Image,
+            ChangePercentage24h = c.PriceChangePercentage24h ?? 0,
+            c.LastUpdated
+        });
 
-        var grouped = userTransactions.GroupBy(t => t.AssetId);
+        var stockDict = _stockRepository.GetAllStocks().ToDictionary(s => s.Id, s => new
+        {
+            s.Name,
+            Price = s.Price ?? 0,
+            s.Symbol,
+            s.Image,
+            ChangePercentage24h = s.ChangesPercentage ?? 0,
+            s.LastUpdated
+        });
 
+        var grouped = transactions.GroupBy(t => t.AssetId);
         var result = new List<UserAssetsSummaryDto>();
-        double totalPortfolioInvested = 0;
         double totalBalance = 0;
 
         foreach (var group in grouped)
         {
-            foreach (var transaction in group)
-            {
-                if (transaction.Concept.StartsWith("+"))
-                {
-                    totalPortfolioInvested += transaction.Amount;
-                }
-                else if (transaction.Concept.StartsWith("-"))
-                {
-                    totalPortfolioInvested -= transaction.Amount;
-                }
-            }
-        }
+            var assetIdGroup = group.Key!;
+            var firstTransaction = group.First();
+            var isCrypto = firstTransaction.TypeOfAsset == "Crypto";
+            var assetDict = isCrypto ? cryptoDict : stockDict;
 
-        foreach (var group in grouped)
-        {
-            var assetId = group.Key;
-            var cryptoName = cryptos.ContainsKey(assetId) ? cryptos[assetId].Name : "Unknown";
-            double currentPrice = cryptos.ContainsKey(assetId) ? cryptos[assetId].Price ?? 0 : 0;
+            if (!assetDict.ContainsKey(assetIdGroup)) continue;
 
+            var asset = assetDict[assetIdGroup];
             double totalAssetAmount = 0;
             double totalInvestedAmount = 0;
             double avgPurchasePrice = 0;
             double realizedProfit = 0;
 
-            foreach (var transaction in group.OrderBy(t => t.Date))
-            {
-                var assetAmount = transaction.AssetAmount ?? 0;
-                var amount = transaction.Amount;
-
-                if (transaction.Concept.StartsWith("+"))
-                {
-                    totalAssetAmount += assetAmount;
-                    totalInvestedAmount += amount;
-                    avgPurchasePrice = totalAssetAmount != 0 ? totalInvestedAmount / totalAssetAmount : 0;
-                }
-                else if (transaction.Concept.StartsWith("-"))
-                {
-                    // Calculamos cuánto costó originalmente ese assetAmount
-                    double costBasis = assetAmount * avgPurchasePrice;
-                    // Calculamos ganancia (o pérdida) realizada
-                    double gain = amount - costBasis;
-                    realizedProfit += gain;
-
-                    totalAssetAmount -= assetAmount;
-                    totalInvestedAmount -= costBasis;
-                }
-            }
-
-            double unrealizedBalance = totalAssetAmount * currentPrice - totalInvestedAmount;
-            double totalBalanceWithRealized = unrealizedBalance + realizedProfit;
-            double total = totalInvestedAmount + unrealizedBalance;
-
-            totalBalance += totalBalanceWithRealized;
-
-            result.Add(new UserAssetsSummaryDto
-            {
-                AssetId = assetId,
-                Name = cryptoName,
-                TotalInvestedAmount = totalInvestedAmount,
-                TotalAssetAmount = totalAssetAmount,
-                AveragePurchasePrice = avgPurchasePrice,
-                Balance = totalBalanceWithRealized,
-                BalancePercentage = (totalAssetAmount > 0 && avgPurchasePrice > 0) ? unrealizedBalance / (totalAssetAmount * avgPurchasePrice) * 100 : 0,
-                Total = total,
-                WalletPercentage = 0,
-                TypeOfAsset = "Crypto",
-                Symbol = cryptos.ContainsKey(assetId) ? cryptos[assetId].Symbol : string.Empty,
-                Image = cryptos.ContainsKey(assetId) ? cryptos[assetId].Image : string.Empty,
-                Price = currentPrice,
-                ChangesPercentage24h = cryptos.ContainsKey(assetId) ? cryptos[assetId].PriceChangePercentage24h : 0,
-            });
-        }
-
-        if (string.IsNullOrEmpty(cryptoId))
-        {
-            var nowDate = DateTime.UtcNow.AddHours(2).Date;
-
-            if (user.LastUpdated.Date != nowDate && firstCrypto?.LastUpdated.Date == nowDate)
-            {
-                user.LastBalance = user.Wallet + user.Profit;
-                var newProfit = totalBalance - user.Profit;
-                user.Profit = Math.Round(user.Profit + newProfit, 2);
-                user.LastUpdated = DateTime.UtcNow.AddHours(2);
-                _userRepository.UpdateUser(user);
-            }
-        }
-
-        double walletBase = user.Wallet + user.Profit;
-
-        foreach (var crypto in result)
-        {
-            crypto.WalletPercentage = walletBase != 0 ? crypto.Total / walletBase * 100 : 0;
-        }
-
-        return result.OrderByDescending(c => c.Total);
-    }
-
-    public IEnumerable<UserAssetsSummaryDto> MyStocks(int userId, string? stockId = null)
-    {
-        var user = _userRepository.GetUser(userId);
-        if (user == null)
-        {
-            throw new KeyNotFoundException($"Usuario con ID {userId} no encontrado");
-        }
-
-        var userTransactions = _transactionRepository.GetAllTransactions(userId)
-                                                    .Where(t => t.TypeOfAsset == "Stock" && t.AssetId != null);
-
-        if (!string.IsNullOrEmpty(stockId))
-        {
-            userTransactions = userTransactions.Where(t => t.AssetId == stockId);
-        }
-
-        var firstStock = _stockRepository.GetAllStocks().OrderByDescending(s => s.MarketCap).FirstOrDefault();
-
-        // Obtener todos los stocks y sus precios
-        var stocks = _stockRepository.GetAllStocks().ToDictionary(s => s.Id, s => new { s.Name, s.Price, s.Symbol, s.Image, s.ChangesPercentage });
-
-        // Agrupar las transacciones por AssetId
-        var grouped = userTransactions.GroupBy(t => t.AssetId);
-
-        var result = new List<UserAssetsSummaryDto>();
-        double totalPortfolioInvested = 0;
-        double totalBalance = 0;
-
-        // Primero calculamos el total invertido en la cartera
-        foreach (var group in grouped)
-        {
-            foreach (var transaction in group)
-            {
-                if (transaction.Concept.StartsWith("+"))
-                {
-                    totalPortfolioInvested += transaction.Amount;
-                }
-                else if (transaction.Concept.StartsWith("-"))
-                {
-                    totalPortfolioInvested -= transaction.Amount;
-                }
-            }
-        }
-
-        // Luego recorremos los stocks y sus transacciones
-        foreach (var group in grouped)
-        {
-            var assetId = group.Key;
-            var stockName = stocks.ContainsKey(assetId) ? stocks[assetId].Name : "Unknown";
-            double currentPrice = stocks.ContainsKey(assetId) ? stocks[assetId].Price ?? 0 : 0;
-
-            double totalAssetAmount = 0;
-            double totalInvestedAmount = 0;
-            double avgPurchasePrice = 0;
-            double realizedProfit = 0;
-
-            // Calcular la cantidad de stock y la inversión
             foreach (var transaction in group.OrderBy(t => t.Date))
             {
                 var assetAmount = transaction.AssetAmount ?? 0;
@@ -453,7 +329,7 @@ public class TransactionService : ITransactionService
                 }
             }
 
-            double unrealizedBalance = totalAssetAmount * currentPrice - totalInvestedAmount;
+            double unrealizedBalance = totalAssetAmount * asset.Price - totalInvestedAmount;
             double totalBalanceWithRealized = unrealizedBalance + realizedProfit;
             double total = totalInvestedAmount + unrealizedBalance;
 
@@ -461,8 +337,8 @@ public class TransactionService : ITransactionService
 
             result.Add(new UserAssetsSummaryDto
             {
-                AssetId = assetId,
-                Name = stockName,
+                AssetId = assetIdGroup,
+                Name = asset.Name,
                 TotalInvestedAmount = totalInvestedAmount,
                 TotalAssetAmount = totalAssetAmount,
                 AveragePurchasePrice = avgPurchasePrice,
@@ -470,19 +346,21 @@ public class TransactionService : ITransactionService
                 BalancePercentage = (totalAssetAmount > 0 && avgPurchasePrice > 0) ? unrealizedBalance / (totalAssetAmount * avgPurchasePrice) * 100 : 0,
                 Total = total,
                 WalletPercentage = 0,
-                TypeOfAsset = "Stock",
-                Symbol = stocks.ContainsKey(assetId) ? stocks[assetId].Symbol : string.Empty,
-                Image = stocks.ContainsKey(assetId) ? stocks[assetId].Image : string.Empty,
-                Price = currentPrice,
-                ChangesPercentage24h = stocks.ContainsKey(assetId) ? stocks[assetId].ChangesPercentage : 0,
+                TypeOfAsset = isCrypto ? "Crypto" : "Stock",
+                Symbol = asset.Symbol,
+                Image = asset.Image,
+                Price = asset.Price,
+                ChangesPercentage24h = asset.ChangePercentage24h
             });
         }
 
-        if (string.IsNullOrEmpty(stockId))
+        if (assetType == null && string.IsNullOrEmpty(assetId))
         {
             var nowDate = DateTime.UtcNow.AddHours(2).Date;
+            var anyLastUpdatedToday = cryptoDict.Values.Any(c => c.LastUpdated.Date == nowDate)
+                                || stockDict.Values.Any(s => s.LastUpdated.Date == nowDate);
 
-            if (user.LastUpdated.Date != nowDate && firstStock?.LastUpdated.Date == nowDate)
+            if (user.LastUpdated.Date != nowDate && anyLastUpdatedToday)
             {
                 user.LastBalance = user.Wallet + user.Profit;
                 var newProfit = totalBalance - user.Profit;
@@ -493,13 +371,12 @@ public class TransactionService : ITransactionService
         }
 
         double walletBase = user.Wallet + user.Profit;
-
-        foreach (var stock in result)
+        foreach (var asset in result)
         {
-            stock.WalletPercentage = walletBase != 0 ? stock.Total / walletBase * 100 : 0;
+            asset.WalletPercentage = walletBase != 0 ? asset.Total / walletBase * 100 : 0;
         }
 
-        return result.OrderByDescending(s => s.Total);
+        return result.OrderByDescending(a => a.Total);
     }
 
     public double GetCryptoBalance(int userId, string cryptoId)

@@ -173,15 +173,15 @@ public class TransactionsController : ControllerBase
     }
 
     [Authorize(Roles = Roles.Admin + "," + Roles.User)]
-    [HttpGet("{userId}/cryptos")]
-    public ActionResult<IEnumerable<UserAssetsSummaryDto>> GetCryptos(int userId, [FromQuery] string? cryptoId = null)
+    [HttpGet("{userId}/assets")]
+    public ActionResult<IEnumerable<UserAssetsSummaryDto>> GetAssets(int userId, [FromQuery] string? typeAsset = null, string? assetId = null)
     {
         if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
             {return Forbid(); }
 
         try 
         {
-            var userCryptos = _transactionService.MyCryptos(userId, cryptoId);
+            var userCryptos = _transactionService.MyAssets(userId, typeAsset, assetId);
             return Ok(userCryptos);
         }     
         catch (KeyNotFoundException knfex)
@@ -190,29 +190,7 @@ public class TransactionsController : ControllerBase
         }  
         catch (Exception ex)
         {
-            return BadRequest($"Error al obtener las criptomonedas del usuario {userId}. {ex.Message}");
-        }
-    }
-
-    [Authorize(Roles = Roles.Admin + "," + Roles.User)]
-    [HttpGet("{userId}/stocks")]
-    public ActionResult<IEnumerable<Transaction>> GetStocks(int userId, [FromQuery] string? stockId = null)
-    {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
-            {return Forbid(); }
-
-        try 
-        {
-            var userStocks = _transactionService.MyStocks(userId, stockId);
-            return Ok(userStocks);
-        }     
-        catch (KeyNotFoundException knfex)
-        {
-            return NotFound($"No se ha encontrado el usuario con ID: {userId}. {knfex.Message}");
-        }  
-        catch (Exception ex)
-        {
-            return BadRequest($"Error al obtener las acciones del usuario {userId}. {ex.Message}");
+            return BadRequest($"Error al obtener los activos del usuario {userId}. {ex.Message}");
         }
     }
 
