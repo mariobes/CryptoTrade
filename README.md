@@ -1,10 +1,8 @@
 <h1>CryptoTrade API RESTful</h1>
-<hr>
 <b>Proyecto de final de curso.</b><br>
 CryptoTrade es una API RESTful construida con C# y .NET 6, diseñada para gestionar transacciones de activos como criptomonedas y acciones. Esta API permite una comunicación eficiente entre el cliente y el servidor, procesando solicitudes y garantizando que la lógica de negocio sea robusta y escalable.
 <hr style="height: 4px;">
 <h2>Stack Tecnológico</h2>
-<hr>
 <ul>
   <li><b>Backend: </b>Construido con C# y .NET 6, siguiendo una arquitectura por capas para garantizar la separación de responsabilidades y facilitar el mantenimiento a largo plazo.</li>
   <li><b>Frontend: </b>La interfaz de usuario es una aplicación web desarrollada con Vue.js. Para más detalles, visita el repositorio: <a href="https://github.com/mariobes/vue-CryptoTrade">CryptoTrade-Vue</a></li>
@@ -14,7 +12,6 @@ CryptoTrade es una API RESTful construida con C# y .NET 6, diseñada para gestio
 </ul>
 <hr style="height: 4px;">
 <h2>Configuración del proyecto</h2>
-<hr>
 <h3>Clonar el repositorio y entrar en él</h3>
 
 ```sh
@@ -25,7 +22,6 @@ cd CryptoTrade
 <h3>Configurar la base de datos y asegurarte de que la conexión configurada en el archivo appsettings.json sea la correcta.</h3>
 <hr style="height: 4px;">
 <h2>Cómo arrancar el proyecto</h2>
-<hr>
 <h3>Opción recomendada: Iniciar con Docker</h3>
 <h4>Instrucción para levantar el Docker Compose</h4>
 

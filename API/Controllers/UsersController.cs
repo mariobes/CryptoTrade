@@ -122,5 +122,4 @@ public class UsersController : ControllerBase
             return BadRequest($"Error al eliminar el usuario con ID: {userId}. {ex.Message}");
         }
     }
-
 }

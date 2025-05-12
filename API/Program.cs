@@ -34,11 +34,9 @@ builder.Services.AddScoped<IMarketRepository, MarketEFRepository>();
 builder.Services.AddScoped<IWatchlistService, WatchlistService>();
 builder.Services.AddScoped<IWatchlistRepository, WatchlistEFRepository>();
 
-
 var connectionString = builder.Configuration.GetConnectionString("ServerDB_dockernet");
 
-builder.Services.AddDbContext<CryptoTradeContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<CryptoTradeContext>(options => options.UseSqlServer(connectionString));
 
 // Configurar CORS para permitir todas las solicitudes
 builder.Services.AddCors(options =>

@@ -193,5 +193,4 @@ public class TransactionsController : ControllerBase
             return BadRequest($"Error al obtener los activos del usuario {userId}. {ex.Message}");
         }
     }
-
 }

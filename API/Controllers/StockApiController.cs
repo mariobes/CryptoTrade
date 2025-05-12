@@ -203,5 +203,4 @@ public class StockApiController : ControllerBase
             return BadRequest($"Error al obtener las gráficas de la acción {symbol}. {ex.Message}");
         }
     }
-
 }

@@ -33,5 +33,4 @@ public class StockTrending
         ChangePercentage = changePercentage;
         LastUpdated = lastUpdated;
     }
-
 }

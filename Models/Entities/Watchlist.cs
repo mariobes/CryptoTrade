@@ -25,5 +25,4 @@ public class Watchlist
         AssetId = assetId;
         TypeAsset = typeAsset;
     }
-
 }

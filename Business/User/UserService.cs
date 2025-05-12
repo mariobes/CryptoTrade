@@ -107,5 +107,4 @@ public class UserService : IUserService
         GetUserById(userId);
         _repository.DeleteUser(userId);
     }
-    
 }

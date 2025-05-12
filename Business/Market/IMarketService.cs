@@ -22,5 +22,4 @@ public interface IMarketService
 
     public Task UpdateStockMostActiveDatabase(List<AssetMarketDto> stocksMostActive);
     public IEnumerable<StockMostActive> GetStocksMostActives();
-
 }

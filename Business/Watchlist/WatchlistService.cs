@@ -1,43 +1,42 @@
 ﻿using CryptoTrade.Data;
 using CryptoTrade.Models;
 
-namespace CryptoTrade.Business
+namespace CryptoTrade.Business;
+
+public class WatchlistService : IWatchlistService
 {
-    public class WatchlistService : IWatchlistService
+    private readonly IWatchlistRepository _repository;
+
+    public WatchlistService(IWatchlistRepository repository)
     {
-        private readonly IWatchlistRepository _repository;
+        _repository = repository;
+    }
 
-        public WatchlistService(IWatchlistRepository repository)
+    public Watchlist RegisterWatchlist(WatchlistCreateDto dto)
+    {
+        Watchlist watchlist = new Watchlist
         {
-            _repository = repository;
-        }
+            UserId = dto.UserId,
+            AssetId = dto.AssetId,
+            TypeAsset = dto.TypeAsset
+        };
+        _repository.AddWatchlist(watchlist);
+        return watchlist;
+    }
 
-        public Watchlist RegisterWatchlist(WatchlistCreateDto dto)
+    public void DeleteWatchlist(WatchlistCreateDto dto)
+    {
+        Watchlist watchlist = new Watchlist
         {
-            Watchlist watchlist = new Watchlist
-            {
-                UserId = dto.UserId,
-                AssetId = dto.AssetId,
-                TypeAsset = dto.TypeAsset
-            };
-            _repository.AddWatchlist(watchlist);
-            return watchlist;
-        }
+            UserId = dto.UserId,
+            AssetId = dto.AssetId,
+            TypeAsset = dto.TypeAsset
+        };
+        _repository.DeleteWatchlist(watchlist);
+    }
 
-        public void DeleteWatchlist(WatchlistCreateDto dto)
-        {
-            Watchlist watchlist = new Watchlist
-            {
-                UserId = dto.UserId,
-                AssetId = dto.AssetId,
-                TypeAsset = dto.TypeAsset
-            };
-            _repository.DeleteWatchlist(watchlist);
-        }
-
-        public IEnumerable<Watchlist> GetAllWatchlists(int userId, string typeAsset)
-        {
-            return _repository.GetAllWatchlists(userId, typeAsset);
-        }
+    public IEnumerable<Watchlist> GetAllWatchlists(int userId, string typeAsset)
+    {
+        return _repository.GetAllWatchlists(userId, typeAsset);
     }
 }

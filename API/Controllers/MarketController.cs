@@ -99,6 +99,4 @@ public class MarketController : ControllerBase
             return BadRequest($"Error al obtener las acciones más activas. {ex.Message}");
         }
     }
-
-
 }

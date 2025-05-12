@@ -62,5 +62,4 @@ public class AuthController : ControllerBase
             return BadRequest($"Error al registrar el usuario. {ex.Message}");
         }
     }
-
 }

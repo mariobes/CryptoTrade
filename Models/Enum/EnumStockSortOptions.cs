@@ -28,6 +28,4 @@ public enum EnumStockSortOptions
 
     [Display(Name = "Average Volume")]
     averageVolume = 8
-
-
 }

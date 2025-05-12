@@ -198,5 +198,4 @@ public class StockService : IStockService
         }
         return stocks;
     }
-    
 }

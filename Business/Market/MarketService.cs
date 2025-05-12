@@ -165,5 +165,4 @@ public class MarketService : IMarketService
     {
         return _repository.GetStocksMostActives();
     }
-
 }

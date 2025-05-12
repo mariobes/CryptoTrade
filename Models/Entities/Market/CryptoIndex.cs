@@ -36,5 +36,4 @@ public class CryptoIndex
         Sentiment = sentiment;
         LastUpdated = lastUpdated;
     }
-
 }

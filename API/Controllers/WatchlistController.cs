@@ -71,5 +71,4 @@ public class WatchlistController : ControllerBase
             return BadRequest($"Error al eliminar la lista de seguimiento con ID: {userId}. {ex.Message}");
         }
     }
-
 }

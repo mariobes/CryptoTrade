@@ -428,5 +428,4 @@ public class TransactionService : ITransactionService
         }
         return assetBalance;
     }
-    
 }

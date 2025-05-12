@@ -33,5 +33,4 @@ public class StockGainer
         ChangePercentage = changePercentage;
         LastUpdated = lastUpdated;
     }
-
 }

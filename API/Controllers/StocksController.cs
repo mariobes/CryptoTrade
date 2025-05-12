@@ -122,5 +122,4 @@ public class StocksController : ControllerBase
             return BadRequest($"Error al buscar acciones con la búsqueda: {query}. {ex.Message}");
         }
     }
-
 }

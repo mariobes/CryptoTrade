@@ -33,5 +33,4 @@ public class StockMostActive
         ChangePercentage = changePercentage;
         LastUpdated = lastUpdated;
     }
-
 }

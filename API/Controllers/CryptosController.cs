@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using CryptoTrade.Business;
 using CryptoTrade.Models;
 using Microsoft.AspNetCore.Authorization;
-using System.Text.Json;
 
 namespace CryptoTrade.API.Controllers;
 
@@ -123,5 +122,4 @@ public class CryptosController : ControllerBase
             return BadRequest($"Error al buscar criptomonedas con la búsqueda: {query}. {ex.Message}");
         }
     }
-
 }

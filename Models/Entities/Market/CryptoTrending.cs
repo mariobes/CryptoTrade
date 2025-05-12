@@ -33,5 +33,4 @@ public class CryptoTrending
         ChangePercentage = changePercentage;
         LastUpdated = lastUpdated;
     }
-
 }

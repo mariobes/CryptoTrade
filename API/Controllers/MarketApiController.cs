@@ -510,24 +510,22 @@ public class MarketApiController : ControllerBase
         {
             if (property.ValueKind == JsonValueKind.Number)
             {
-                return property.GetDouble();  // Si es un número, lo devolvemos directamente
+                return property.GetDouble();
             }
             else if (property.ValueKind == JsonValueKind.String)
             {
                 if (double.TryParse(property.GetString(), NumberStyles.Any, CultureInfo.InvariantCulture, out double value))
                 {
-                    return value;  // Si es una cadena y se puede convertir a número, lo devolvemos
+                    return value;
                 }
                 else
                 {
-                    // Si no se puede convertir la cadena, devolvemos 0 (o cualquier otro valor por defecto)
                     return 0;
                 }
             }
         }
-        return 0;  // Si no encontramos la propiedad o no es válida, devolvemos 0
+        return 0;
     }
-
 
     [HttpGet("crypto-details/{id}")]
     public async Task<JsonElement?> GetCryptoDetails(string id)
@@ -594,5 +592,4 @@ public class MarketApiController : ControllerBase
             return null;
         }
     }
-
 }

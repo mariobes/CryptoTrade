@@ -29,12 +29,12 @@ services:
             - db
         networks:
             - cryptotrade
-    # web:
-    #     container_name: vue-cryptotrade
-    #     image: mariozgz/vue-cryptotrade:1.0
-    #     ports:
-    #         - 5173:80
-    #     depends_on:
-    #         - api
-    #     networks:
-    #         - cryptotrade
+    web:
+        container_name: vue-cryptotrade
+        image: mariozgz/vue-cryptotrade:1.0
+        ports:
+            - 5173:80
+        depends_on:
+            - api
+        networks:
+            - cryptotrade

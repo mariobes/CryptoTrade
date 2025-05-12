@@ -182,5 +182,4 @@ public class CryptoApiController : ControllerBase
             return BadRequest($"Error al obtener las criptomonedas más perdedoras. {ex.Message}");
         }
     }
-
 }

@@ -227,5 +227,4 @@ public class CryptoService : ICryptoService
         }
         return cryptos;
     }
-    
 }
