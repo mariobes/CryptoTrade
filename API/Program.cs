@@ -44,7 +44,7 @@ builder.Services.AddCors(options =>
 options.AddPolicy("MyAllowedOrigins",
     policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5173", "https://jolly-flower-0cd90ac03.6.azurestaticapps.net")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -87,15 +87,12 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// if (connectionString == "ServerDB_azure")
-// {
-    using (var scope = app.Services.CreateScope())
-    {
+using (var scope = app.Services.CreateScope())
+{
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<CryptoTradeContext>();
     context.Database.Migrate();
-    }
-// }
+}
 
 // Configurar CORS
 app.UseCors("MyAllowedOrigins");
