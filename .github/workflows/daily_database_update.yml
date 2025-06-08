@@ -1,0 +1,22 @@
+name: Daily Database Update
+
+on:
+  schedule:
+    - cron: '0 22 * * *'
+
+jobs:
+  call-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call APIs
+        run: |
+          curl -X GET "https://cryptotrade-efgfdqh2epbedeg5.westeurope-01.azurewebsites.net/MarketApi/total-market-cap"
+          curl -X GET "https://cryptotrade-efgfdqh2epbedeg5.westeurope-01.azurewebsites.net/MarketApi/fear-greed-index"
+          curl -X GET "https://cryptotrade-efgfdqh2epbedeg5.westeurope-01.azurewebsites.net/MarketApi/CMC100-index"
+          curl -X GET "https://cryptotrade-efgfdqh2epbedeg5.westeurope-01.azurewebsites.net/MarketApi/cryptos-trending"
+          curl -X GET "https://cryptotrade-efgfdqh2epbedeg5.westeurope-01.azurewebsites.net/MarketApi/stocks-trending"
+          curl -X GET "https://cryptotrade-efgfdqh2epbedeg5.westeurope-01.azurewebsites.net/MarketApi/stocks-gainers"
+          curl -X GET "https://cryptotrade-efgfdqh2epbedeg5.westeurope-01.azurewebsites.net/MarketApi/stocks-losers"
+          curl -X GET "https://cryptotrade-efgfdqh2epbedeg5.westeurope-01.azurewebsites.net/MarketApi/stocks-most-actives"
+          curl -X GET "https://cryptotrade-efgfdqh2epbedeg5.westeurope-01.azurewebsites.net/CryptoApi/cryptos"
+          curl -X GET "https://cryptotrade-efgfdqh2epbedeg5.westeurope-01.azurewebsites.net/StockApi/stocks"
