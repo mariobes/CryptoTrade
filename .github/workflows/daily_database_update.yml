@@ -2,7 +2,7 @@ name: Daily Database Update
 
 on:
   schedule:
-    - cron: '0 2 * * *'
+    - cron: '0 1 * * *'
 
 jobs:
   call-api:
