@@ -35,7 +35,8 @@ public class UserService : IUserService
             Password = PasswordHasher.Hash(dto.Password),
             Phone = dto.Phone,
             DNI = dto.DNI,
-            Nationality = dto.Nationality
+            Nationality = dto.Nationality,
+            CreationDate = DateTime.UtcNow.AddHours(2),
         };
         _repository.AddUser(user);
         return user;
