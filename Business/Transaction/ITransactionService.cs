@@ -12,4 +12,5 @@ public interface ITransactionService
     public void BuyStock(BuySellAssetDto dto);
     public void SellStock(BuySellAssetDto dto);
     public IEnumerable<UserAssetsSummaryDto> MyAssets(int userId, string? typeAsset = null, string? assetId = null);
+    public void UpdateAllUsersBalances();
 }
