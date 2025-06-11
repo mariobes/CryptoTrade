@@ -145,7 +145,7 @@ public class TransactionService : ITransactionService
         {
             throw new Exception($"No tienes suficientes fondos para realizar la venta");
         }
-        
+
         Transaction transaction = new Transaction
         {
             UserId = dto.UserId,
@@ -156,7 +156,7 @@ public class TransactionService : ITransactionService
             AssetAmount = assetAmount,
             TypeOfAsset = "Crypto"
         };
-        
+
         user.Cash += amount;
         user.Wallet -= amount;
         _userRepository.UpdateUser(user);
@@ -234,7 +234,7 @@ public class TransactionService : ITransactionService
         {
             throw new Exception($"No tienes suficientes fondos para realizar la venta");
         }
-        
+
         Transaction transaction = new Transaction
         {
             UserId = dto.UserId,
@@ -354,22 +354,6 @@ public class TransactionService : ITransactionService
             });
         }
 
-        if (assetType == null && string.IsNullOrEmpty(assetId))
-        {
-            var nowDate = DateTime.UtcNow.AddHours(2).Date;
-            var anyLastUpdatedToday = cryptoDict.Values.Any(c => c.LastUpdated.Date == nowDate)
-                                || stockDict.Values.Any(s => s.LastUpdated.Date == nowDate);
-
-            if (user.LastUpdated.Date != nowDate && anyLastUpdatedToday)
-            {
-                user.LastBalance = user.Wallet + user.Profit;
-                var newProfit = totalBalance - user.Profit;
-                user.Profit = Math.Round(user.Profit + newProfit, 2);
-                user.LastUpdated = DateTime.UtcNow.AddHours(2);
-                _userRepository.UpdateUser(user);
-            }
-        }
-
         double walletBase = user.Wallet + user.Profit;
         foreach (var asset in result)
         {
@@ -427,5 +411,86 @@ public class TransactionService : ITransactionService
             }
         }
         return assetBalance;
+    }
+    
+    public void UpdateAllUsersBalances()
+    {
+        var allUsers = _userRepository.GetAllUsers().ToList();
+        var allCryptos = _cryptoRepository.GetAllCryptos().ToList().ToDictionary(c => c.Id, c => c);
+        var allStocks = _stockRepository.GetAllStocks().ToList().ToDictionary(s => s.Id, s => s);
+
+        var nowDate = DateTime.UtcNow.AddHours(2).Date;
+
+        foreach (var user in allUsers)
+        {
+            var transactions = _transactionRepository.GetAllTransactions(user.Id).Where(t => t.AssetId != null).ToList();
+
+            var grouped = transactions.GroupBy(t => t.AssetId);
+            double totalBalance = 0;
+
+            foreach (var group in grouped)
+            {
+                var assetId = group.Key!;
+                var firstTransaction = group.First();
+                var isCrypto = firstTransaction.TypeOfAsset == "Crypto";
+
+                double assetPrice = 0;
+
+                if (isCrypto)
+                {
+                    if (!allCryptos.ContainsKey(assetId)) continue;
+                    assetPrice = allCryptos[assetId].Price ?? 0;
+                }
+                else
+                {
+                    if (!allStocks.ContainsKey(assetId)) continue;
+                    assetPrice = allStocks[assetId].Price ?? 0;
+                }
+
+                double totalAssetAmount = 0;
+                double totalInvestedAmount = 0;
+                double avgPurchasePrice = 0;
+                double realizedProfit = 0;
+
+                foreach (var transaction in group.OrderBy(t => t.Date))
+                {
+                    var assetAmount = transaction.AssetAmount ?? 0;
+                    var amount = transaction.Amount;
+
+                    if (transaction.Concept.StartsWith("+"))
+                    {
+                        totalAssetAmount += assetAmount;
+                        totalInvestedAmount += amount;
+                        avgPurchasePrice = totalAssetAmount != 0 ? totalInvestedAmount / totalAssetAmount : 0;
+                    }
+                    else if (transaction.Concept.StartsWith("-"))
+                    {
+                        double costBasis = assetAmount * avgPurchasePrice;
+                        double gain = amount - costBasis;
+                        realizedProfit += gain;
+
+                        totalAssetAmount -= assetAmount;
+                        totalInvestedAmount -= costBasis;
+                    }
+                }
+
+                double unrealizedBalance = totalAssetAmount * assetPrice - totalInvestedAmount;
+                double totalBalanceWithRealized = unrealizedBalance + realizedProfit;
+                totalBalance += totalBalanceWithRealized;
+            }
+
+            var anyUpdatedToday = allCryptos.Values.Any(c => c.LastUpdated.Date == nowDate) ||
+                                allStocks.Values.Any(s => s.LastUpdated.Date == nowDate);
+
+            if (user.LastUpdated.Date != nowDate && anyUpdatedToday)
+            {
+                user.LastBalance = user.Wallet + user.Profit;
+                var newProfit = totalBalance - user.Profit;
+                user.Profit = Math.Round(user.Profit + newProfit, 2);
+                user.LastUpdated = DateTime.UtcNow.AddHours(2);
+
+                _userRepository.UpdateUser(user);
+            }
+        }
     }
 }

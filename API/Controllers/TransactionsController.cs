@@ -22,18 +22,18 @@ public class TransactionsController : ControllerBase
     [HttpGet("{userId}")]
     public ActionResult<IEnumerable<Transaction>> GetAllTransactions(int userId)
     {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
-            {return Forbid(); }
+        if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User))
+        { return Forbid(); }
 
-        try 
+        try
         {
             var transactions = _transactionService.GetAllTransactions(userId);
             return Ok(transactions);
-        }   
+        }
         catch (KeyNotFoundException knfex)
         {
             return NotFound($"No se ha encontrado el usuario con ID: {userId}. {knfex.Message}");
-        }  
+        }
         catch (Exception ex)
         {
             return BadRequest($"Error al obtener todas las transacciones del usuario con ID {userId}. {ex.Message}");
@@ -44,14 +44,14 @@ public class TransactionsController : ControllerBase
     [HttpPost("deposit")]
     public IActionResult MakeDeposit([FromBody] DepositDto dto)
     {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
-            {return Forbid(); }
+        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User))
+        { return Forbid(); }
 
-        try 
+        try
         {
             _transactionService.MakeDeposit(dto);
             return Ok("Depósito realizado correctamente.");
-        }     
+        }
         catch (KeyNotFoundException knfex)
         {
             return NotFound($"No se ha encontrado el usuario con ID: {dto.UserId}. {knfex.Message}");
@@ -66,14 +66,14 @@ public class TransactionsController : ControllerBase
     [HttpPost("withdrawal")]
     public IActionResult MakeWithdrawal([FromBody] WithdrawalDto dto)
     {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
-            {return Forbid(); }
+        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User))
+        { return Forbid(); }
 
-        try 
+        try
         {
             _transactionService.MakeWithdrawal(dto);
             return Ok("Retiro realizado correctamente.");
-        }     
+        }
         catch (KeyNotFoundException knfex)
         {
             return NotFound($"No se ha encontrado el usuario con ID: {dto.UserId}. {knfex.Message}");
@@ -88,14 +88,14 @@ public class TransactionsController : ControllerBase
     [HttpPost("buy-crypto")]
     public IActionResult BuyCrypto([FromBody] BuySellAssetDto dto)
     {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
-            {return Forbid(); }
+        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User))
+        { return Forbid(); }
 
-        try 
+        try
         {
             _transactionService.BuyCrypto(dto);
             return Ok("Compra realizada correctamente.");
-        }     
+        }
         catch (KeyNotFoundException knfex)
         {
             return NotFound($"No se ha encontrado la criptomoneda con ID: {dto.AssetId}. {knfex.Message}");
@@ -110,14 +110,14 @@ public class TransactionsController : ControllerBase
     [HttpPost("sell-crypto")]
     public IActionResult SellCrypto([FromBody] BuySellAssetDto dto)
     {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
-            {return Forbid(); }
+        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User))
+        { return Forbid(); }
 
-        try 
+        try
         {
             _transactionService.SellCrypto(dto);
             return Ok("Venta realizada correctamente.");
-        }     
+        }
         catch (KeyNotFoundException knfex)
         {
             return NotFound($"No se ha encontrado la criptomoneda con ID: {dto.AssetId}. {knfex.Message}");
@@ -132,14 +132,14 @@ public class TransactionsController : ControllerBase
     [HttpPost("buy-stock")]
     public IActionResult BuyStock([FromBody] BuySellAssetDto dto)
     {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
-            {return Forbid(); }
+        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User))
+        { return Forbid(); }
 
-        try 
+        try
         {
             _transactionService.BuyStock(dto);
             return Ok("Compra realizada correctamente.");
-        }     
+        }
         catch (KeyNotFoundException knfex)
         {
             return NotFound($"No se ha encontrado la acción con ID: {dto.AssetId}. {knfex.Message}");
@@ -154,14 +154,14 @@ public class TransactionsController : ControllerBase
     [HttpPost("sell-stock")]
     public IActionResult SellStock([FromBody] BuySellAssetDto dto)
     {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User)) 
-            {return Forbid(); }
+        if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), null, HttpContext.User))
+        { return Forbid(); }
 
-        try 
+        try
         {
             _transactionService.SellStock(dto);
             return Ok("Venta realizada correctamente.");
-        }     
+        }
         catch (KeyNotFoundException knfex)
         {
             return NotFound($"No se ha encontrado la acción con ID: {dto.AssetId}. {knfex.Message}");
@@ -176,21 +176,35 @@ public class TransactionsController : ControllerBase
     [HttpGet("{userId}/assets")]
     public ActionResult<IEnumerable<UserAssetsSummaryDto>> GetAssets(int userId, [FromQuery] string? typeAsset = null, string? assetId = null)
     {
-        if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User)) 
-            {return Forbid(); }
+        if (!_authService.HasAccessToResource(Convert.ToInt32(userId), null, HttpContext.User))
+        { return Forbid(); }
 
-        try 
+        try
         {
             var userCryptos = _transactionService.MyAssets(userId, typeAsset, assetId);
             return Ok(userCryptos);
-        }     
+        }
         catch (KeyNotFoundException knfex)
         {
             return NotFound($"No se ha encontrado el usuario con ID: {userId}. {knfex.Message}");
-        }  
+        }
         catch (Exception ex)
         {
             return BadRequest($"Error al obtener los activos del usuario {userId}. {ex.Message}");
+        }
+    }
+
+    [HttpPost("update-users-balances")]
+    public IActionResult UpdateUsersBalances()
+    {
+        try
+        {
+            _transactionService.UpdateAllUsersBalances();
+            return Ok("Balances de los usuarios actualizados en la base de datos con éxito.");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error al actualizar los balances de los usuarios. {ex.Message}");
         }
     }
 }
