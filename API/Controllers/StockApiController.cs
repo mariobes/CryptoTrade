@@ -149,7 +149,7 @@ public class StockApiController : ControllerBase
     }
 
     [HttpGet("stock-charts/{symbol}")]
-    public async Task<IActionResult> GetStockCharts(string symbol, [FromQuery] string time) // 1/5/15/30min, 1/4hour 1day, 1month, 1year
+    public async Task<IActionResult> GetStockCharts(string symbol, [FromQuery] string time)
     {
         var client = _httpClientFactory.CreateClient();
         var apiKey = _configuration["FMPApi:ApiKey"];
@@ -179,13 +179,36 @@ public class StockApiController : ControllerBase
                 var prices = new List<List<object>>();
                 var volumes = new List<List<object>>();
 
-                foreach (var item in data)
+                if (time == "1min")
                 {
-                    if (DateTime.TryParse(item.Date, out var dateTime))
+                    var groupedByDate = data
+                        .Where(d => DateTime.TryParse(d.Date, out _))
+                        .GroupBy(d => DateTime.Parse(d.Date).Date)
+                        .OrderByDescending(g => g.Key)
+                        .FirstOrDefault();
+
+                    if (groupedByDate != null)
                     {
-                        var timestamp = new DateTimeOffset(dateTime).ToUnixTimeMilliseconds();
-                        prices.Add(new List<object> { timestamp, item.Price });
-                        volumes.Add(new List<object> { timestamp, item.Volume });
+                        foreach (var item in groupedByDate)
+                        {
+                            var dateTime = DateTime.Parse(item.Date);
+                            var timestamp = new DateTimeOffset(dateTime).ToUnixTimeMilliseconds();
+
+                            prices.Add(new List<object> { timestamp, item.Price });
+                            volumes.Add(new List<object> { timestamp, item.Volume });
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var item in data)
+                    {
+                        if (DateTime.TryParse(item.Date, out var dateTime))
+                        {
+                            var timestamp = new DateTimeOffset(dateTime).ToUnixTimeMilliseconds();
+                            prices.Add(new List<object> { timestamp, item.Price });
+                            volumes.Add(new List<object> { timestamp, item.Volume });
+                        }
                     }
                 }
 
