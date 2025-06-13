@@ -20,4 +20,4 @@ jobs:
           curl -X GET "https://cryptotrade-efgfdqh2epbedeg5.westeurope-01.azurewebsites.net/MarketApi/stocks-most-actives"
           curl -X GET "https://cryptotrade-efgfdqh2epbedeg5.westeurope-01.azurewebsites.net/CryptoApi/cryptos"
           curl -X GET "https://cryptotrade-efgfdqh2epbedeg5.westeurope-01.azurewebsites.net/StockApi/stocks"
-          curl -X GET "https://cryptotrade-efgfdqh2epbedeg5.westeurope-01.azurewebsites.net/Transactions/update-users-balances"
+          curl -X POST "https://cryptotrade-efgfdqh2epbedeg5.westeurope-01.azurewebsites.net/Transactions/update-users-balances"
