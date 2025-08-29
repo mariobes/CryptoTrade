@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CryptoTrade.Data.Migrations
 {
     [DbContext(typeof(CryptoTradeContext))]
-    [Migration("20250430150717_InitialCreate")]
+    [Migration("20250829183254_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -677,6 +677,9 @@ namespace CryptoTrade.Data.Migrations
                     b.Property<double>("Cash")
                         .HasColumnType("float");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("DNI")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -727,10 +730,11 @@ namespace CryptoTrade.Data.Migrations
                             Id = 1,
                             Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 0.0,
+                            CreationDate = new DateTime(2016, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DNI = "Admin",
                             Email = "admin@cryptotrade.com",
                             LastBalance = 0.0,
-                            LastUpdated = new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8559),
+                            LastUpdated = new DateTime(2025, 8, 29, 20, 32, 54, 74, DateTimeKind.Utc).AddTicks(5915),
                             Name = "Admin",
                             Nationality = "Admin",
                             Password = "YHrp/ExR53lRO6ouA2tT0y9QCb94jfjNBsxcGq5x798=",
@@ -744,10 +748,11 @@ namespace CryptoTrade.Data.Migrations
                             Id = 2,
                             Birthdate = new DateTime(2001, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 384.35000000000002,
+                            CreationDate = new DateTime(2022, 7, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DNI = "25463652D",
                             Email = "mario@gmail.com",
                             LastBalance = 0.0,
-                            LastUpdated = new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8564),
+                            LastUpdated = new DateTime(2025, 8, 29, 20, 32, 54, 74, DateTimeKind.Utc).AddTicks(5921),
                             Name = "Mario",
                             Nationality = "España",
                             Password = "JApd9lfG2wshq3agTXjgwVT/f4jQecLCYTBnBT30AqE=",
@@ -761,10 +766,11 @@ namespace CryptoTrade.Data.Migrations
                             Id = 3,
                             Birthdate = new DateTime(2003, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 0.0,
+                            CreationDate = new DateTime(2023, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DNI = "26587463X",
                             Email = "fernando@gmail.com",
                             LastBalance = 0.0,
-                            LastUpdated = new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8568),
+                            LastUpdated = new DateTime(2025, 8, 29, 20, 32, 54, 74, DateTimeKind.Utc).AddTicks(5923),
                             Name = "Fernando",
                             Nationality = "España",
                             Password = "xf0cyil3yRNj5rC2KE+3O+wmt/rGtUapwYkq5YfkqG4=",
@@ -778,10 +784,11 @@ namespace CryptoTrade.Data.Migrations
                             Id = 4,
                             Birthdate = new DateTime(1998, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Cash = 0.0,
+                            CreationDate = new DateTime(2024, 1, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DNI = "52684659D",
                             Email = "eduardo@gmail.com",
                             LastBalance = 0.0,
-                            LastUpdated = new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8569),
+                            LastUpdated = new DateTime(2025, 8, 29, 20, 32, 54, 74, DateTimeKind.Utc).AddTicks(5924),
                             Name = "Eduardo",
                             Nationality = "España",
                             Password = "6GGegrjO3tQMHPZBrkdANTfPC92ka20ChXH9VdvhLak=",

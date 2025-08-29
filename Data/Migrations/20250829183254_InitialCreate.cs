@@ -198,6 +198,7 @@ namespace CryptoTrade.Data.Migrations
                     Wallet = table.Column<double>(type: "float", nullable: false),
                     Profit = table.Column<double>(type: "float", nullable: false),
                     LastBalance = table.Column<double>(type: "float", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -262,13 +263,13 @@ namespace CryptoTrade.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Birthdate", "Cash", "DNI", "Email", "LastBalance", "LastUpdated", "Name", "Nationality", "Password", "Phone", "Profit", "Role", "Wallet" },
+                columns: new[] { "Id", "Birthdate", "Cash", "CreationDate", "DNI", "Email", "LastBalance", "LastUpdated", "Name", "Nationality", "Password", "Phone", "Profit", "Role", "Wallet" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0.0, "Admin", "admin@cryptotrade.com", 0.0, new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8559), "Admin", "Admin", "YHrp/ExR53lRO6ouA2tT0y9QCb94jfjNBsxcGq5x798=", "000", 0.0, "admin", 0.0 },
-                    { 2, new DateTime(2001, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 384.35000000000002, "25463652D", "mario@gmail.com", 0.0, new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8564), "Mario", "España", "JApd9lfG2wshq3agTXjgwVT/f4jQecLCYTBnBT30AqE=", "567935418", 0.0, "user", 4615.6499999999996 },
-                    { 3, new DateTime(2003, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), 0.0, "26587463X", "fernando@gmail.com", 0.0, new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8568), "Fernando", "España", "xf0cyil3yRNj5rC2KE+3O+wmt/rGtUapwYkq5YfkqG4=", "541298637", 0.0, "user", 0.0 },
-                    { 4, new DateTime(1998, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 0.0, "52684659D", "eduardo@gmail.com", 0.0, new DateTime(2025, 4, 30, 17, 7, 17, 723, DateTimeKind.Utc).AddTicks(8569), "Eduardo", "España", "6GGegrjO3tQMHPZBrkdANTfPC92ka20ChXH9VdvhLak=", "658248974", 0.0, "user", 0.0 }
+                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0.0, new DateTime(2016, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", "admin@cryptotrade.com", 0.0, new DateTime(2025, 8, 29, 20, 32, 54, 74, DateTimeKind.Utc).AddTicks(5915), "Admin", "Admin", "YHrp/ExR53lRO6ouA2tT0y9QCb94jfjNBsxcGq5x798=", "000", 0.0, "admin", 0.0 },
+                    { 2, new DateTime(2001, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 384.35000000000002, new DateTime(2022, 7, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "25463652D", "mario@gmail.com", 0.0, new DateTime(2025, 8, 29, 20, 32, 54, 74, DateTimeKind.Utc).AddTicks(5921), "Mario", "España", "JApd9lfG2wshq3agTXjgwVT/f4jQecLCYTBnBT30AqE=", "567935418", 0.0, "user", 4615.6499999999996 },
+                    { 3, new DateTime(2003, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), 0.0, new DateTime(2023, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "26587463X", "fernando@gmail.com", 0.0, new DateTime(2025, 8, 29, 20, 32, 54, 74, DateTimeKind.Utc).AddTicks(5923), "Fernando", "España", "xf0cyil3yRNj5rC2KE+3O+wmt/rGtUapwYkq5YfkqG4=", "541298637", 0.0, "user", 0.0 },
+                    { 4, new DateTime(1998, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 0.0, new DateTime(2024, 1, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), "52684659D", "eduardo@gmail.com", 0.0, new DateTime(2025, 8, 29, 20, 32, 54, 74, DateTimeKind.Utc).AddTicks(5924), "Eduardo", "España", "6GGegrjO3tQMHPZBrkdANTfPC92ka20ChXH9VdvhLak=", "658248974", 0.0, "user", 0.0 }
                 });
 
             migrationBuilder.InsertData(
