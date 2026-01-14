@@ -6,11 +6,14 @@ namespace CryptoTrade.Data;
 public class UserJsonRepository : IUserRepository
 {
     private Dictionary<string, User> _users = new Dictionary<string, User>();
-    private readonly string _filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "Data", "JsonData", "Users.json");
+    private readonly string _filePath;
     private static int UserIdSeed { get; set; }
 
     public UserJsonRepository()
     {
+        var basePath = AppDomain.CurrentDomain.BaseDirectory;
+        _filePath = Path.Combine(basePath, "JsonData", "Users.json");
+
         if (File.Exists(_filePath))
         {
             try

@@ -6,10 +6,13 @@ namespace CryptoTrade.Data;
 public class CryptoJsonRepository : ICryptoRepository
 {
     private Dictionary<string, Crypto> _cryptos = new Dictionary<string, Crypto>();
-    private readonly string _filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "Data", "JsonData", "Cryptos.json");
+    private readonly string _filePath;
 
     public CryptoJsonRepository()
     {
+        var basePath = AppDomain.CurrentDomain.BaseDirectory;
+        _filePath = Path.Combine(basePath, "JsonData", "Cryptos.json");
+
         if (File.Exists(_filePath))
         {
             try
