@@ -25,38 +25,53 @@ public class MarketApiController : ControllerBase
         _configuration = configuration;
     }
 
-    [HttpGet("total-market-cap")]
-    public async Task<IActionResult> GetTotalMarketCapApi()
+    private async Task<string> CallMarketApiAsync(string urlTemplate, string apiKeyHeader = null, params object[] args)
     {
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri("https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest"),
-            Headers =
-            {
-                { "X-CMC_PRO_API_KEY", _configuration["CoinMarketCapApi:ApiKey"] },
-                { "Accept", "application/json" }
-            }
-        };
-
         try
         {
             var client = _httpClientFactory.CreateClient();
+            var url = args != null && args.Length > 0 ? string.Format(urlTemplate, args) : urlTemplate;
+
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.Add("accept", "application/json");
+
+            if (!string.IsNullOrEmpty(apiKeyHeader))
+            {
+                string apiKeyValue = apiKeyHeader switch
+                {
+                    "x-cg-demo-api-key" => _configuration["CoinGekoApi:ApiKey"],
+                    "X-CMC_PRO_API_KEY" => _configuration["CoinMarketCapApi:ApiKey"],
+                    _ => _configuration[$"{apiKeyHeader}:ApiKey"]
+                };
+                request.Headers.Add(apiKeyHeader, apiKeyValue);
+            }
+
             using var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
+            return await response.Content.ReadAsStringAsync();
+        }
+        catch (Exception ex)
+        {
+            return $"Error al llamar a la API de los mercados: {ex.Message}";
+        }
+    }
+
+    [HttpGet("total-market-cap")]
+    public async Task<IActionResult> GetTotalMarketCapApi()
+    {
+        try
+        {
+            var url = _configuration["Endpoints:Market:GetTotalMarketCap"];
+            var body = await CallMarketApiAsync(url, "X-CMC_PRO_API_KEY");
 
             var data = JsonSerializer.Deserialize<JsonElement>(body);
             var marketData = data.GetProperty("data").GetProperty("quote").GetProperty("USD");
 
-            var totalMarketCap = marketData.GetProperty("total_market_cap").GetDouble();
-            var marketCapChangePercentage = marketData.GetProperty("total_market_cap_yesterday_percentage_change").GetDouble();
-
             var result = new CryptoIndexDto
             {
                 Name = "total-market-cap",
-                Value = totalMarketCap,
-                ChangePercentage = marketCapChangePercentage
+                Value = marketData.GetProperty("total_market_cap").GetDouble(),
+                ChangePercentage = marketData.GetProperty("total_market_cap_yesterday_percentage_change").GetDouble()
             };
 
             await _marketService.DeleteCryptoIndexDatabase();
@@ -72,23 +87,10 @@ public class MarketApiController : ControllerBase
     [HttpGet("fear-greed-index")]
     public async Task<IActionResult> GetFearGreedIndexApi()
     {
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri("https://pro-api.coinmarketcap.com/v3/fear-and-greed/historical"),
-            Headers =
-            {
-                { "X-CMC_PRO_API_KEY", _configuration["CoinMarketCapApi:ApiKey"] },
-                { "Accept", "application/json" }
-            }
-        };
-
         try
         {
-            var client = _httpClientFactory.CreateClient();
-            using var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
+            var url = _configuration["Endpoints:Market:GetFearGreedIndex"];
+            var body = await CallMarketApiAsync(url, "X-CMC_PRO_API_KEY");
 
             var data = JsonSerializer.Deserialize<JsonElement>(body);
             var latestData = data.GetProperty("data")[0];
@@ -113,40 +115,22 @@ public class MarketApiController : ControllerBase
     [HttpGet("CMC100-index")]
     public async Task<IActionResult> GetCMC100IndexApi()
     {
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri("https://pro-api.coinmarketcap.com/v3/index/cmc100-historical"),
-            Headers =
-            {
-                { "X-CMC_PRO_API_KEY", _configuration["CoinMarketCapApi:ApiKey"] },
-                { "Accept", "application/json" }
-            }
-        };
-
         try
         {
-            var client = _httpClientFactory.CreateClient();
-            using var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
+            var url = _configuration["Endpoints:Market:GetCMC100Index"];
+            var body = await CallMarketApiAsync(url, "X-CMC_PRO_API_KEY");
 
             var data = JsonSerializer.Deserialize<JsonElement>(body);
             var latestData = data.GetProperty("data").EnumerateArray().ToList();
 
-            var mostRecent = latestData[latestData.Count - 1];
-            var secondMostRecent = latestData[latestData.Count - 2];
-
-            var mostRecentValue = mostRecent.GetProperty("value").GetDouble();
-            var secondMostRecentValue = secondMostRecent.GetProperty("value").GetDouble();
-
-            var percentageChange = (mostRecentValue - secondMostRecentValue) / secondMostRecentValue * 100;
+            var mostRecentValue = latestData[^1].GetProperty("value").GetDouble();
+            var previousValue = latestData[^2].GetProperty("value").GetDouble();
 
             var result = new CryptoIndexDto
             {
                 Name = "CMC100-index",
                 Value = mostRecentValue,
-                ChangePercentage = percentageChange
+                ChangePercentage = (mostRecentValue - previousValue) / previousValue * 100
             };
 
             await _marketService.UpdateCryptoIndexDatabase(result);
@@ -161,35 +145,19 @@ public class MarketApiController : ControllerBase
     [HttpGet("cryptos-trending")]
     public async Task<IActionResult> GetCryptosTrendingApi()
     {
-        var client = _httpClientFactory.CreateClient();
-
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri("https://api.coingecko.com/api/v3/search/trending"),
-            Headers =
-            {
-                { "accept", "application/json" },
-                { "x-cg-demo-api-key", _configuration["CoinGekoApi:ApiKey"] },
-            },
-        };
-
         try
         {
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
+            var url = _configuration["Endpoints:Market:GetCryptosTrending"];
+            var body = await CallMarketApiAsync(url, "x-cg-demo-api-key");
 
-                var data = JsonSerializer.Deserialize<JsonElement>(body);
-                var cryptosTrending = data.GetProperty("coins").EnumerateArray().Take(5).ToList();
+            var data = JsonSerializer.Deserialize<JsonElement>(body);
+            var cryptosTrending = data.GetProperty("coins").EnumerateArray().Take(5).ToList();
 
-                var (newCryptosTrending, newCryptos) = await CreateCryptoEntities(cryptosTrending);
+            var (newCryptosTrending, newCryptos) = await CreateCryptoEntities(cryptosTrending);
 
-                await _marketService.UpdateCryptoTrendingDatabase(newCryptosTrending);
-                await _cryptoService.UpdateCryptosDatabase(newCryptos);
-                return Ok("Criptomonedas en tendencia obtenidas y actualizadas en la base de datos con éxito.");
-            }
+            await _marketService.UpdateCryptoTrendingDatabase(newCryptosTrending);
+            await _cryptoService.UpdateCryptosDatabase(newCryptos);
+            return Ok("Criptomonedas en tendencia obtenidas y actualizadas en la base de datos con éxito.");
         }
         catch (Exception ex)
         {
@@ -200,35 +168,19 @@ public class MarketApiController : ControllerBase
     [HttpGet("stocks-trending")]
     public async Task<IActionResult> GetStocksTrendingApi()
     {
-        var client = _httpClientFactory.CreateClient();
-        var apiKey = _configuration["FMPApi:ApiKey"];
-
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/actives?apikey={apiKey}"),
-            Headers =
-            {
-                { "accept", "application/json" }
-            },
-        };
-
         try
         {
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
+            var url = _configuration["Endpoints:Market:GetStocksTrending"];
+            var body = await CallMarketApiAsync(url, null, _configuration["FMPApi:ApiKey"]);
 
-                var data = JsonSerializer.Deserialize<JsonElement>(body);
-                var stocksTrending = data.EnumerateArray().TakeLast(5).ToList();
+            var data = JsonSerializer.Deserialize<JsonElement>(body);
+            var stocksTrending = data.EnumerateArray().TakeLast(5).ToList();
 
-                var (newStocksTrending, newStocks) = await CreateStockEntities(stocksTrending);
+            var (newStocksTrending, newStocks) = await CreateStockEntities(stocksTrending);
 
-                await _marketService.UpdateStockTrendingDatabase(newStocksTrending);
-                await _stockService.UpdateStocksDatabase(newStocks);
-                return Ok("Acciones en tendencia obtenidas y actualizadas en la base de datos con éxito.");
-            }
+            await _marketService.UpdateStockTrendingDatabase(newStocksTrending);
+            await _stockService.UpdateStocksDatabase(newStocks);
+            return Ok("Acciones en tendencia obtenidas y actualizadas en la base de datos con éxito.");
         }
         catch (Exception ex)
         {
@@ -239,35 +191,19 @@ public class MarketApiController : ControllerBase
     [HttpGet("stocks-gainers")]
     public async Task<IActionResult> GetStocksGainersApi()
     {
-        var client = _httpClientFactory.CreateClient();
-        var apiKey = _configuration["FMPApi:ApiKey"];
-
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/stock/gainers?apikey={apiKey}"),
-            Headers =
-            {
-                { "accept", "application/json" }
-            },
-        };
-
         try
         {
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
+            var url = _configuration["Endpoints:Market:GetStocksGainers"];
+            var body = await CallMarketApiAsync(url, null, _configuration["FMPApi:ApiKey"]);
 
-                var data = JsonSerializer.Deserialize<JsonElement>(body);
-                var stocksGainers = data.GetProperty("mostGainerStock").EnumerateArray().TakeLast(5).ToList();
+            var data = JsonSerializer.Deserialize<JsonElement>(body);
+            var stocksGainers = data.GetProperty("mostGainerStock").EnumerateArray().TakeLast(5).ToList();
 
-                var (newStocksGainers, newStocks) = await CreateStockEntities(stocksGainers);
+            var (newStocksGainers, newStocks) = await CreateStockEntities(stocksGainers);
 
-                await _marketService.UpdateStockGainerDatabase(newStocksGainers);
-                await _stockService.UpdateStocksDatabase(newStocks);
-                return Ok("Acciones más ganadoras obtenidas y actualizadas en la base de datos con éxito.");
-            }
+            await _marketService.UpdateStockGainerDatabase(newStocksGainers);
+            await _stockService.UpdateStocksDatabase(newStocks);
+            return Ok("Acciones más ganadoras obtenidas y actualizadas en la base de datos con éxito.");
         }
         catch (Exception ex)
         {
@@ -278,35 +214,19 @@ public class MarketApiController : ControllerBase
     [HttpGet("stocks-losers")]
     public async Task<IActionResult> GetStocksLosersApi()
     {
-        var client = _httpClientFactory.CreateClient();
-        var apiKey = _configuration["FMPApi:ApiKey"];
-
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/stock/losers?apikey={apiKey}"),
-            Headers =
-            {
-                { "accept", "application/json" }
-            },
-        };
-
         try
         {
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
+            var url = _configuration["Endpoints:Market:GetStocksLosers"];
+            var body = await CallMarketApiAsync(url, null, _configuration["FMPApi:ApiKey"]);
 
-                var data = JsonSerializer.Deserialize<JsonElement>(body);
-                var stocksLosers = data.GetProperty("mostLoserStock").EnumerateArray().TakeLast(5).ToList();
-                
-                var (newStocksLosers, newStocks) = await CreateStockEntities(stocksLosers);
+            var data = JsonSerializer.Deserialize<JsonElement>(body);
+            var stocksLosers = data.GetProperty("mostLoserStock").EnumerateArray().TakeLast(5).ToList();
 
-                await _marketService.UpdateStockLoserDatabase(newStocksLosers);
-                await _stockService.UpdateStocksDatabase(newStocks);
-                return Ok("Acciones más perdedoras obtenidas y actualizadas en la base de datos con éxito.");
-            }
+            var (newStocksLosers, newStocks) = await CreateStockEntities(stocksLosers);
+
+            await _marketService.UpdateStockLoserDatabase(newStocksLosers);
+            await _stockService.UpdateStocksDatabase(newStocks);
+            return Ok("Acciones más perdedoras obtenidas y actualizadas en la base de datos con éxito.");  
         }
         catch (Exception ex)
         {
@@ -317,35 +237,19 @@ public class MarketApiController : ControllerBase
     [HttpGet("stocks-most-actives")]
     public async Task<IActionResult> GetStocksMostActivesApi()
     {
-        var client = _httpClientFactory.CreateClient();
-        var apiKey = _configuration["FMPApi:ApiKey"];
-
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/actives?apikey={apiKey}"),
-            Headers =
-            {
-                { "accept", "application/json" }
-            },
-        };
-
         try
         {
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
+            var url = _configuration["Endpoints:Market:GetStocksMostActives"];
+            var body = await CallMarketApiAsync(url, null, _configuration["FMPApi:ApiKey"]);
 
-                var data = JsonSerializer.Deserialize<JsonElement>(body);
-                var stocksMostActives = data.EnumerateArray().Take(5).ToList();
+            var data = JsonSerializer.Deserialize<JsonElement>(body);
+            var stocksMostActives = data.EnumerateArray().Take(5).ToList();
 
-                var (newStocksMostActives, newStocks) = await CreateStockEntities(stocksMostActives);
+            var (newStocksMostActives, newStocks) = await CreateStockEntities(stocksMostActives);
 
-                await _marketService.UpdateStockMostActiveDatabase(newStocksMostActives);
-                await _stockService.UpdateStocksDatabase(newStocks);
-                return Ok("Acciones más activas obtenidas y actualizadas en la base de datos con éxito.");
-            }
+            await _marketService.UpdateStockMostActiveDatabase(newStocksMostActives);
+            await _stockService.UpdateStocksDatabase(newStocks);
+            return Ok("Acciones más activas obtenidas y actualizadas en la base de datos con éxito.");
         }
         catch (Exception ex)
         {
@@ -368,7 +272,7 @@ public class MarketApiController : ControllerBase
             var price = GetDoubleOrDefault(item.GetProperty("data"), "price");
             var changePercentage = GetDoubleOrDefault(item.GetProperty("data").GetProperty("price_change_percentage_24h"), "usd");
 
-            var newCryptoMarket = new AssetMarketDto
+            newCryptosMarket.Add(new AssetMarketDto
             {
                 Id = id,
                 Name = name,
@@ -376,69 +280,46 @@ public class MarketApiController : ControllerBase
                 Image = image,
                 Price = price,
                 ChangePercentage = changePercentage
-            };
-
-            newCryptosMarket.Add(newCryptoMarket);
+            });
 
             var cryptoDetails = await GetCryptoDetails(id);
-
             if (cryptoDetails != null)
             {
                 var marketData = cryptoDetails.Value.GetProperty("market_data");
 
-                var marketCap = GetDoubleOrDefault(marketData.GetProperty("market_cap"), "usd");
-                var fullyDilutedValuation = GetDoubleOrDefault(marketData.GetProperty("fully_diluted_valuation"), "usd");
-                var totalVolume = GetDoubleOrDefault(marketData.GetProperty("total_volume"), "usd");
-                var high24h = GetDoubleOrDefault(marketData.GetProperty("high_24h"), "usd");
-                var low24h = GetDoubleOrDefault(marketData.GetProperty("low_24h"), "usd");
-                var priceChange24h = GetDoubleOrDefault(marketData, "price_change_24h");
-                var priceChangePercentage24h = GetDoubleOrDefault(marketData, "price_change_percentage_24h");
-                var priceChangePercentage1h = GetDoubleOrDefault(marketData.GetProperty("price_change_percentage_1h_in_currency"), "usd");
-                var priceChangePercentage7d = GetDoubleOrDefault(marketData.GetProperty("price_change_percentage_7d_in_currency"), "usd");
-                var marketCapChange24h = GetDoubleOrDefault(marketData, "market_cap_change_24h");
-                var marketCapChangePercentage24h = GetDoubleOrDefault(marketData, "market_cap_change_percentage_24h");
-                var circulatingSupply = GetDoubleOrDefault(marketData, "circulating_supply");
-                var totalSupply = GetDoubleOrDefault(marketData, "total_supply");
-                var maxSupply = GetDoubleOrDefault(marketData, "max_supply");
-                var allTimeHigh = GetDoubleOrDefault(marketData.GetProperty("ath"), "usd");
-                var allTimeHighChangePercentage = GetDoubleOrDefault(marketData.GetProperty("ath_change_percentage"), "usd");
-
                 var sparklineIn7d = new SparklineIn7d
                 {
-                    Price = marketData.TryGetProperty("sparkline_7d", out var sparkline7dElement)
-                        ? sparkline7dElement.TryGetProperty("price", out var priceElement) 
-                            ? priceElement.EnumerateArray().Select(p => p.GetDouble()).ToList() 
-                            : new List<double>() 
-                        : new List<double>()
+                    Price = marketData.TryGetProperty("sparkline_7d", out var sparkline7dElement) &&
+                            sparkline7dElement.TryGetProperty("price", out var priceElement)
+                            ? priceElement.EnumerateArray().Select(p => p.GetDouble()).ToList()
+                            : new List<double>()
                 };
 
-                var newCrypto = new Crypto
+                newCryptos.Add(new Crypto
                 {
                     Id = id,
                     Name = name,
                     Symbol = symbol,
                     Image = image,
                     Price = price,
-                    MarketCap = marketCap,
-                    FullyDilutedValuation = fullyDilutedValuation,
-                    TotalVolume = totalVolume,
-                    High24h = high24h,
-                    Low24h = low24h,
-                    PriceChange24h = priceChange24h,
-                    PriceChangePercentage24h = priceChangePercentage24h,
-                    PriceChangePercentage1h = priceChangePercentage1h,
-                    PriceChangePercentage7d = priceChangePercentage7d,
-                    MarketCapChange24h = marketCapChange24h,
-                    MarketCapChangePercentage24h = marketCapChangePercentage24h,
-                    CirculatingSupply = circulatingSupply,
-                    TotalSupply = totalSupply,
-                    MaxSupply = maxSupply,
-                    AllTimeHigh = allTimeHigh,
-                    AllTimeHighChangePercentage = allTimeHighChangePercentage,
+                    MarketCap = GetDoubleOrDefault(marketData.GetProperty("market_cap"), "usd"),
+                    FullyDilutedValuation = GetDoubleOrDefault(marketData.GetProperty("fully_diluted_valuation"), "usd"),
+                    TotalVolume = GetDoubleOrDefault(marketData.GetProperty("total_volume"), "usd"),
+                    High24h = GetDoubleOrDefault(marketData.GetProperty("high_24h"), "usd"),
+                    Low24h = GetDoubleOrDefault(marketData.GetProperty("low_24h"), "usd"),
+                    PriceChange24h = GetDoubleOrDefault(marketData, "price_change_24h"),
+                    PriceChangePercentage24h = GetDoubleOrDefault(marketData, "price_change_percentage_24h"),
+                    PriceChangePercentage1h = GetDoubleOrDefault(marketData.GetProperty("price_change_percentage_1h_in_currency"), "usd"),
+                    PriceChangePercentage7d = GetDoubleOrDefault(marketData.GetProperty("price_change_percentage_7d_in_currency"), "usd"),
+                    MarketCapChange24h = GetDoubleOrDefault(marketData, "market_cap_change_24h"),
+                    MarketCapChangePercentage24h = GetDoubleOrDefault(marketData, "market_cap_change_percentage_24h"),
+                    CirculatingSupply = GetDoubleOrDefault(marketData, "circulating_supply"),
+                    TotalSupply = GetDoubleOrDefault(marketData, "total_supply"),
+                    MaxSupply = GetDoubleOrDefault(marketData, "max_supply"),
+                    AllTimeHigh = GetDoubleOrDefault(marketData.GetProperty("ath"), "usd"),
+                    AllTimeHighChangePercentage = GetDoubleOrDefault(marketData.GetProperty("ath_change_percentage"), "usd"),
                     SparklineIn7d = sparklineIn7d
-                };
-
-                newCryptos.Add(newCrypto);
+                });
             }
         }
 
@@ -455,14 +336,12 @@ public class MarketApiController : ControllerBase
             var id = stock.GetProperty("ticker").GetString();
             var name = stock.GetProperty("companyName").GetString();
             var symbol = stock.GetProperty("ticker").GetString();
-
             var price = GetDoubleOrDefault(stock, "price");
             var changePercentage = GetDoubleOrDefault(stock, "changesPercentage");
-
             var stockDetails = await GetStockDetails(symbol);
             var image = stockDetails?.Image ?? string.Empty;
 
-            var newStockMarket= new AssetMarketDto
+            newStocksMarket.Add(new AssetMarketDto
             {
                 Id = id,
                 Name = name,
@@ -470,16 +349,15 @@ public class MarketApiController : ControllerBase
                 Image = image,
                 Price = price,
                 ChangePercentage = changePercentage
-            };
+            });
 
-            newStocksMarket.Add(newStockMarket);
-
-            var newStock = new Stock
+            newStocks.Add(new Stock
             {
                 Id = id,
                 Name = name,
                 Symbol = symbol,
                 Price = price,
+                ChangesPercentage = changePercentage,
                 MarketCap = stockDetails?.MarketCap ?? 0,
                 Sector = stockDetails?.Sector,
                 Industry = stockDetails?.Industry,
@@ -489,16 +367,13 @@ public class MarketApiController : ControllerBase
                 ExchangeShortName = stockDetails?.ExchangeShortName,
                 Country = stockDetails?.Country,
                 Changes = stockDetails?.Changes ?? 0,
-                ChangesPercentage = changePercentage,
                 Currency = stockDetails?.Currency,
                 Isin = stockDetails?.Isin,
                 Website = stockDetails?.Website,
                 Description = stockDetails?.Description,
                 Ceo = stockDetails?.Ceo,
-                Image = image,
-            };
-
-            newStocks.Add(newStock);
+                Image = image
+            });
         }
 
         return (newStocksMarket, newStocks);
@@ -509,49 +384,31 @@ public class MarketApiController : ControllerBase
         if (element.TryGetProperty(propertyName, out var property))
         {
             if (property.ValueKind == JsonValueKind.Number)
-            {
                 return property.GetDouble();
-            }
-            else if (property.ValueKind == JsonValueKind.String)
-            {
-                if (double.TryParse(property.GetString(), NumberStyles.Any, CultureInfo.InvariantCulture, out double value))
-                {
-                    return value;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
+
+            if (property.ValueKind == JsonValueKind.String &&
+                double.TryParse(property.GetString(), NumberStyles.Any, CultureInfo.InvariantCulture, out double value))
+                return value;
         }
+
         return 0;
     }
 
-    [HttpGet("crypto-details/{id}")]
-    public async Task<JsonElement?> GetCryptoDetails(string id)
+    private async Task<JsonElement?> GetCryptoDetails(string id)
     {
         var client = _httpClientFactory.CreateClient();
+        var url = string.Format(_configuration["Endpoints:Crypto:GetCryptoDetails"], id);
 
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri($"https://api.coingecko.com/api/v3/coins/{id}?sparkline=true"),
-            Headers =
-            {
-                { "accept", "application/json" },
-                { "x-cg-demo-api-key", _configuration["CoinGekoApi:ApiKey"] },
-            },
-        };
+        var request = new HttpRequestMessage(HttpMethod.Get, url);
+        request.Headers.Add("accept", "application/json");
+        request.Headers.Add("x-cg-demo-api-key", _configuration["CoinGekoApi:ApiKey"]);
 
         try
         {
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
-                JsonDocument doc = JsonDocument.Parse(body);
-                return doc.RootElement;
-            }
+            using var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            var body = await response.Content.ReadAsStringAsync();
+            return JsonDocument.Parse(body).RootElement;
         }
         catch (Exception ex)
         {
@@ -560,35 +417,26 @@ public class MarketApiController : ControllerBase
         }
     }
 
-    [HttpGet("stock-details/{symbol}")]
-    public async Task<Stock?> GetStockDetails(string symbol)
+    private async Task<Stock?> GetStockDetails(string symbol)
     {
         var client = _httpClientFactory.CreateClient();
         var apiKey = _configuration["FMPApi:ApiKey"];
+        var url = string.Format(_configuration["Endpoints:Stock:GetStockDetails"], symbol, apiKey);
 
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/profile/{symbol}?apikey={apiKey}"),
-            Headers =
-            {
-                { "accept", "application/json" }
-            },
-        };
+        var request = new HttpRequestMessage(HttpMethod.Get, url);
+        request.Headers.Add("accept", "application/json");
 
         try
         {
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
-                var stockDetailsList = JsonSerializer.Deserialize<List<Stock>>(body);
-                return stockDetailsList?.FirstOrDefault();
-            }
+            using var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            var body = await response.Content.ReadAsStringAsync();
+            var stockDetailsList = JsonSerializer.Deserialize<List<Stock>>(body);
+            return stockDetailsList?.FirstOrDefault();
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error al obtener los detalles de la acción {symbol}. {ex.Message}");
+            Console.WriteLine($"Error al obtener los detalles de la acción con símbolo: {symbol}. {ex.Message}");
             return null;
         }
     }

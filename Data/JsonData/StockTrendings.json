@@ -1,0 +1,47 @@
+[
+  {
+    "Id": "btg",
+    "Name": "B2Gold Corp.",
+    "Symbol": "BTG",
+    "Image": "https://images.financialmodelingprep.com/symbol/BTG.png",
+    "Price": 3.91,
+    "ChangePercentage": 2.89474,
+    "LastUpdated": "2025-11-10T04:49:00.8266385"
+  },
+  {
+    "Id": "iren",
+    "Name": "IREN Limited",
+    "Symbol": "IREN",
+    "Image": "https://images.financialmodelingprep.com/symbol/IREN.png",
+    "Price": 62.38,
+    "ChangePercentage": -6.8399,
+    "LastUpdated": "2025-11-10T04:49:00.8169493"
+  },
+  {
+    "Id": "joby",
+    "Name": "Joby Aviation, Inc.",
+    "Symbol": "JOBY",
+    "Image": "https://images.financialmodelingprep.com/symbol/JOBY.png",
+    "Price": 14.9,
+    "ChangePercentage": 4.05028,
+    "LastUpdated": "2025-11-10T04:49:00.7970172"
+  },
+  {
+    "Id": "rxrx",
+    "Name": "Recursion Pharmaceuticals, Inc.",
+    "Symbol": "RXRX",
+    "Image": "https://images.financialmodelingprep.com/symbol/RXRX.png",
+    "Price": 4.62,
+    "ChangePercentage": 0,
+    "LastUpdated": "2025-11-10T04:49:00.8357768"
+  },
+  {
+    "Id": "spxu",
+    "Name": "ProShares UltraPro Short S\u0026P500",
+    "Symbol": "SPXU",
+    "Image": "https://images.financialmodelingprep.com/symbol/SPXU.png",
+    "Price": 13.29,
+    "ChangePercentage": -0.30008,
+    "LastUpdated": "2025-11-10T04:49:00.8448786"
+  }
+]

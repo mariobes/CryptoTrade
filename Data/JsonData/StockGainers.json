@@ -1,0 +1,47 @@
+[
+  {
+    "Id": "baly",
+    "Name": "Bally\u0027s Corporation",
+    "Symbol": "BALY",
+    "Image": "https://images.financialmodelingprep.com/symbol/BALY.png",
+    "Price": 18.56,
+    "ChangePercentage": 8.41121,
+    "LastUpdated": "2025-11-10T04:49:02.5375332"
+  },
+  {
+    "Id": "brbi",
+    "Name": "BRBI BR Partners S.A. ADSs",
+    "Symbol": "BRBI",
+    "Image": "/images/asset-default.png",
+    "Price": 15.01,
+    "ChangePercentage": 8.37545,
+    "LastUpdated": "2025-11-10T04:49:02.5574183"
+  },
+  {
+    "Id": "dpro",
+    "Name": "Draganfly Inc.",
+    "Symbol": "DPRO",
+    "Image": "https://images.financialmodelingprep.com/symbol/DPRO.png",
+    "Price": 8.47,
+    "ChangePercentage": 8.31202,
+    "LastUpdated": "2025-11-10T04:49:02.5684456"
+  },
+  {
+    "Id": "innv",
+    "Name": "InnovAge Holding Corp.",
+    "Symbol": "INNV",
+    "Image": "https://images.financialmodelingprep.com/symbol/INNV.png",
+    "Price": 5.29,
+    "ChangePercentage": 8.40164,
+    "LastUpdated": "2025-11-10T04:49:02.5470666"
+  },
+  {
+    "Id": "peb",
+    "Name": "Pebblebrook Hotel Trust",
+    "Symbol": "PEB",
+    "Image": "https://images.financialmodelingprep.com/symbol/PEB.png",
+    "Price": 11.3,
+    "ChangePercentage": 8.4453,
+    "LastUpdated": "2025-11-10T04:49:02.5283468"
+  }
+]

@@ -1,0 +1,219 @@
+[
+  {
+    "Id": 1,
+    "UserId": 2,
+    "Concept": "\u002B Deposit",
+    "Amount": 5000,
+    "Date": "2024-01-04T00:00:00",
+    "PaymentMethod": "Credit card"
+  },
+  {
+    "Id": 2,
+    "UserId": 2,
+    "AssetId": "bitcoin",
+    "Concept": "\u002B Bitcoin",
+    "Amount": 109.44,
+    "PurchasePrice": 22436.13,
+    "AssetAmount": 0.004878,
+    "Date": "2024-01-09T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 3,
+    "UserId": 2,
+    "AssetId": "bitcoin",
+    "Concept": "\u002B Bitcoin",
+    "Amount": 218.89,
+    "PurchasePrice": 28455.57,
+    "AssetAmount": 0.007692,
+    "Date": "2024-01-09T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 4,
+    "UserId": 2,
+    "AssetId": "bitcoin",
+    "Concept": "\u002B Bitcoin",
+    "Amount": 54.72,
+    "PurchasePrice": 45749.96,
+    "AssetAmount": 0.001196,
+    "Date": "2024-01-09T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 5,
+    "UserId": 2,
+    "AssetId": "bitcoin",
+    "Concept": "\u002B Bitcoin",
+    "Amount": 54.72,
+    "PurchasePrice": 42904.27,
+    "AssetAmount": 0.001276,
+    "Date": "2024-01-09T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 6,
+    "UserId": 2,
+    "AssetId": "bitcoin",
+    "Concept": "\u002B Bitcoin",
+    "Amount": 109.46,
+    "PurchasePrice": 43891.48,
+    "AssetAmount": 0.002494,
+    "Date": "2024-01-09T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 7,
+    "UserId": 2,
+    "AssetId": "hedera-hashgraph",
+    "Concept": "\u002B Hedera",
+    "Amount": 654.37,
+    "PurchasePrice": 0.08926,
+    "AssetAmount": 7331.13,
+    "Date": "2024-02-24T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 8,
+    "UserId": 2,
+    "AssetId": "cardano",
+    "Concept": "\u002B Cardano",
+    "Amount": 529.36,
+    "PurchasePrice": 0.4514,
+    "AssetAmount": 1172.51,
+    "Date": "2024-02-24T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 9,
+    "UserId": 2,
+    "AssetId": "ripple",
+    "Concept": "\u002B XRP",
+    "Amount": 322.91,
+    "PurchasePrice": 0.6045,
+    "AssetAmount": 534.22,
+    "Date": "2024-02-24T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 10,
+    "UserId": 2,
+    "AssetId": "ondo-finance",
+    "Concept": "\u002B Ondo",
+    "Amount": 203.2,
+    "PurchasePrice": 0.7726,
+    "AssetAmount": 263.01,
+    "Date": "2024-05-13T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 11,
+    "UserId": 2,
+    "AssetId": "ethereum",
+    "Concept": "\u002B Ethereum",
+    "Amount": 507.43,
+    "PurchasePrice": 2332.92,
+    "AssetAmount": 0.2175,
+    "Date": "2024-08-05T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 12,
+    "UserId": 2,
+    "AssetId": "polkadot",
+    "Concept": "\u002B Polkadot",
+    "Amount": 229.09,
+    "PurchasePrice": 6.417,
+    "AssetAmount": 35.7,
+    "Date": "2024-08-06T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 13,
+    "UserId": 2,
+    "AssetId": "polkadot",
+    "Concept": "\u002B Polkadot",
+    "Amount": 195.47,
+    "PurchasePrice": 6.417,
+    "AssetAmount": 30.46,
+    "Date": "2024-08-06T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 14,
+    "UserId": 2,
+    "AssetId": "pepe",
+    "Concept": "\u002B Pepe",
+    "Amount": 157.43,
+    "PurchasePrice": 6.72E-06,
+    "AssetAmount": 23400000,
+    "Date": "2024-08-06T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 15,
+    "UserId": 2,
+    "AssetId": "near",
+    "Concept": "\u002B NEAR Protocol",
+    "Amount": 200.01,
+    "PurchasePrice": 7.7211,
+    "AssetAmount": 25.9,
+    "Date": "2024-12-08T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 16,
+    "UserId": 2,
+    "AssetId": "near",
+    "Concept": "\u002B NEAR Protocol",
+    "Amount": 309.94,
+    "PurchasePrice": 4.924,
+    "AssetAmount": 62.94,
+    "Date": "2025-01-15T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 17,
+    "UserId": 2,
+    "AssetId": "render-token",
+    "Concept": "\u002B Render",
+    "Amount": 309.32,
+    "PurchasePrice": 6.883,
+    "AssetAmount": 44.94,
+    "Date": "2025-01-15T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 18,
+    "UserId": 2,
+    "AssetId": "render-token",
+    "Concept": "\u002B Render",
+    "Amount": 99.89,
+    "PurchasePrice": 4.164,
+    "AssetAmount": 23.99,
+    "Date": "2025-02-07T00:00:00",
+    "TypeOfAsset": "Crypto"
+  },
+  {
+    "Id": 19,
+    "UserId": 2,
+    "AssetId": "msft",
+    "Concept": "\u002B Microsoft Corporation",
+    "Amount": 100,
+    "PurchasePrice": 320,
+    "AssetAmount": 0.3125,
+    "Date": "2025-04-20T00:00:00",
+    "TypeOfAsset": "Stock"
+  },
+  {
+    "Id": 20,
+    "UserId": 2,
+    "AssetId": "nvda",
+    "Concept": "\u002B NVIDIA Corporation",
+    "Amount": 250,
+    "PurchasePrice": 120,
+    "AssetAmount": 2.083,
+    "Date": "2025-04-25T00:00:00",
+    "TypeOfAsset": "Stock"
+  }
+]

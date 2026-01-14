@@ -1,0 +1,38 @@
+[
+  {
+    "Id": 1,
+    "UserId": 2,
+    "AssetId": "bitcoin",
+    "TypeAsset": "Crypto"
+  },
+  {
+    "Id": 2,
+    "UserId": 2,
+    "AssetId": "ethereum",
+    "TypeAsset": "Crypto"
+  },
+  {
+    "Id": 3,
+    "UserId": 2,
+    "AssetId": "ripple",
+    "TypeAsset": "Crypto"
+  },
+  {
+    "Id": 4,
+    "UserId": 2,
+    "AssetId": "cardano",
+    "TypeAsset": "Crypto"
+  },
+  {
+    "Id": 5,
+    "UserId": 2,
+    "AssetId": "aapl",
+    "TypeAsset": "Stock"
+  },
+  {
+    "Id": 6,
+    "UserId": 2,
+    "AssetId": "amzn",
+    "TypeAsset": "Stock"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "Id": 1,
+    "Name": "total-market-cap",
+    "Value": 3286110111136.868,
+    "ChangePercentage": 3.3924044808427993,
+    "Sentiment": null,
+    "LastUpdated": "2026-01-14T20:12:28.5317018Z"
+  },
+  {
+    "Id": 2,
+    "Name": "fear-greed-index",
+    "Value": 41,
+    "ChangePercentage": null,
+    "Sentiment": "Neutral",
+    "LastUpdated": "2026-01-14T20:12:35.3825086Z"
+  },
+  {
+    "Id": 3,
+    "Name": "CMC100-index",
+    "Value": 193.34,
+    "ChangePercentage": 5.093221720932763,
+    "Sentiment": null,
+    "LastUpdated": "2026-01-14T20:12:46.4869187Z"
+  }
+]
