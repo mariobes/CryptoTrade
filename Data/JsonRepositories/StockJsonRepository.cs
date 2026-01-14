@@ -6,10 +6,13 @@ namespace CryptoTrade.Data;
 public class StockJsonRepository : IStockRepository
 {
     private Dictionary<string, Stock> _stocks = new Dictionary<string, Stock>();
-    private readonly string _filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "Data", "JsonData", "Stocks.json");
+    private readonly string _filePath;
 
     public StockJsonRepository()
     {
+        var basePath = AppDomain.CurrentDomain.BaseDirectory;
+        _filePath = Path.Combine(basePath, "JsonData", "Stocks.json");
+
         if (File.Exists(_filePath))
         {
             try

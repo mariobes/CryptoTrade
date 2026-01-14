@@ -6,11 +6,14 @@ namespace CryptoTrade.Data;
 public class TransactionJsonRepository : ITransactionRepository
 {
     private Dictionary<string, Transaction> _transactions = new Dictionary<string, Transaction>();
-    private readonly string _filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "Data", "JsonData", "Transactions.json");
+    private readonly string _filePath;
     private static int TransactionIdSeed { get; set; }
 
     public TransactionJsonRepository()
     {
+        var basePath = AppDomain.CurrentDomain.BaseDirectory;
+        _filePath = Path.Combine(basePath, "JsonData", "Transactions.json");
+
         if (File.Exists(_filePath))
         {
             try

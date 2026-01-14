@@ -12,17 +12,25 @@ public class MarketJsonRepository : IMarketRepository
     private Dictionary<string, StockLoser> _stockLosers = new Dictionary<string, StockLoser>();
     private Dictionary<string, StockMostActive> _stockMostActives = new Dictionary<string, StockMostActive>();
 
-    private readonly string _cryptoIndexPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "Data", "JsonData", "CryptoIndices.json");
-    private readonly string _cryptoTrendingPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "Data", "JsonData", "CryptoTrendings.json");
-    private readonly string _stockTrendingPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "Data", "JsonData", "StockTrendings.json");
-    private readonly string _stockGainerPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "Data", "JsonData", "StockGainers.json");
-    private readonly string _stockLoserPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "Data", "JsonData", "StockLosers.json");
-    private readonly string _stockMostActivePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "Data", "JsonData", "StockMostActives.json");
+    private readonly string _cryptoIndexPath;
+    private readonly string _cryptoTrendingPath;
+    private readonly string _stockTrendingPath;
+    private readonly string _stockGainerPath;
+    private readonly string _stockLoserPath;
+    private readonly string _stockMostActivePath;
 
     private static int CryptoIndexIdSeed { get; set; }
 
     public MarketJsonRepository()
     {
+        var basePath = AppDomain.CurrentDomain.BaseDirectory;
+        _cryptoIndexPath = Path.Combine(basePath, "JsonData", "CryptoIndices.json");
+        _cryptoTrendingPath = Path.Combine(basePath, "JsonData", "CryptoTrendings.json");
+        _stockTrendingPath = Path.Combine(basePath, "JsonData", "StockTrendings.json");
+        _stockGainerPath = Path.Combine(basePath, "JsonData", "StockGainers.json");
+        _stockLoserPath = Path.Combine(basePath, "JsonData", "StockLosers.json");
+        _stockMostActivePath = Path.Combine(basePath, "JsonData", "StockMostActives.json");
+
         // CRYPTO INDEX
         if (File.Exists(_cryptoIndexPath))
         {

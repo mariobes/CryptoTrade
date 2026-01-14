@@ -6,11 +6,14 @@ namespace CryptoTrade.Data;
 public class WatchlistJsonRepository : IWatchlistRepository
 {
     private Dictionary<string, Watchlist> _watchlists = new Dictionary<string, Watchlist>();
-    private readonly string _filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "Data", "JsonData", "Watchlists.json");
+    private readonly string _filePath;
     private static int WatchlistIdSeed { get; set; }
 
     public WatchlistJsonRepository()
     {
+        var basePath = AppDomain.CurrentDomain.BaseDirectory;
+        _filePath = Path.Combine(basePath, "JsonData", "Watchlists.json");
+
         if (File.Exists(_filePath))
         {
             try
