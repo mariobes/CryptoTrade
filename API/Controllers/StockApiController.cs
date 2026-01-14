@@ -20,38 +20,51 @@ public class StockApiController : ControllerBase
         _configuration = configuration;
     }
 
+    private async Task<string> CallFMPApiAsync(string urlTemplate, params object[] args)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var apiKey = _configuration["FMPApi:ApiKey"];
+
+            var finalArgs = args?.Append(apiKey).ToArray() ?? new object[] { apiKey };
+
+            var url = string.Format(urlTemplate, finalArgs);
+
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.Add("accept", "application/json");
+
+            using var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsStringAsync();
+        }
+        catch (Exception ex)
+        {
+            return $"Error al llamar a Financial Modeling Prep API: {ex.Message}";
+        }
+    }
+
     // [HttpGet("coins")]
     // public async Task<IActionResult> Coins()
     // {
-    //     var client = _httpClientFactory.CreateClient();
-    //     var apiKey = _configuration["FMPApi:ApiKey"];
-
-    //     var request = new HttpRequestMessage
-    //     {
-    //         Method = HttpMethod.Get,
-    //         RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/stock-screener?limit=100&apikey={apiKey}"),
-    //         Headers =
-    //         {
-    //             { "accept", "application/json" }
-    //         },
-    //     };
-
     //     try
     //     {
-    //         using (var response = await client.SendAsync(request))
-    //         {
-    //             response.EnsureSuccessStatusCode();
-    //             var body = await response.Content.ReadAsStringAsync();
+    //         var urlTemplate = _configuration["Endpoints:Stock:GetStocks"];
+    //         var body = await CallFMPApiAsync(urlTemplate);
 
-    //             var stocks = JsonSerializer.Deserialize<List<StockApiDto>>(body);
+    //         var stocks = JsonSerializer.Deserialize<List<StockApiDto>>(body);
+    //         if (stocks == null || !stocks.Any())
+    //             return BadRequest("Error al deserializar las acciones.");
 
-    //             var validStocks = stocks?
-    //                 .Where(s => s.Price != null && s.IsEtf == false && s.IsFund == false && s.IsActivelyTrading == true)
-    //                 .OrderByDescending(s => s.MarketCap)
-    //                 .ToList();
+    //         var validStocks = stocks
+    //             .Where(s => s.Price != null && s.IsEtf == false && s.IsFund == false && s.IsActivelyTrading == true)
+    //             .OrderByDescending(s => s.MarketCap)
+    //             .Take(50)
+    //             .ToList();
 
-    //             return Ok(validStocks);
-    //         }
+    //         return Ok(validStocks);
     //     }
     //     catch (Exception ex)
     //     {
@@ -62,52 +75,48 @@ public class StockApiController : ControllerBase
     [HttpGet("stocks")]
     public async Task<IActionResult> GetStocksApi()
     {
-        var client = _httpClientFactory.CreateClient();
-        var apiKey = _configuration["FMPApi:ApiKey"];
-
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/stock-screener?limit=100&apikey={apiKey}"),
-            Headers =
-            {
-                { "accept", "application/json" }
-            },
-        };
-
         try
         {
-            using (var response = await client.SendAsync(request))
+            var url = _configuration["Endpoints:Stock:GetStocks"];
+            var body = await CallFMPApiAsync(url);
+
+            var stocks = JsonSerializer.Deserialize<List<StockApiDto>>(body);
+            if (stocks == null || !stocks.Any())
+                return BadRequest("Error al deserializar.");
+
+            var validStocks = stocks
+                .Where(s => s.Price != null && s.IsEtf == false && s.IsFund == false && s.IsActivelyTrading == true)
+                .OrderByDescending(s => s.MarketCap)
+                .Take(50)
+                .ToList();
+
+            var resultStocks = new List<Stock>();
+
+            foreach (var stock in validStocks)
             {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
+                var detailsBody = await CallFMPApiAsync(
+                    _configuration["Endpoints:Stock:GetStockDetails"], 
+                    stock.Symbol);
 
-                var stocks = JsonSerializer.Deserialize<List<StockApiDto>>(body);
-                if (stocks == null || !stocks.Any())
-                {
-                    return BadRequest("Error al deserializar.");
-                }
-
-                var validStocks = stocks
-                    .Where(s => s.Price != null && s.IsEtf == false && s.IsFund == false && s.IsActivelyTrading == true)
-                    .OrderByDescending(s => s.MarketCap)
-                    .Take(50)
-                    .ToList();
-
-                var resultStocks = new List<Stock>();
-
-                foreach (var stock in validStocks)
-                {
-                    var stockDetails = await GetStockDetails(stock.Symbol);
-                    if (stockDetails != null)
-                    {
-                        resultStocks.Add(stockDetails);
-                    }
-                }
-
-                await _stockService.UpdateStocksDatabase(resultStocks);
-                return Ok("Acciones obtenidas y actualizadas en la base de datos con éxito.");
+                var stockDetails = JsonSerializer.Deserialize<List<Stock>>(detailsBody)?.FirstOrDefault();
+                if (stockDetails != null)
+                    resultStocks.Add(stockDetails);
             }
+
+            // PROBAR ESTO EN VEZ DEL FOREACH (Debería ir más rápido)
+            // var tasks = validStocks.Select(stock => CallFMPApiAsync(
+            //     _configuration["Endpoints:Stock:GetStockDetails"], stock.Symbol
+            // )).ToList();
+
+            // var results = await Task.WhenAll(tasks);
+
+            // var resultStocks = results
+            //     .Select(r => JsonSerializer.Deserialize<List<Stock>>(r)?.FirstOrDefault())
+            //     .Where(s => s != null)
+            //     .ToList();
+
+            await _stockService.UpdateStocksDatabase(resultStocks);
+            return Ok("Acciones obtenidas y actualizadas en la base de datos con éxito.");
         }
         catch (Exception ex)
         {
@@ -116,114 +125,73 @@ public class StockApiController : ControllerBase
     }
 
     [HttpGet("stock-details/{symbol}")]
-    public async Task<Stock?> GetStockDetails(string symbol)
+    public async Task<IActionResult> GetStockDetails(string symbol)
     {
-        var client = _httpClientFactory.CreateClient();
-        var apiKey = _configuration["FMPApi:ApiKey"];
-
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/profile/{symbol}?apikey={apiKey}"),
-            Headers =
-            {
-                { "accept", "application/json" }
-            },
-        };
-
         try
         {
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
-                var stockDetailsList = JsonSerializer.Deserialize<List<Stock>>(body);
-                return stockDetailsList?.FirstOrDefault();
-            }
+            var url = _configuration["Endpoints:Stock:GetStockDetails"];
+            var body = await CallFMPApiAsync(url, symbol);
+            return Ok(body);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error al obtener los detalles de la acción {symbol}. {ex.Message}");
-            return null;
+            return BadRequest($"Error al obtener los detalles de la acción con símbolo: {symbol}. {ex.Message}");
         }
     }
 
     [HttpGet("stock-charts/{symbol}")]
     public async Task<IActionResult> GetStockCharts(string symbol, [FromQuery] string time)
     {
-        var client = _httpClientFactory.CreateClient();
-        var apiKey = _configuration["FMPApi:ApiKey"];
-
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri($"https://financialmodelingprep.com/api/v3/historical-chart/{time}/{symbol}?apikey={apiKey}"),
-            Headers =
-            {
-                { "accept", "application/json" }
-            },
-        };
-
         try
         {
-            using (var response = await client.SendAsync(request))
+            var url = _configuration["Endpoints:Stock:GetStockCharts"];
+            var body = await CallFMPApiAsync(url, time, symbol);
+
+            var data = JsonSerializer.Deserialize<List<StockChartDto>>(body, new JsonSerializerOptions
             {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
+                PropertyNameCaseInsensitive = true
+            });
 
-                var data = JsonSerializer.Deserialize<List<StockChartDto>>(body, new JsonSerializerOptions
+            var prices = new List<List<object>>();
+            var volumes = new List<List<object>>();
+
+            if (time == "1min")
+            {
+                var groupedByDate = data
+                    .Where(d => DateTime.TryParse(d.Date, out _))
+                    .GroupBy(d => DateTime.Parse(d.Date).Date)
+                    .OrderByDescending(g => g.Key)
+                    .FirstOrDefault();
+
+                if (groupedByDate != null)
                 {
-                    PropertyNameCaseInsensitive = true
-                });
-
-                var prices = new List<List<object>>();
-                var volumes = new List<List<object>>();
-
-                if (time == "1min")
-                {
-                    var groupedByDate = data
-                        .Where(d => DateTime.TryParse(d.Date, out _))
-                        .GroupBy(d => DateTime.Parse(d.Date).Date)
-                        .OrderByDescending(g => g.Key)
-                        .FirstOrDefault();
-
-                    if (groupedByDate != null)
+                    foreach (var item in groupedByDate)
                     {
-                        foreach (var item in groupedByDate)
-                        {
-                            var dateTime = DateTime.Parse(item.Date);
-                            var timestamp = new DateTimeOffset(dateTime).ToUnixTimeMilliseconds();
-
-                            prices.Add(new List<object> { timestamp, item.Price });
-                            volumes.Add(new List<object> { timestamp, item.Volume });
-                        }
+                        var dateTime = DateTime.Parse(item.Date);
+                        var timestamp = new DateTimeOffset(dateTime).ToUnixTimeMilliseconds();
+                        prices.Add(new List<object> { timestamp, item.Price });
+                        volumes.Add(new List<object> { timestamp, item.Volume });
                     }
                 }
-                else
-                {
-                    foreach (var item in data)
-                    {
-                        if (DateTime.TryParse(item.Date, out var dateTime))
-                        {
-                            var timestamp = new DateTimeOffset(dateTime).ToUnixTimeMilliseconds();
-                            prices.Add(new List<object> { timestamp, item.Price });
-                            volumes.Add(new List<object> { timestamp, item.Volume });
-                        }
-                    }
-                }
-
-                var result = new
-                {
-                    prices,
-                    volumes
-                };
-
-                return Ok(result);
             }
+            else
+            {
+                foreach (var item in data)
+                {
+                    if (DateTime.TryParse(item.Date, out var dateTime))
+                    {
+                        var timestamp = new DateTimeOffset(dateTime).ToUnixTimeMilliseconds();
+                        prices.Add(new List<object> { timestamp, item.Price });
+                        volumes.Add(new List<object> { timestamp, item.Volume });
+                    }
+                }
+            }
+
+            return Ok(new { prices, volumes });
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error al obtener las gráficas de la acción {symbol}. {ex.Message}");
+            return BadRequest($"Error al obtener las gráficas de la acción con símbolo: {symbol}. {ex.Message}");
         }
     }
 }

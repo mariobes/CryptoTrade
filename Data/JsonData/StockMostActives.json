@@ -1,0 +1,47 @@
+[
+  {
+    "Id": "azi",
+    "Name": "Autozi Internet Technology (Global) Ltd.",
+    "Symbol": "AZI",
+    "Image": "/images/asset-default.png",
+    "Price": 0.0947,
+    "ChangePercentage": -4.05268,
+    "LastUpdated": "2025-11-10T04:49:05.2303413"
+  },
+  {
+    "Id": "bkyi",
+    "Name": "BIO-key International, Inc.",
+    "Symbol": "BKYI",
+    "Image": "https://images.financialmodelingprep.com/symbol/BKYI.png",
+    "Price": 0.962,
+    "ChangePercentage": 51.56767,
+    "LastUpdated": "2025-11-10T04:49:05.2063049"
+  },
+  {
+    "Id": "nvda",
+    "Name": "NVIDIA Corporation",
+    "Symbol": "NVDA",
+    "Image": "https://images.financialmodelingprep.com/symbol/NVDA.png",
+    "Price": 188.15,
+    "ChangePercentage": 0.03721821,
+    "LastUpdated": "2025-11-10T04:49:05.2393497"
+  },
+  {
+    "Id": "soxs",
+    "Name": "Direxion Daily Semiconductor Bear 3X Shares",
+    "Symbol": "SOXS",
+    "Image": "https://images.financialmodelingprep.com/symbol/SOXS.png",
+    "Price": 3.68,
+    "ChangePercentage": 3.08123,
+    "LastUpdated": "2025-11-10T04:49:05.221245"
+  },
+  {
+    "Id": "sqqq",
+    "Name": "ProShares UltraPro Short QQQ",
+    "Symbol": "SQQQ",
+    "Image": "https://images.financialmodelingprep.com/symbol/SQQQ.png",
+    "Price": 14.43,
+    "ChangePercentage": 1.05042,
+    "LastUpdated": "2025-11-10T04:49:05.2484846"
+  }
+]

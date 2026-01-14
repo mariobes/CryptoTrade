@@ -1,0 +1,47 @@
+[
+  {
+    "Id": "bitcoin",
+    "Name": "Bitcoin",
+    "Symbol": "BTC",
+    "Image": "https://coin-images.coingecko.com/coins/images/1/standard/bitcoin.png?1696501400",
+    "Price": 90997.23378493339,
+    "ChangePercentage": 0.2038148375512016,
+    "LastUpdated": "2026-01-09T04:59:06.0824666"
+  },
+  {
+    "Id": "brevis",
+    "Name": "Brevis",
+    "Symbol": "BREV",
+    "Image": "https://coin-images.coingecko.com/coins/images/71219/standard/brevis.png?1766454723",
+    "Price": 0.38031281597280053,
+    "ChangePercentage": -9.669641914739096,
+    "LastUpdated": "2026-01-09T04:59:06.0455003"
+  },
+  {
+    "Id": "pippin",
+    "Name": "pippin",
+    "Symbol": "PIPPIN",
+    "Image": "https://coin-images.coingecko.com/coins/images/51589/standard/pippin_logo.png?1731570163",
+    "Price": 0.3581586356500937,
+    "ChangePercentage": 28.428210881973364,
+    "LastUpdated": "2026-01-09T04:59:06.0726371"
+  },
+  {
+    "Id": "pudgy-penguins",
+    "Name": "Pudgy Penguins",
+    "Symbol": "PENGU",
+    "Image": "https://coin-images.coingecko.com/coins/images/52622/standard/PUDGY_PENGUINS_PENGU_PFP.png?1733809110",
+    "Price": 0.011844722501274734,
+    "ChangePercentage": -1.7773183287555707,
+    "LastUpdated": "2026-01-09T04:59:06.0586946"
+  },
+  {
+    "Id": "zcash",
+    "Name": "Zcash",
+    "Symbol": "ZEC",
+    "Image": "https://coin-images.coingecko.com/coins/images/486/standard/circle-zcash-color.png?1696501740",
+    "Price": 429.10559361772584,
+    "ChangePercentage": -9.805528211758203,
+    "LastUpdated": "2026-01-09T04:59:06.0332162"
+  }
+]

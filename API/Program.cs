@@ -22,21 +22,35 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserRepository, UserEFRepository>();
 builder.Services.AddScoped<ICryptoService, CryptoService>();
-builder.Services.AddScoped<ICryptoRepository, CryptoEFRepository>();
 builder.Services.AddScoped<IStockService, StockService>();
-builder.Services.AddScoped<IStockRepository, StockEFRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
-builder.Services.AddScoped<ITransactionRepository, TransactionEFRepository>();
 builder.Services.AddScoped<IMarketService, MarketService>();
-builder.Services.AddScoped<IMarketRepository, MarketEFRepository>();
 builder.Services.AddScoped<IWatchlistService, WatchlistService>();
-builder.Services.AddScoped<IWatchlistRepository, WatchlistEFRepository>();
 
-var connectionString = builder.Configuration.GetConnectionString("ServerDB_azure");
+var useJson = builder.Configuration.GetValue<bool>("UseJsonData");
 
-builder.Services.AddDbContext<CryptoTradeContext>(options => options.UseSqlServer(connectionString));
+if (!useJson)
+{
+   builder.Services.AddScoped<IUserRepository, UserEFRepository>(); 
+   builder.Services.AddScoped<ICryptoRepository, CryptoEFRepository>();
+   builder.Services.AddScoped<IStockRepository, StockEFRepository>();
+   builder.Services.AddScoped<ITransactionRepository, TransactionEFRepository>();
+   builder.Services.AddScoped<IMarketRepository, MarketEFRepository>();
+   builder.Services.AddScoped<IWatchlistRepository, WatchlistEFRepository>();
+
+   var connectionString = builder.Configuration.GetConnectionString("ServerDB_azure");
+   builder.Services.AddDbContext<CryptoTradeContext>(options => options.UseSqlServer(connectionString));
+}
+else
+{
+    builder.Services.AddScoped<IUserRepository, UserJsonRepository>();
+    builder.Services.AddScoped<ICryptoRepository, CryptoJsonRepository>();
+    builder.Services.AddScoped<IStockRepository, StockJsonRepository>();
+    builder.Services.AddScoped<ITransactionRepository, TransactionJsonRepository>();
+    builder.Services.AddScoped<IMarketRepository, MarketJsonRepository>();
+    builder.Services.AddScoped<IWatchlistRepository, WatchlistJsonRepository>();
+}
 
 // Configurar CORS para permitir todas las solicitudes
 builder.Services.AddCors(options =>
@@ -87,11 +101,14 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+if (!useJson)
 {
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<CryptoTradeContext>();
-    context.Database.Migrate();
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<CryptoTradeContext>();
+        context.Database.Migrate();
+    }
 }
 
 // Configurar CORS

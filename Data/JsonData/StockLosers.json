@@ -1,0 +1,47 @@
+[
+  {
+    "Id": "asle",
+    "Name": "AerSale Corporation",
+    "Symbol": "ASLE",
+    "Image": "https://images.financialmodelingprep.com/symbol/ASLE.png",
+    "Price": 6.145,
+    "ChangePercentage": -12.0887,
+    "LastUpdated": "2025-11-10T04:49:03.80259"
+  },
+  {
+    "Id": "dzz",
+    "Name": "DB Gold Double Short ETN",
+    "Symbol": "DZZ",
+    "Image": "https://images.financialmodelingprep.com/symbol/DZZ.png",
+    "Price": 4.57,
+    "ChangePercentage": -12.45211,
+    "LastUpdated": "2025-11-10T04:49:03.8410489"
+  },
+  {
+    "Id": "lsta",
+    "Name": "Lisata Therapeutics, Inc.",
+    "Symbol": "LSTA",
+    "Image": "https://images.financialmodelingprep.com/symbol/LSTA.png",
+    "Price": 2.06,
+    "ChangePercentage": -12.34043,
+    "LastUpdated": "2025-11-10T04:49:03.8317322"
+  },
+  {
+    "Id": "nvve",
+    "Name": "Nuvve Holding Corp.",
+    "Symbol": "NVVE",
+    "Image": "https://images.financialmodelingprep.com/symbol/NVVE.png",
+    "Price": 0.168,
+    "ChangePercentage": -12.31733,
+    "LastUpdated": "2025-11-10T04:49:03.8219603"
+  },
+  {
+    "Id": "pom",
+    "Name": "POMDOCTOR Ltd",
+    "Symbol": "POM",
+    "Image": "/images/asset-default.png",
+    "Price": 5.34,
+    "ChangePercentage": -12.31527,
+    "LastUpdated": "2025-11-10T04:49:03.8122914"
+  }
+]

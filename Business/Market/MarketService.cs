@@ -28,7 +28,6 @@ public class MarketService : IMarketService
             LastUpdated = DateTime.UtcNow.AddHours(2)
         };
         _repository.AddCryptoIndex(cryptoIndex);
-        _repository.SaveChanges();
     }
 
     public IEnumerable<CryptoIndex> GetCryptoIndices()
@@ -54,7 +53,6 @@ public class MarketService : IMarketService
             };
             _repository.AddCryptoTrending(cryptoTrending);
         }
-        _repository.SaveChanges();
     }
 
     public IEnumerable<CryptoTrending> GetCryptosTrending()
@@ -80,7 +78,6 @@ public class MarketService : IMarketService
             };
             _repository.AddStockTrending(stockTrending);
         }
-        _repository.SaveChanges();
     }
 
     public IEnumerable<StockTrending> GetStocksTrending()
@@ -106,7 +103,6 @@ public class MarketService : IMarketService
             };
             _repository.AddStockGainer(stockGainer);
         }
-        _repository.SaveChanges();
     }
 
     public IEnumerable<StockGainer> GetStocksGainers()
@@ -132,7 +128,6 @@ public class MarketService : IMarketService
             };
             _repository.AddStockLoser(stockLoser);
         }
-        _repository.SaveChanges();
     }
 
     public IEnumerable<StockLoser> GetStocksLosers()
@@ -158,7 +153,6 @@ public class MarketService : IMarketService
             };
             _repository.AddStockMostActive(stockMostActive);
         }
-        _repository.SaveChanges();
     }
 
     public IEnumerable<StockMostActive> GetStocksMostActives()
