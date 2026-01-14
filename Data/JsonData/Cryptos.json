@@ -2220,7 +2220,7 @@
     "image": "https://coin-images.coingecko.com/coins/images/486/standard/circle-zcash-color.png?1696501740",
     "current_price": 397.4,
     "market_cap": 6555744826,
-    "marketCapRank": 12,
+    "MarketCapRank": 12,
     "fully_diluted_valuation": 6555823698,
     "total_volume": 654913859,
     "high_24h": 415.94,
@@ -2286,7 +2286,7 @@
         409.947946402861,408.662207166511,406.039560280068,403.985751268738
       ]
     },
-    "lastUpdated": "2026-01-13T04:57:16.7792173"
+    "LastUpdated": "2026-01-13T04:57:16.7792173"
   },
   {
     "id": "hedera-hashgraph",
@@ -3501,8 +3501,8 @@
     "symbol": "pengu",
     "image": "https://coin-images.coingecko.com/coins/images/52622/large/PUDGY_PENGUINS_PENGU_PFP.png?1733809110",
     "current_price": 0.011792555508953225,
-    "market_cap": 741025716,
-    "marketCapRank": 19,
+    "Market_cap": 741025716,
+    "MarketCapRank": 19,
     "fully_diluted_valuation": 939187611,
     "total_volume": 190915894,
     "high_24h": 0.01254498,
@@ -3568,7 +3568,7 @@
         0.011999061895,0.011940290778,0.011805634529,0.011813543719
       ]
     },
-    "lastUpdated": "2026-01-13T04:57:13.1063541"
+    "LastUpdated": "2026-01-13T04:57:13.1063541"
   },
   {
     "id": "pippin",
@@ -3577,7 +3577,7 @@
     "image": "https://coin-images.coingecko.com/coins/images/51589/standard/pippin_logo.png?1731570163",
     "current_price": 0.3581586356500937,
     "market_cap": 358139427,
-    "marketCapRank": 20,
+    "MarketCapRank": 20,
     "fully_diluted_valuation": 358139427,
     "total_volume": 43907455,
     "high_24h": 0.391482,
@@ -3643,7 +3643,7 @@
         0.369352871278, 0.368123726727, 0.366978625289, 0.373448480805
       ]
     },
-    "lastUpdated": "2026-01-09T04:59:06.276457"
+    "LastUpdated": "2026-01-09T04:59:06.276457"
   },
   {
     "id": "brevis",
